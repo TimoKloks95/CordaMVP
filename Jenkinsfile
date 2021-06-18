@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('SonarCube') {
             steps {
-               bat 'gradlew.bat sonarqube -Dsonar.projectKey=cordamvp -Dsonar.host.url=http://host.docker.internal:9000 -Dsonar.login=041be7a281c9d58ba540b981d082710d2774ef7a'
+               bat 'gradlew sonarqube -Dsonar.projectKey=cordamvp -Dsonar.host.url=http://localhost:9000 -Dsonar.login=041be7a281c9d58ba540b981d082710d2774ef7a'
             }
         }
     }
