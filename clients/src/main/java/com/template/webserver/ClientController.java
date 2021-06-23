@@ -20,7 +20,7 @@ public class ClientController {
     }
 
     @PostMapping("/{issuerId}")
-    private ResponseEntity<String> opslaanContract(@PathVariable("issuerId") String issuerId, @RequestBody Contract contract) {
+    public ResponseEntity<String> opslaanContract(@PathVariable("issuerId") String issuerId, @RequestBody Contract contract) {
         Contract result = contractService.opslaanContract(issuerId, contract);
         return result == null
                 ? new ResponseEntity<>("Failure", HttpStatus.BAD_REQUEST)
@@ -28,7 +28,7 @@ public class ClientController {
     }
 
     @GetMapping("{issuerId}/{contractId}")
-    private ResponseEntity<Contract> ophalenContract(@PathVariable("issuerId") String issuerId, @PathVariable("contractId") String contractId) {
+    public ResponseEntity<Contract> ophalenContract(@PathVariable("issuerId") String issuerId, @PathVariable("contractId") String contractId) {
         Contract result = contractService.ophalenContract(issuerId, contractId);
         return result == null
                 ? new ResponseEntity<>(null, HttpStatus.BAD_REQUEST)
@@ -36,7 +36,7 @@ public class ClientController {
     }
 
     @PatchMapping("{issuerId}/{contractId}")
-    private ResponseEntity<String> toevoegenAddendum(@PathVariable("issuerId") String issuerId, @PathVariable("contractId") String contractId,
+    public ResponseEntity<String> toevoegenAddendum(@PathVariable("issuerId") String issuerId, @PathVariable("contractId") String contractId,
                                        @RequestBody Addendum addendum) {
         Contract result = contractService.toevoegenAddendum(issuerId, contractId, addendum);
         return result == null

@@ -3,10 +3,16 @@ package com.template.webserver.dto;
 import java.util.List;
 
 public class Contract {
-    private String id, sellerId, buyerId, offerId, sellerSignedAt, buyerSignedAt;
+    private String id;
+    private String sellerId;
+    private String buyerId;
+    private String offerId;
+    private String sellerSignedAt;
+    private String buyerSignedAt;
     private List<Conditie> condities;
     private List<Koffie> koffies;
     private List<Addendum> addenda;
+
     public Contract() {
 
     }

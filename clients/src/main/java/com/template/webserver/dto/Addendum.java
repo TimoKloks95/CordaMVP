@@ -3,7 +3,10 @@ package com.template.webserver.dto;
 import java.util.List;
 
 public class Addendum {
-    private String id, createdAt, buyerSignedAt, sellerSignedAt;
+    private String id;
+    private String createdAt;
+    private String buyerSignedAt;
+    private String sellerSignedAt;
     private List<Conditie> condities;
     public Addendum() {
 

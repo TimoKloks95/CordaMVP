@@ -1,7 +1,12 @@
 package com.template.webserver.dto;
 
 public class Conditie {
-    private String id, type, status, title, createdAt, negotiationId;
+    private String id;
+    private String type;
+    private String status;
+    private String title;
+    private String createdAt;
+    private String negotiationId;
 
     public Conditie() {
 
