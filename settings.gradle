@@ -1,3 +1,3 @@
 rootProject.name = 'CordaMVP'
-include ':workflows', ':contracts'
+include ':workflows', ':contracts', ':clients'
 
