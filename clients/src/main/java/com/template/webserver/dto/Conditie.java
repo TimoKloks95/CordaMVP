@@ -1,16 +1,27 @@
 package com.template.webserver.dto;
 
+import javax.persistence.Entity;
+import javax.validation.constraints.NotBlank;
+
+@Entity
 public class Conditie {
+    @NotBlank(message = "id is mandatory")
     private String id;
+
+    @NotBlank(message = "type is mandatory")
     private String type;
+
+    @NotBlank(message = "status is mandatory")
     private String status;
+
+    @NotBlank(message = "title is mandatory")
     private String title;
+
+    @NotBlank(message = "createdAt is mandatory")
     private String createdAt;
+
+    @NotBlank(message = "negotiationId is mandatory")
     private String negotiationId;
-
-    public Conditie() {
-
-    }
 
     public Conditie(String id, String type, String status, String title, String createdAt, String negotiationId) {
         this.id = id;

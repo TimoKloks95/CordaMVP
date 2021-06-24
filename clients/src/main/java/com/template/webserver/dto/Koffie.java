@@ -1,39 +1,87 @@
 package com.template.webserver.dto;
+import javax.persistence.Entity;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-
+@Entity
 public class Koffie {
+    @NotBlank(message = "id is mandatory")
     private String id;
+
+    @NotBlank(message = "country is mandatory")
     private String country;
+
+    @NotBlank(message = "region is mandatory")
     private String region;
+
+    @NotBlank(message = "unit is mandatory")
     private String unit;
+
+    @NotBlank(message = "species is mandatory")
     private String species;
+
+    @NotBlank(message = "process is mandatory")
     private String process;
+
+    @NotBlank(message = "sector is mandatory")
     private String sector;
+
+    @NotBlank(message = "harvestAt is mandatory")
     private String harvestAt;
+
+    @NotBlank(message = "qualitySegment is mandatory")
     private String qualitySegment;
+
     private String parentId;
+
     private boolean isBulk;
+
+    @Min(0)
     private int quantity;
+
+    @Min(0)
     private int minScreenSize;
+
+    @Min(0)
     private int maxScreenSize;
+
+    @Min(0)
     private int cuppingScore;
+
     private String[] certificates;
 
-    public Koffie() {
-
+    public Koffie(String id, String country, String region, String unit, String species, String process, String sector,
+                  String harvestAt, String qualitySegment, String parentId, boolean isBulk, int quantity, int minScreenSize,
+                  int maxScreenSize, int cuppingScore, String[] certificates) {
+        this.id = id;
+        this.country = country;
+        this.region = region;
+        this.unit = unit;
+        this.species = species;
+        this.process = process;
+        this.sector = sector;
+        this.harvestAt = harvestAt;
+        this.qualitySegment = qualitySegment;
+        this.parentId = parentId;
+        this.isBulk = isBulk;
+        this.quantity = quantity;
+        this.minScreenSize = minScreenSize;
+        this.maxScreenSize = maxScreenSize;
+        this.cuppingScore = cuppingScore;
+        this.certificates = certificates;
     }
 
-    @JsonCreator
-    public static Koffie createKoffie(String id, String country, String region, String unit, String species, String process,
-                                      String sector, String harvestAt, String qualitySegment, String parentId,
-                                      boolean isBulk, int quantity, int minScreenSize, int maxScreenSize, int cuppingScore,
-                                      String[] certificates) {
-        return new Koffie().setId(id).setCountry(country).setRegion(region).setUnit(unit).setSpecies(species).setProcess(process).setSector(sector)
-                .setHarvestAt(harvestAt).setQualitySegment(qualitySegment).setParentId(parentId).setBulk(isBulk)
-                .setQuantity(quantity).setMinScreenSize(minScreenSize).setMaxScreenSize(maxScreenSize).setCuppingScore(cuppingScore)
-                .setCertificates(certificates);
-    }
+//    @JsonCreator
+//    public static Koffie createKoffie(String id, String country, String region, String unit, String species, String process,
+//                                      String sector, String harvestAt, String qualitySegment, String parentId,
+//                                      boolean isBulk, int quantity, int minScreenSize, int maxScreenSize, int cuppingScore,
+//                                      String[] certificates) {
+//        return new Koffie().setId(id).setCountry(country).setRegion(region).setUnit(unit).setSpecies(species).setProcess(process).setSector(sector)
+//                .setHarvestAt(harvestAt).setQualitySegment(qualitySegment).setParentId(parentId).setBulk(isBulk)
+//                .setQuantity(quantity).setMinScreenSize(minScreenSize).setMaxScreenSize(maxScreenSize).setCuppingScore(cuppingScore)
+//                .setCertificates(certificates);
+//    }
 
     public String getId() {
         return id;

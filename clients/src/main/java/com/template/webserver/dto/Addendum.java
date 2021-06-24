@@ -1,16 +1,24 @@
 package com.template.webserver.dto;
 
+import javax.persistence.Entity;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
+@Entity
 public class Addendum {
+    @NotBlank(message = "id is mandatory")
     private String id;
-    private String createdAt;
-    private String buyerSignedAt;
-    private String sellerSignedAt;
-    private List<Conditie> condities;
-    public Addendum() {
 
-    }
+    @NotBlank(message = "createdAt is mandatory")
+    private String createdAt;
+
+    @NotBlank(message = "buyerSignedAt is mandatory")
+    private String buyerSignedAt;
+
+    @NotBlank(message = "sellerSignedAt is mandatory")
+    private String sellerSignedAt;
+
+    private List<Conditie> condities;
 
     public Addendum(String id, String createdAt, String buyerSignedAt, String sellerSignedAt, List<Conditie> condities) {
         this.id = id;

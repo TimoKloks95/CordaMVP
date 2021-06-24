@@ -19,7 +19,7 @@ public class ClientControllerTest extends BaseTestCase {
     ClientController sut;
 
     @Test
-    public void opslaanContract() {
+    public void opslaanContractValideContract() {
         //Arrange
         //when(sut.opslaanContract(any(String.class), any(Contract.class))).thenReturn();
 
@@ -31,7 +31,7 @@ public class ClientControllerTest extends BaseTestCase {
     }
 
     @Test
-    public void ophalenContract() {
+    public void ophalenContractInvalideContract() {
         //Arrange
 
         //Act
