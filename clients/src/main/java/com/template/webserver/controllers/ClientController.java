@@ -6,7 +6,6 @@ import com.template.webserver.business.ContractService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 
 @RestController
@@ -17,7 +16,7 @@ public class ClientController {
         this.contractService = contractService;
     }
 
-    @PostMapping("/{issuerId}")
+    @PostMapping("{issuerId}")
     public ResponseEntity<HttpStatus> opslaanContract(@PathVariable("issuerId") String issuerId, @Valid @RequestBody Contract contract) {
         contractService.opslaanContract(issuerId, contract);
         return new ResponseEntity<>(HttpStatus.CREATED);

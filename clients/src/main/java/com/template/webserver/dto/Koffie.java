@@ -1,6 +1,5 @@
 package com.template.webserver.dto;
 import javax.persistence.Entity;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
@@ -87,143 +86,127 @@ public class Koffie {
         return id;
     }
 
-    private Koffie setId(String id) {
+    public void setId(String id) {
         this.id = id;
-        return this;
     }
 
     public String getCountry() {
         return country;
     }
 
-    private Koffie setCountry(String country) {
+    public void setCountry(String country) {
         this.country = country;
-        return this;
     }
 
     public String getRegion() {
         return region;
     }
 
-    private Koffie setRegion(String region) {
+    public void setRegion(String region) {
         this.region = region;
-        return this;
     }
 
     public String getUnit() {
         return unit;
     }
 
-    private Koffie setUnit(String unit) {
+    public void setUnit(String unit) {
         this.unit = unit;
-        return this;
     }
 
     public String getSpecies() {
         return species;
     }
 
-    private Koffie setSpecies(String species) {
+    public void setSpecies(String species) {
         this.species = species;
-        return this;
     }
 
     public String getProcess() {
         return process;
     }
 
-    private Koffie setProcess(String process) {
+    public void setProcess(String process) {
         this.process = process;
-        return this;
     }
 
     public String getSector() {
         return sector;
     }
 
-    private Koffie setSector(String sector) {
+    public void setSector(String sector) {
         this.sector = sector;
-        return this;
     }
 
     public String getHarvestAt() {
         return harvestAt;
     }
 
-    private Koffie setHarvestAt(String harvestAt) {
+    public void setHarvestAt(String harvestAt) {
         this.harvestAt = harvestAt;
-        return this;
     }
 
     public String getQualitySegment() {
         return qualitySegment;
     }
 
-    private Koffie setQualitySegment(String qualitySegment) {
+    public void setQualitySegment(String qualitySegment) {
         this.qualitySegment = qualitySegment;
-        return this;
     }
 
     public String getParentId() {
         return parentId;
     }
 
-    private Koffie setParentId(String parentId) {
+    public void setParentId(String parentId) {
         this.parentId = parentId;
-        return this;
     }
 
     public boolean isBulk() {
         return isBulk;
     }
 
-    private Koffie setBulk(boolean bulk) {
+    public void setBulk(boolean bulk) {
         isBulk = bulk;
-        return this;
     }
 
     public int getQuantity() {
         return quantity;
     }
 
-    private Koffie setQuantity(int quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
-        return this;
     }
 
     public int getMinScreenSize() {
         return minScreenSize;
     }
 
-    private Koffie setMinScreenSize(int minScreenSize) {
+    public void setMinScreenSize(int minScreenSize) {
         this.minScreenSize = minScreenSize;
-        return this;
     }
 
     public int getMaxScreenSize() {
         return maxScreenSize;
     }
 
-    private Koffie setMaxScreenSize(int maxScreenSize) {
+    public void setMaxScreenSize(int maxScreenSize) {
         this.maxScreenSize = maxScreenSize;
-        return this;
     }
 
     public int getCuppingScore() {
         return cuppingScore;
     }
 
-    private Koffie setCuppingScore(int cuppingScore) {
+    public void setCuppingScore(int cuppingScore) {
         this.cuppingScore = cuppingScore;
-        return this;
     }
 
     public String[] getCertificates() {
         return certificates;
     }
 
-    private Koffie setCertificates(String[] certificates) {
+    public void setCertificates(String[] certificates) {
         this.certificates = certificates;
-        return this;
     }
 }

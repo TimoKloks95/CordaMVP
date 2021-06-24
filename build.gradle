@@ -17,6 +17,7 @@ buildscript {//properties that you need to build the project
         spring_boot_version = constants.getProperty("springBootVersion")
         spring_boot_gradle_plugin_version = constants.getProperty("springBootGradleVersion")
         mockito_version = constants.getProperty("mockitoVersion")
+        hibernate_validator_version = constants.getProperty("hibernateValidatorVersion")
     }
 
     repositories {
@@ -85,9 +86,10 @@ dependencies {
     cordapp project(":contracts")
 
 
-    cordaCompile "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_version}"
-    cordaCompile "org.apache.logging.log4j:log4j-web:${log4j_version}"
-    cordaCompile "org.slf4j:jul-to-slf4j:$slf4j_version"
+    cordaCompile ("org.apache.logging.log4j:log4j-slf4j-impl:${log4j_version}")
+    cordaCompile ("org.apache.logging.log4j:log4j-web:${log4j_version}")
+    cordaCompile ("org.slf4j:jul-to-slf4j:$slf4j_version")
+
 }
 
 

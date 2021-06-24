@@ -1,0 +1,58 @@
+{
+  "id": "1",
+  "sellerId": "1",
+  "buyerId": "2",
+  "offerId": "1",
+  "sellerSignedAt": "11 mei 2021",
+  "buyerSignedAt": "11 mei 2021",
+  "condities": [
+    {
+      "id":"1",
+      "type": "test",
+      "status": "test",
+      "title":"test",
+      "createdAt": "11 mei 2021",
+      "negotiationId": "1"
+    }
+  ],
+  "koffies": [
+    {
+      "id": "1",
+      "country": "test",
+      "region": "test",
+      "unit": "test",
+      "species": "test",
+      "process": "test",
+      "sector": "test",
+      "harvestAt": "11 mei 2021",
+      "qualitySegment": "test",
+      "parentId": "2",
+      "isBulk": true,
+      "quantity": 10,
+      "minScreenSize": 1,
+      "maxScreenSize": 5,
+      "cuppingScore": 10,
+      "certificates": [
+        "test", "test"
+      ]
+    }
+  ],
+  "addenda": [
+    {
+      "id": "1",
+      "createdAt": "5 mei 2021",
+      "buyerSignedAt": "6 mei 2021",
+      "sellerSignedAt": "6 mei 2021",
+      "conditions": [
+        {
+          "id":"2",
+          "type": "test",
+          "status": "test",
+          "title": "test",
+          "createdAt": "11 mei 2021",
+          "negotiationId": "1"
+        }
+      ]
+    }
+  ]
+}

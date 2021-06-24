@@ -1,6 +1,7 @@
 package com.template.webserver.dto;
 
 import javax.persistence.Entity;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
@@ -24,8 +25,13 @@ public class Contract {
     @NotBlank(message = "buyerSignedAt is mandatory")
     private String buyerSignedAt;
 
+    @Valid
     private List<Conditie> condities;
+
+    @Valid
     private List<Koffie> koffies;
+
+    @Valid
     private List<Addendum> addenda;
 
     public Contract(String id, String sellerId, String buyerId, String offerId, String sellerSignedAt,

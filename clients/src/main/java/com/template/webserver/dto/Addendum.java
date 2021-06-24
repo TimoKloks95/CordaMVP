@@ -1,6 +1,7 @@
 package com.template.webserver.dto;
 
 import javax.persistence.Entity;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class Addendum {
     @NotBlank(message = "sellerSignedAt is mandatory")
     private String sellerSignedAt;
 
+    @Valid
     private List<Conditie> condities;
 
     public Addendum(String id, String createdAt, String buyerSignedAt, String sellerSignedAt, List<Conditie> condities) {

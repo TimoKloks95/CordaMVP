@@ -1,0 +1,16 @@
+{
+    "id": "1",
+    "createdAt": "5 mei 2021",
+    "buyerSignedAt": "6 mei 2021",
+    "sellerSignedAt": "6 mei 2021",
+    "conditions": [
+        {
+            "id":"",
+            "type": "test",
+            "status": "test",
+            "title":"test",
+            "createdAt": "11 mei 2021",
+            "negotiationId": "1"
+        }
+    ]
+}
