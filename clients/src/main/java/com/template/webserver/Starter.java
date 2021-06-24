@@ -1,17 +1,12 @@
 package com.template.webserver;
 
 import com.template.webserver.config.ClientConfiguration;
-import com.template.webserver.services.impl.ContractServiceImpl;
-import com.template.webserver.services.impl.RPCServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
-
-import javax.security.auth.login.AppConfigurationEntry;
 
 import static org.springframework.boot.WebApplicationType.SERVLET;
 

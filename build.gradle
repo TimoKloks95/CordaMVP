@@ -14,9 +14,9 @@ buildscript {//properties that you need to build the project
         log4j_version = constants.getProperty("log4jVersion")
         slf4j_version = constants.getProperty("slf4jVersion")
         corda_platform_version = constants.getProperty("platformVersion").toInteger()
-        //springboot
         spring_boot_version = constants.getProperty("springBootVersion")
         spring_boot_gradle_plugin_version = constants.getProperty("springBootGradleVersion")
+        mockito_version = constants.getProperty("mockitoVersion")
     }
 
     repositories {

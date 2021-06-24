@@ -2,7 +2,7 @@ package com.template.webserver.controllers;
 
 import com.template.webserver.dto.Addendum;
 import com.template.webserver.dto.Contract;
-import com.template.webserver.services.ContractService;
+import com.template.webserver.business.ContractService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -12,19 +12,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/")
 public class ClientController {
-    private final static Logger log = LoggerFactory.getLogger(ClientController.class);
-
     private ContractService contractService;
     public ClientController(ContractService contractService) {
         this.contractService = contractService;
     }
 
     @PostMapping("/{issuerId}")
-    public ResponseEntity<String> opslaanContract(@PathVariable("issuerId") String issuerId, @RequestBody Contract contract) {
-        Contract result = contractService.opslaanContract(issuerId, contract);
-        return result == null
-                ? new ResponseEntity<>("Failure", HttpStatus.BAD_REQUEST)
-                : new ResponseEntity<>("Succes", HttpStatus.OK);
+    public ResponseEntity<HttpStatus> opslaanContract(@PathVariable("issuerId") String issuerId, @RequestBody Contract contract) {
+        contractService.opslaanContract(issuerId, contract);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("{issuerId}/{contractId}")
@@ -36,11 +32,9 @@ public class ClientController {
     }
 
     @PatchMapping("{issuerId}/{contractId}")
-    public ResponseEntity<String> toevoegenAddendum(@PathVariable("issuerId") String issuerId, @PathVariable("contractId") String contractId,
+    public ResponseEntity<HttpStatus> toevoegenAddendum(@PathVariable("issuerId") String issuerId, @PathVariable("contractId") String contractId,
                                        @RequestBody Addendum addendum) {
-        Contract result = contractService.toevoegenAddendum(issuerId, contractId, addendum);
-        return result == null
-                ? new ResponseEntity<>("Failure", HttpStatus.BAD_REQUEST)
-                : new ResponseEntity<>("Succes", HttpStatus.OK);
+        contractService.toevoegenAddendum(issuerId, contractId, addendum);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

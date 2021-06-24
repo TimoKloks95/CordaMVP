@@ -1,4 +1,4 @@
-package com.template.webserver.services;
+package com.template.webserver.business;
 
 import net.corda.core.messaging.CordaRPCOps;
 
