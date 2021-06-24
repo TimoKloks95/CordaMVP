@@ -1,42 +1,33 @@
 package com.template.webserver.services.impl;
 
+import com.template.webserver.config.ClientConfiguration;
 import com.template.webserver.services.RPCService;
 import net.corda.client.rpc.CordaRPCClient;
 import net.corda.client.rpc.CordaRPCConnection;
 import net.corda.core.messaging.CordaRPCOps;
 import net.corda.core.utilities.NetworkHostAndPort;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-@Component
+@Service
 public class RPCServiceImpl implements AutoCloseable, RPCService {
-    private final String host;
-    private final String username;
-    private final String password;
-    private final int rpcPort;
+    private ClientConfiguration clientConfiguration;
 
     private CordaRPCConnection rpcConnection;
     private CordaRPCOps proxy;
 
-    public RPCServiceImpl(@Value("${config.rpc.host}") String host,
-                          @Value("${config.rpc.username}") String username,
-                          @Value("${config.rpc.password}") String password,
-                          @Value("${config.rpc.port}") int rpcPort) {
-        this.host = host;
-        this.username = username;
-        this.password = password;
-        this.rpcPort = rpcPort;
+    public RPCServiceImpl(ClientConfiguration clientConfiguration) {
+        this.clientConfiguration = clientConfiguration;
     }
 
     @PostConstruct
     @Override
     public void verbindMetBlockchain() {
-        NetworkHostAndPort rpcAddress = new NetworkHostAndPort(host, rpcPort);
+        NetworkHostAndPort rpcAddress = new NetworkHostAndPort(clientConfiguration.getHost(), clientConfiguration.getPort());
         CordaRPCClient rpcClient = new CordaRPCClient(rpcAddress);
-        this.rpcConnection = rpcClient.start(username, password);
+        this.rpcConnection = rpcClient.start(clientConfiguration.getUsername(), clientConfiguration.getPassword());
         this.proxy = rpcConnection.getProxy();
     }
 

@@ -25,11 +25,11 @@ public class Koffie {
     }
 
     @JsonCreator
-    public static Koffie createKoffie(String id, String region, String unit, String species, String process,
+    public static Koffie createKoffie(String id, String country, String region, String unit, String species, String process,
                                       String sector, String harvestAt, String qualitySegment, String parentId,
                                       boolean isBulk, int quantity, int minScreenSize, int maxScreenSize, int cuppingScore,
                                       String[] certificates) {
-        return new Koffie().setId(id).setRegion(region).setUnit(unit).setSpecies(species).setProcess(process).setSector(sector)
+        return new Koffie().setId(id).setCountry(country).setRegion(region).setUnit(unit).setSpecies(species).setProcess(process).setSector(sector)
                 .setHarvestAt(harvestAt).setQualitySegment(qualitySegment).setParentId(parentId).setBulk(isBulk)
                 .setQuantity(quantity).setMinScreenSize(minScreenSize).setMaxScreenSize(maxScreenSize).setCuppingScore(cuppingScore)
                 .setCertificates(certificates);

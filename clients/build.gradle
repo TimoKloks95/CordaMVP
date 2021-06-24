@@ -1,9 +1,19 @@
 apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 sourceSets {
     main {
         resources {
             srcDir rootProject.file("config/dev")
+        }
+    }
+    test {
+        java {
+            srcDir 'src/test/java'
+            java.outputDir = file('bin/main')
+        }
+        resources {
+            srcDir rootProject.file("config/test")
         }
     }
 }
@@ -18,9 +28,14 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-websocket:$spring_boot_version") {
         exclude group: "org.springframework.boot", module: "spring-boot-starter-logging"
     }
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
     compile "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_version}"
     compile "org.apache.logging.log4j:log4j-web:${log4j_version}"
     compile "org.slf4j:jul-to-slf4j:$slf4j_version"
+}
+
+test {
+    useJUnitPlatform()
 }
 
 springBoot {
