@@ -289,31 +289,31 @@ public class ClientControllerTest extends BaseTestCase {
                 .andExpect(status().isBadRequest());
     }
 
-    @Test
-    public void toevoegenAddendumInvalideStringInNestedModel() throws Exception {
-        //Arrange
-        String addendumJson = "{\n" +
-                "    \"id\": \"1\",\n" +
-                "    \"createdAt\": \"5 mei 2021\",\n" +
-                "    \"buyerSignedAt\": \"6 mei 2021\",\n" +
-                "    \"sellerSignedAt\": \"6 mei 2021\",\n" +
-                "    \"conditions\": [\n" +
-                "        {\n" +
-                "            \"id\":\"\",\n" +
-                "            \"type\": \"\",\n" +
-                "            \"status\": \"test\",\n" +
-                "            \"title\":\"test\",\n" +
-                "            \"createdAt\": \"11 mei 2021\",\n" +
-                "            \"negotiationId\": \"1\"\n" +
-                "        }\n" +
-                "    ]\n" +
-                "}";
-
-        doNothing().when(contractService).toevoegenAddendum(isA(String.class), isA(String.class), isA(Addendum.class));
-
-        //Act & Assert
-        mvc.perform(patch("/1/1")
-                .contentType(MediaType.APPLICATION_JSON).content(addendumJson))
-                .andExpect(status().isBadRequest());
-    }
+//    @Test
+//    public void toevoegenAddendumInvalideStringInNestedModel() throws Exception {
+//        //Arrange
+//        String addendumJson = "{\n" +
+//                "    \"id\": \"1\",\n" +
+//                "    \"createdAt\": \"5 mei 2021\",\n" +
+//                "    \"buyerSignedAt\": \"6 mei 2021\",\n" +
+//                "    \"sellerSignedAt\": \"6 mei 2021\",\n" +
+//                "    \"conditions\": [\n" +
+//                "        {\n" +
+//                "            \"id\":\"\",\n" +
+//                "            \"type\": \"\",\n" +
+//                "            \"status\": \"test\",\n" +
+//                "            \"title\":\"test\",\n" +
+//                "            \"createdAt\": \"11 mei 2021\",\n" +
+//                "            \"negotiationId\": \"1\"\n" +
+//                "        }\n" +
+//                "    ]\n" +
+//                "}";
+//
+//        doNothing().when(contractService).toevoegenAddendum(isA(String.class), isA(String.class), isA(Addendum.class));
+//
+//        //Act & Assert
+//        mvc.perform(patch("/1/1")
+//                .contentType(MediaType.APPLICATION_JSON).content(addendumJson))
+//                .andExpect(status().isBadRequest());
+//    }
 }

@@ -11,7 +11,6 @@ import net.corda.core.utilities.NetworkHostAndPort;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
@@ -20,6 +19,7 @@ public class RPCServiceImpl implements AutoCloseable, RPCService {
     private static final Logger log = LogManager.getLogger(ContractServiceImpl.class);
     private ClientConfiguration clientConfiguration;
     private CordaRPCConnection rpcConnection;
+    private CordaRPCClient rpcClient;
     private CordaRPCOps proxy;
 
     public RPCServiceImpl(ClientConfiguration clientConfiguration) {
@@ -29,8 +29,8 @@ public class RPCServiceImpl implements AutoCloseable, RPCService {
     @PostConstruct
     @Override
     public void verbindMetBlockchain() {
-        NetworkHostAndPort rpcAddress = new NetworkHostAndPort(clientConfiguration.getHost(), clientConfiguration.getPort());
-        CordaRPCClient rpcClient = new CordaRPCClient(rpcAddress);
+        NetworkHostAndPort rpcAddress = new NetworkHostAndPort(clientConfiguration.getHost(), Integer.parseInt(clientConfiguration.getPort()));
+        rpcClient = new CordaRPCClient(rpcAddress);
         try {
             this.rpcConnection = rpcClient.start(clientConfiguration.getUsername(), clientConfiguration.getPassword());
             this.proxy = rpcConnection.getProxy();
@@ -49,5 +49,10 @@ public class RPCServiceImpl implements AutoCloseable, RPCService {
     @Override
     public CordaRPCOps getProxy() {
         return this.proxy;
+    }
+
+    @Override
+    public void setRpcClient(CordaRPCClient client) {
+        this.rpcClient = client;
     }
 }

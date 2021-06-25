@@ -11,16 +11,16 @@ import com.template.webserver.business.RPCService;
 import net.corda.core.transactions.SignedTransaction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.concurrent.ExecutionException;
 
 @Service
 public class ContractServiceImpl implements ContractService {
     private static final Logger log = LogManager.getLogger(ContractServiceImpl.class);
+
+    @Autowired
     private RPCService rpcService;
-    public ContractServiceImpl(RPCService rpcService) {
-        this.rpcService = rpcService;
-    }
 
     @Override
     public void opslaanContract(String issuerId, Contract contract) {

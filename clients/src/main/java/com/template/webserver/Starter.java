@@ -20,7 +20,6 @@ public class Starter {
         SpringApplication app = new SpringApplication(Starter.class);
         app.setBannerMode(Banner.Mode.OFF);
         app.setWebApplicationType(SERVLET);
-        app.run(args);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
