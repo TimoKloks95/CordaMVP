@@ -90,7 +90,7 @@ public class ClientControllerTest extends BaseTestCase {
                 "  ]\n" +
                 "}";
 
-        doNothing().when(contractService).opslaanContract(isA(String.class), isA(Contract.class));
+        doNothing().when(contractService).saveContract(isA(String.class), isA(Contract.class));
 
         //Act & Assert
         mvc.perform(post("/1")
@@ -160,7 +160,7 @@ public class ClientControllerTest extends BaseTestCase {
                 "  ]\n" +
                 "}";
 
-        doNothing().when(contractService).opslaanContract(isA(String.class), isA(Contract.class));
+        doNothing().when(contractService).saveContract(isA(String.class), isA(Contract.class));
 
         //Act & Assert
         mvc.perform(post("/1")
@@ -230,7 +230,7 @@ public class ClientControllerTest extends BaseTestCase {
                 "  ]\n" +
                 "}";
 
-        doNothing().when(contractService).opslaanContract(isA(String.class), isA(Contract.class));
+        doNothing().when(contractService).saveContract(isA(String.class), isA(Contract.class));
 
         //Act & Assert
         mvc.perform(post("/1")
@@ -243,7 +243,7 @@ public class ClientControllerTest extends BaseTestCase {
         //Arrange
         Contract contract = new Contract("1234", "1", "2", "1", "5-mei-2021", "5 mei 2021",
                 null, null, null);
-        when(contractService.ophalenContract(isA(String.class), isA(String.class))).thenReturn(contract);
+        when(contractService.getContract(isA(String.class), isA(String.class))).thenReturn(contract);
 
         //Act & Assert
         mvc.perform(get("/1/1")
@@ -262,7 +262,7 @@ public class ClientControllerTest extends BaseTestCase {
                 "    \"conditions\": null\n" +
                 "}";
 
-        doNothing().when(contractService).toevoegenAddendum(isA(String.class), isA(String.class), isA(Addendum.class));
+        doNothing().when(contractService).addAddendum(isA(String.class), isA(String.class), isA(Addendum.class));
 
         //Act & Assert
         mvc.perform(patch("/1/1")
@@ -281,7 +281,7 @@ public class ClientControllerTest extends BaseTestCase {
                 "    \"conditions\": null\n" +
                 "}";
 
-        doNothing().when(contractService).toevoegenAddendum(isA(String.class), isA(String.class), isA(Addendum.class));
+        doNothing().when(contractService).addAddendum(isA(String.class), isA(String.class), isA(Addendum.class));
 
         //Act & Assert
         mvc.perform(patch("/1/1")

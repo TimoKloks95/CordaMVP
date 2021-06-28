@@ -20,14 +20,14 @@ public class Addendum {
     private String sellerSignedAt;
 
     @Valid
-    private List<Conditie> condities;
+    private List<Condition> conditions;
 
-    public Addendum(String id, String createdAt, String buyerSignedAt, String sellerSignedAt, List<Conditie> condities) {
+    public Addendum(String id, String createdAt, String buyerSignedAt, String sellerSignedAt, List<Condition> conditions) {
         this.id = id;
         this.createdAt = createdAt;
         this.buyerSignedAt = buyerSignedAt;
         this.sellerSignedAt = sellerSignedAt;
-        this.condities = condities;
+        this.conditions = conditions;
     }
 
     public String getId() {
@@ -62,11 +62,11 @@ public class Addendum {
         this.sellerSignedAt = sellerSignedAt;
     }
 
-    public List<Conditie> getCondities() {
-        return condities;
+    public List<Condition> getConditions() {
+        return conditions;
     }
 
-    public void setCondities(List<Conditie> condities) {
-        this.condities = condities;
+    public void setConditions(List<Condition> conditions) {
+        this.conditions = conditions;
     }
 }

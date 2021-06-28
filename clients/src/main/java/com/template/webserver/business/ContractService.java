@@ -4,7 +4,7 @@ import com.template.webserver.dto.Addendum;
 import com.template.webserver.dto.Contract;
 
 public interface ContractService {
-    void opslaanContract(String issuerId, Contract contract);
-    Contract ophalenContract(String issuerId, String contractId);
-    void toevoegenAddendum(String issuerId, String contractId, Addendum addendum);
+    void saveContract(String issuerId, Contract contract);
+    Contract getContract(String issuerId, String contractId);
+    void addAddendum(String issuerId, String contractId, Addendum addendum);
 }

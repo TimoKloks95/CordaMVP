@@ -8,6 +8,7 @@ import com.template.webserver.dto.Addendum;
 import com.template.webserver.dto.Contract;
 import com.template.webserver.business.ContractService;
 import com.template.webserver.business.RPCService;
+import net.corda.core.messaging.CordaRPCOps;
 import net.corda.core.transactions.SignedTransaction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,9 +24,10 @@ public class ContractServiceImpl implements ContractService {
     private RPCService rpcService;
 
     @Override
-    public void opslaanContract(String issuerId, Contract contract) {
+    public void saveContract(String issuerId, Contract contract) {
+        CordaRPCOps proxy = rpcService.getProxy();
         try {
-            rpcService.getProxy().startTrackedFlowDynamic(OpslaanContractFlow.class, issuerId, contract).getReturnValue().get();
+            proxy.startTrackedFlowDynamic(OpslaanContractFlow.class, issuerId, contract).getReturnValue().get();
         } catch (InterruptedException | ExecutionException e) {
             log.error("Something went wrong while calling the save contract flow", e);
             throw new BeycoFlowException("Something went wrong while calling the save contract flow", e);
@@ -33,9 +35,10 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public Contract ophalenContract(String issuerId, String contractId) {
+    public Contract getContract(String issuerId, String contractId) {
+        CordaRPCOps proxy = rpcService.getProxy();
         try {
-            SignedTransaction result = rpcService.getProxy().startTrackedFlowDynamic(OphalenContractFlow.class, issuerId, contractId).getReturnValue().get();
+            SignedTransaction result = proxy.startTrackedFlowDynamic(OphalenContractFlow.class, issuerId, contractId).getReturnValue().get();
            return null;
         } catch (InterruptedException | ExecutionException e) {
             log.error("Something went wrong while calling the get contract flow", e);
@@ -44,9 +47,10 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public void toevoegenAddendum(String issuerId, String contractId, Addendum addendum) {
+    public void addAddendum(String issuerId, String contractId, Addendum addendum) {
+        CordaRPCOps proxy = rpcService.getProxy();
         try {
-            rpcService.getProxy().startTrackedFlowDynamic(ToevoegenAddendumFlow.class, issuerId, contractId, addendum).getReturnValue().get();
+            proxy.startTrackedFlowDynamic(ToevoegenAddendumFlow.class, issuerId, contractId, addendum).getReturnValue().get();
         } catch (InterruptedException | ExecutionException e) {
             log.error("Something went wrong while calling the add addendum flow", e);
             throw new BeycoFlowException("Something went wrong while calling the add addendum flow", e);

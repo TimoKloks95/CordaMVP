@@ -4,21 +4,14 @@ import com.template.webserver.business.RPCService;
 import com.template.webserver.config.ClientConfiguration;
 import net.corda.client.rpc.CordaRPCClient;
 import net.corda.client.rpc.CordaRPCConnection;
-import net.corda.client.rpc.RPCException;
 import net.corda.core.messaging.CordaRPCOps;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
@@ -58,6 +51,6 @@ public class RPCServiceImplTest {
 
     @Test
     public void verbindMetBlockchainSucces() {
-        verify(rpcService).verbindMetBlockchain();
+        verify(rpcService).connectToBlockchainNode();
     }
 }

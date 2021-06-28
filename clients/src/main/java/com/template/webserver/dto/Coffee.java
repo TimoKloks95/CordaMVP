@@ -4,7 +4,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 @Entity
-public class Koffie {
+public class Coffee {
     @NotBlank(message = "id is mandatory")
     private String id;
 
@@ -50,7 +50,7 @@ public class Koffie {
 
     private String[] certificates;
 
-    public Koffie(String id, String country, String region, String unit, String species, String process, String sector,
+    public Coffee(String id, String country, String region, String unit, String species, String process, String sector,
                   String harvestAt, String qualitySegment, String parentId, boolean isBulk, int quantity, int minScreenSize,
                   int maxScreenSize, int cuppingScore, String[] certificates) {
         this.id = id;

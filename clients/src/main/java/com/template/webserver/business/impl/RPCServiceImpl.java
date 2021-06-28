@@ -28,7 +28,7 @@ public class RPCServiceImpl implements AutoCloseable, RPCService {
 
     @PostConstruct
     @Override
-    public void verbindMetBlockchain() {
+    public void connectToBlockchainNode() {
         NetworkHostAndPort rpcAddress = new NetworkHostAndPort(clientConfiguration.getHost(), Integer.parseInt(clientConfiguration.getPort()));
         rpcClient = new CordaRPCClient(rpcAddress);
         try {

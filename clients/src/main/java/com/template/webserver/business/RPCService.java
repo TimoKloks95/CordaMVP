@@ -4,7 +4,7 @@ import net.corda.client.rpc.CordaRPCClient;
 import net.corda.core.messaging.CordaRPCOps;
 
 public interface RPCService {
-    void verbindMetBlockchain();
+    void connectToBlockchainNode();
     CordaRPCOps getProxy();
     void setRpcClient(CordaRPCClient client);
 }

@@ -26,16 +26,16 @@ public class Contract {
     private String buyerSignedAt;
 
     @Valid
-    private List<Conditie> condities;
+    private List<Condition> conditions;
 
     @Valid
-    private List<Koffie> koffies;
+    private List<Coffee> coffees;
 
     @Valid
     private List<Addendum> addenda;
 
     public Contract(String id, String sellerId, String buyerId, String offerId, String sellerSignedAt,
-                    String buyerSignedAt, List<Conditie> condities, List<Koffie> koffies,
+                    String buyerSignedAt, List<Condition> conditions, List<Coffee> coffees,
                     List<Addendum> addenda) {
         this.id = id;
         this.sellerId = sellerId;
@@ -43,8 +43,8 @@ public class Contract {
         this.offerId = offerId;
         this.sellerSignedAt = sellerSignedAt;
         this.buyerSignedAt = buyerSignedAt;
-        this.condities = condities;
-        this.koffies = koffies;
+        this.conditions = conditions;
+        this.coffees = coffees;
         this.addenda = addenda;
     }
 
@@ -96,20 +96,20 @@ public class Contract {
         this.buyerSignedAt = buyerSignedAt;
     }
 
-    public List<Conditie> getCondities() {
-        return condities;
+    public List<Condition> getConditions() {
+        return conditions;
     }
 
-    public void setCondities(List<Conditie> condities) {
-        this.condities = condities;
+    public void setConditions(List<Condition> conditions) {
+        this.conditions = conditions;
     }
 
-    public List<Koffie> getKoffies() {
-        return koffies;
+    public List<Coffee> getCoffees() {
+        return coffees;
     }
 
-    public void setKoffies(List<Koffie> koffies) {
-        this.koffies = koffies;
+    public void setCoffees(List<Coffee> coffees) {
+        this.coffees = coffees;
     }
 
     public List<Addendum> getAddenda() {

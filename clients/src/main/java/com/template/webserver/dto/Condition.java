@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
 
 @Entity
-public class Conditie {
+public class Condition {
     @NotBlank(message = "id is mandatory")
     private String id;
 
@@ -23,7 +23,7 @@ public class Conditie {
     @NotBlank(message = "negotiationId is mandatory")
     private String negotiationId;
 
-    public Conditie(String id, String type, String status, String title, String createdAt, String negotiationId) {
+    public Condition(String id, String type, String status, String title, String createdAt, String negotiationId) {
         this.id = id;
         this.type = type;
         this.status = status;
