@@ -28,8 +28,11 @@ build/
 logs/
 gradle/wrapper/
 workflows/build/
+workflows/bin/
 workflows/logs/
 contracts/build/
+contracts/bin/
 contracts/logs/
 clients/logs/
 clients/bin/
+clients/build/
