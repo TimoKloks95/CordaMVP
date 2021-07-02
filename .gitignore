@@ -23,5 +23,13 @@
 hs_err_pid*
 
 .gradle/
+.idea/
 build/
-
+logs/
+gradle/wrapper/
+workflows/build/
+workflows/logs/
+contracts/build/
+contracts/logs/
+clients/logs/
+clients/bin/
