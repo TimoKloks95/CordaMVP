@@ -36,3 +36,7 @@ contracts/logs/
 clients/logs/
 clients/bin/
 clients/build/
+
+clients/src/main/resources/
+gradle.properties
+constants.properties
