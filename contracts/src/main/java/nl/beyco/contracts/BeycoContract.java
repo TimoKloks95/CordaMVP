@@ -77,15 +77,37 @@ public class BeycoContract implements Contract {
     }
 
     private void validateAddendumAttributes(Addendum addendum) {
-        //TODO
+        requireThat(require -> {
+            require.using("Addendum id can't be empty or null.", addendum.getId() != null && !addendum.getId().isEmpty());
+            require.using("Created at can't be after current datetime.", addendum.getCreatedAt().isAfter(LocalDateTime.now()));
+            require.using("Buyer signed can't be after current datetime.", addendum.getBuyerSignedAt().isAfter(LocalDateTime.now()));
+            require.using("Seller signed can't be after current datetime.", addendum.getSellerSignedAt().isAfter(LocalDateTime.now()));
+            require.using("Addendum has to specify at least one condition.", addendum.getConditions().size() > 0);
+            return null;
+        });
+        for(Condition condition : addendum.getConditions()) {
+            validateConditionAttributes(condition);
+        }
     }
 
     private void validateConditionAttributes(Condition condition) {
-        //TODO
+        requireThat(require -> {
+           require.using("Condition id can't be empty or null.", condition.getId() != null && !condition.getId().isEmpty());
+            require.using("Condition type can't be empty or null.", condition.getType() != null && !condition.getType().isEmpty());
+            require.using("Condition status can't be empty or null.", condition.getStatus() != null && !condition.getStatus().isEmpty());
+            require.using("Condition title can't be empty or null.", condition.getTitle() != null && !condition.getTitle().isEmpty());
+            require.using("Condition value can't be empty or null.", condition.getValue() != null && !condition.getValue().isEmpty());
+            require.using("Condition negotiation id can't be empty or null.", condition.getNegotiationId() != null && !condition.getNegotiationId().isEmpty());
+           return null;
+        });
     }
 
     private void verifyAddAddendumToContract(BeycoContractState contract) {
-        //TODO
+        requireThat(require -> {
+           require.using("Contract has to have at least one addendum", contract.getAddenda().size() > 0);
+           return null;
+        });
+        validateBeycoContractStateAttributes(contract);
     }
 
     public interface Commands extends CommandData {
