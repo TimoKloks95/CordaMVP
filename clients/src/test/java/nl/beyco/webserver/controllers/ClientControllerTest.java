@@ -62,8 +62,8 @@ public class ClientControllerTest extends BaseTestCase {
                 "      \"parentId\": \"2\",\n" +
                 "      \"isBulk\": true,\n" +
                 "      \"quantity\": 10,\n" +
-                "      \"minScreenSize\": 1,\n" +
-                "      \"maxScreenSize\": 5,\n" +
+                "      \"minScreenSize\": \"1\",\n" +
+                "      \"maxScreenSize\": \"5\",\n" +
                 "      \"cuppingScore\": 10,\n" +
                 "      \"certificates\": [\n" +
                 "        \"test\", \"test\"\n" +
@@ -132,8 +132,8 @@ public class ClientControllerTest extends BaseTestCase {
                 "      \"parentId\": \"2\",\n" +
                 "      \"isBulk\": true,\n" +
                 "      \"quantity\": 10,\n" +
-                "      \"minScreenSize\": 1,\n" +
-                "      \"maxScreenSize\": 5,\n" +
+                "      \"minScreenSize\": \"1\",\n" +
+                "      \"maxScreenSize\": \"5\",\n" +
                 "      \"cuppingScore\": 10,\n" +
                 "      \"certificates\": [\n" +
                 "        \"test\", \"test\"\n" +
@@ -202,8 +202,8 @@ public class ClientControllerTest extends BaseTestCase {
                 "      \"parentId\": \"2\",\n" +
                 "      \"isBulk\": true,\n" +
                 "      \"quantity\": 10,\n" +
-                "      \"minScreenSize\": 1,\n" +
-                "      \"maxScreenSize\": 5,\n" +
+                "      \"minScreenSize\": \"1\",\n" +
+                "      \"maxScreenSize\": \"5\",\n" +
                 "      \"cuppingScore\": -2,\n" +
                 "      \"certificates\": [\n" +
                 "        \"test\", \"test\"\n" +

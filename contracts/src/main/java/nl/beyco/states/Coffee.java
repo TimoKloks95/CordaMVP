@@ -6,7 +6,7 @@ import net.corda.core.serialization.CordaSerializable;
 import java.time.LocalDateTime;
 
 @CordaSerializable
-public class CoffeeState {
+public class Coffee {
     private final String id;
     private final String country;
     private final String region;
@@ -15,9 +15,9 @@ public class CoffeeState {
     private final int quantity;
     private final String species;
     private final String process;
-    private final int minScreenSize;
-    private final int maxScreenSize;
-    private final int cuppingScore;
+    private final String minScreenSize;
+    private final String maxScreenSize;
+    private final double cuppingScore;
     private final String sector;
     private final LocalDateTime harvestAt;
     private final String qualitySegment;
@@ -25,10 +25,10 @@ public class CoffeeState {
     private final String parentId;
 
     @ConstructorForDeserialization
-    public CoffeeState(String id, String country, String region, boolean isBulk,
-                       String unit, int quantity, String species, String process,
-                       int minScreenSize, int maxScreenSize, int cuppingScore, String sector,
-                       LocalDateTime harvestAt, String qualitySegment, String[] certificates, String parentId) {
+    public Coffee(String id, String country, String region, boolean isBulk,
+                  String unit, int quantity, String species, String process,
+                  String minScreenSize, String maxScreenSize, double cuppingScore, String sector,
+                  LocalDateTime harvestAt, String qualitySegment, String[] certificates, String parentId) {
             this.id = id;
             this.country = country;
             this.region = region;
@@ -80,15 +80,15 @@ public class CoffeeState {
         return process;
     }
 
-    public int getMinScreenSize() {
+    public String getMinScreenSize() {
         return minScreenSize;
     }
 
-    public int getMaxScreenSize() {
+    public String getMaxScreenSize() {
         return maxScreenSize;
     }
 
-    public int getCuppingScore() {
+    public double getCuppingScore() {
         return cuppingScore;
     }
 

@@ -32,6 +32,12 @@ public class Coffee {
     @NotBlank(message = "qualitySegment is mandatory")
     private String qualitySegment;
 
+    @NotBlank(message = "Minimal screen size is mandatory")
+    private String minScreenSize;
+
+    @NotBlank(message = "Maximal screen size is mandatory")
+    private String maxScreenSize;
+
     private String parentId;
 
     private boolean isBulk;
@@ -40,19 +46,13 @@ public class Coffee {
     private int quantity;
 
     @Min(0)
-    private int minScreenSize;
-
-    @Min(0)
-    private int maxScreenSize;
-
-    @Min(0)
-    private int cuppingScore;
+    private double cuppingScore;
 
     private String[] certificates;
 
     public Coffee(String id, String country, String region, String unit, String species, String process, String sector,
-                  String harvestAt, String qualitySegment, String parentId, boolean isBulk, int quantity, int minScreenSize,
-                  int maxScreenSize, int cuppingScore, String[] certificates) {
+                  String harvestAt, String qualitySegment, String parentId, boolean isBulk, int quantity, String minScreenSize,
+                  String maxScreenSize, double cuppingScore, String[] certificates) {
         this.id = id;
         this.country = country;
         this.region = region;
@@ -178,27 +178,27 @@ public class Coffee {
         this.quantity = quantity;
     }
 
-    public int getMinScreenSize() {
+    public String getMinScreenSize() {
         return minScreenSize;
     }
 
-    public void setMinScreenSize(int minScreenSize) {
+    public void setMinScreenSize(String minScreenSize) {
         this.minScreenSize = minScreenSize;
     }
 
-    public int getMaxScreenSize() {
+    public String getMaxScreenSize() {
         return maxScreenSize;
     }
 
-    public void setMaxScreenSize(int maxScreenSize) {
+    public void setMaxScreenSize(String maxScreenSize) {
         this.maxScreenSize = maxScreenSize;
     }
 
-    public int getCuppingScore() {
+    public double getCuppingScore() {
         return cuppingScore;
     }
 
-    public void setCuppingScore(int cuppingScore) {
+    public void setCuppingScore(double cuppingScore) {
         this.cuppingScore = cuppingScore;
     }
 

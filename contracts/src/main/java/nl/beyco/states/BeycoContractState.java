@@ -18,15 +18,15 @@ public class BeycoContractState implements ContractState {
     private final String offerId;
     private final LocalDateTime sellerSignedAt;
     private final LocalDateTime buyerSignedAt;
-    private final List<CoffeeState> coffees;
-    private final List<ConditionState> conditions;
-    private List<AddendumState> addenda;
+    private final List<Coffee> coffees;
+    private final List<Condition> conditions;
+    private List<Addendum> addenda;
     private final String issuerId;
 
     public BeycoContractState(String id, String sellerId, String buyerId, String offerId,
                               LocalDateTime sellerSignedAt, LocalDateTime buyerSignedAt,
-                              List<CoffeeState> coffees, List<ConditionState> conditions,
-                              List<AddendumState> addenda, String issuerId) {
+                              List<Coffee> coffees, List<Condition> conditions,
+                              List<Addendum> addenda, String issuerId) {
         this.id = id;
         this.sellerId = sellerId;
         this.buyerId = buyerId;
@@ -63,19 +63,19 @@ public class BeycoContractState implements ContractState {
         return buyerSignedAt;
     }
 
-    public List<CoffeeState> getCoffees() {
+    public List<Coffee> getCoffees() {
         return coffees;
     }
 
-    public List<ConditionState> getConditions() {
+    public List<Condition> getConditions() {
         return conditions;
     }
 
-    public List<AddendumState> getAddenda() {
+    public List<Addendum> getAddenda() {
         return addenda;
     }
 
-    public void addAddendum(AddendumState addendum) {
+    public void addAddendum(Addendum addendum) {
         addenda.add(addendum);
     }
 

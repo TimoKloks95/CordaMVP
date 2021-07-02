@@ -6,7 +6,7 @@ import net.corda.core.serialization.CordaSerializable;
 import java.time.LocalDateTime;
 
 @CordaSerializable
-public class ConditionState {
+public class Condition {
     private final String id;
     private final String type;
     private final String status;
@@ -16,8 +16,8 @@ public class ConditionState {
     private final String negotiationId;
 
     @ConstructorForDeserialization
-    public ConditionState(String id, String type, String status, String title, String value,
-                          LocalDateTime createdAt, String negotiationId) {
+    public Condition(String id, String type, String status, String title, String value,
+                     LocalDateTime createdAt, String negotiationId) {
         this.id = id;
         this.type = type;
         this.status = status;

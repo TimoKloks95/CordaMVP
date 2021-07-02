@@ -29,8 +29,8 @@
       "parentId": "2",
       "isBulk": true,
       "quantity": 10,
-      "minScreenSize": 1,
-      "maxScreenSize": 5,
+      "minScreenSize": "1",
+      "maxScreenSize": "5",
       "cuppingScore": 10,
       "certificates": [
         "test", "test"
