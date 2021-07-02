@@ -41,3 +41,4 @@ clients/src/main/resources/
 gradle.properties
 constants.properties
 runsonar.bat
+Jenkinsfile
