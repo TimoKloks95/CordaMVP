@@ -18,9 +18,11 @@ public class SaveContractFlow extends FlowLogic<Boolean> {
     private Party beyco;
 
     public SaveContractFlow() {
-        // Get current node
+        // Get current node & notary
         beyco = getOurIdentity();
-        // Get inputs
+        final Party notary = getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0);
+
+        // Get inputs - zeker weten dat contract niet bestaat
 
         // Build output
 
