@@ -20,15 +20,34 @@ public class BeycoContract implements Contract {
     public void verify(LedgerTransaction tx) {
         for(CommandWithParties<CommandData> commands : tx.getCommands()) {
             if(commands.getValue() instanceof Commands.Save) {
-                verifySaveContract(tx.outputsOfType(BeycoContractState.class).get(0));
+                verifySaveContract(tx);
             }
             else if(commands.getValue() instanceof Commands.Add) {
-                verifyAddAddendumToContract(tx.outputsOfType(BeycoContractState.class).get(0));
+                verifyAddAddendumToContract(tx);
             }
         }
     }
 
-    private void verifySaveContract(BeycoContractState contract) {
+    private void verifySaveContract(LedgerTransaction tx) {
+        BeycoContractState contract = tx.outputsOfType(BeycoContractState.class).get(0);
+        requireThat(require -> {
+            require.using("No inputs should be consumed when saving a contract.", tx.getInputStates().size() == 0);
+            return null;
+        });
+        validateBeycoContract(contract);
+    }
+
+    private void verifyAddAddendumToContract(LedgerTransaction tx) {
+        BeycoContractState contract = tx.outputsOfType(BeycoContractState.class).get(0);
+        requireThat(require -> {
+            //TODO toevoegen van i/o checks
+            require.using("Contract has to have at least one addendum", contract.getAddenda().size() > 0);
+            return null;
+        });
+        validateBeycoContract(contract);
+    }
+
+    private void validateBeycoContract(BeycoContractState contract) {
         validateBeycoContractStateAttributes(contract);
         for(Coffee coffee : contract.getCoffees()) {
             validateCoffeeAttributes(coffee);
@@ -100,14 +119,6 @@ public class BeycoContract implements Contract {
             require.using("Condition negotiation id can't be empty or null.", condition.getNegotiationId() != null && !condition.getNegotiationId().isEmpty());
            return null;
         });
-    }
-
-    private void verifyAddAddendumToContract(BeycoContractState contract) {
-        requireThat(require -> {
-           require.using("Contract has to have at least one addendum", contract.getAddenda().size() > 0);
-           return null;
-        });
-        validateBeycoContractStateAttributes(contract);
     }
 
     public interface Commands extends CommandData {
