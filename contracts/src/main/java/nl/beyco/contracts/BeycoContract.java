@@ -47,8 +47,8 @@ public class BeycoContract implements Contract {
             require.using("Seller id can't be empty or null.", contract.getSellerId() != null && !contract.getSellerId().isEmpty());
             require.using("Buyer id can't be empty or null.", contract.getBuyerId() != null && !contract.getBuyerId().isEmpty());
             require.using("Offer id can't be empty or null.", contract.getOfferId() != null && !contract.getOfferId().isEmpty());
-            require.using("Seller signed can't be null.", contract.getSellerSignedAt() != null);
-            require.using("Buyer signed can't be null.", contract.getBuyerSignedAt() != null);
+            require.using("Seller has not signed the contract. Both parties have to sign the contract.", contract.getSellerSignedAt() != null);
+            require.using("Buyer has not signed the contract. Both parties have to sign the contract.", contract.getBuyerSignedAt() != null);
             require.using("Seller signed can't be after current datetime.", contract.getSellerSignedAt().isAfter(LocalDateTime.now()));
             require.using("Buyer signed can't be after current datetime.", contract.getBuyerSignedAt().isAfter(LocalDateTime.now()));
             require.using("Contract has to specify at least one coffee", contract.getCoffees().size() > 0);

@@ -3,11 +3,12 @@ package nl.beyco.states;
 import net.corda.core.contracts.BelongsToContract;
 import net.corda.core.contracts.ContractState;
 import net.corda.core.identity.AbstractParty;
+import net.corda.core.identity.Party;
 import nl.beyco.contracts.BeycoContract;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 @BelongsToContract(BeycoContract.class)
@@ -22,11 +23,12 @@ public class BeycoContractState implements ContractState {
     private final List<Condition> conditions;
     private List<Addendum> addenda;
     private final String issuerId;
+    private Party beyco;
 
     public BeycoContractState(String id, String sellerId, String buyerId, String offerId,
                               LocalDateTime sellerSignedAt, LocalDateTime buyerSignedAt,
                               List<Coffee> coffees, List<Condition> conditions,
-                              List<Addendum> addenda, String issuerId) {
+                              List<Addendum> addenda, String issuerId, Party beyco) {
         this.id = id;
         this.sellerId = sellerId;
         this.buyerId = buyerId;
@@ -37,6 +39,7 @@ public class BeycoContractState implements ContractState {
         this.conditions = conditions;
         this.addenda = addenda;
         this.issuerId = issuerId;
+        this.beyco = beyco;
     }
 
     public String getId() {
@@ -75,6 +78,10 @@ public class BeycoContractState implements ContractState {
         return addenda;
     }
 
+    public Party getBeyco() {
+        return beyco;
+    }
+
     public void addAddendum(Addendum addendum) {
         addenda.add(addendum);
     }
@@ -86,6 +93,6 @@ public class BeycoContractState implements ContractState {
     @NotNull
     @Override
     public List<AbstractParty> getParticipants() {
-        return Collections.emptyList();
+        return Arrays.asList(beyco);
     }
 }

@@ -1,5 +1,7 @@
 package nl.beyco.contracts;
 
+import net.corda.core.identity.CordaX500Name;
+import net.corda.testing.core.TestIdentity;
 import net.corda.testing.node.MockServices;
 import org.junit.Test;
 
@@ -9,6 +11,7 @@ import static org.junit.Assert.*;
 
 public class BeycoContractTest {
     private final MockServices ledgerServices = new MockServices(Arrays.asList("nl.beyco"));
+    TestIdentity admin = new TestIdentity(new CordaX500Name("Beyco", "Testland", "Testcountry"));
 
     @Test
     public void stringAttributeCannotBeNull() {
