@@ -2,6 +2,8 @@ package nl.beyco.states;
 
 import net.corda.core.contracts.BelongsToContract;
 import net.corda.core.contracts.ContractState;
+import net.corda.core.contracts.LinearState;
+import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.identity.AbstractParty;
 import net.corda.core.identity.Party;
 import nl.beyco.contracts.BeycoContract;
@@ -12,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @BelongsToContract(BeycoContract.class)
-public class BeycoContractState implements ContractState {
+public class BeycoContractState implements ContractState, LinearState {
     private final String id;
     private final String sellerId;
     private final String buyerId;
@@ -94,5 +96,11 @@ public class BeycoContractState implements ContractState {
     @Override
     public List<AbstractParty> getParticipants() {
         return Arrays.asList(beyco);
+    }
+
+    @NotNull
+    @Override
+    public UniqueIdentifier getLinearId() {
+        return new UniqueIdentifier(id);
     }
 }
