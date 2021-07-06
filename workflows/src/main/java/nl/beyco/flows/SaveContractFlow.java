@@ -2,7 +2,6 @@ package nl.beyco.flows;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import net.corda.core.CordaRuntimeException;
@@ -31,12 +30,12 @@ public class SaveContractFlow extends FlowLogic<SignedTransaction> {
     }
 
     private String issuerId;
-    private String contractState;
+    private String contractJson;
     private Party node;
 
-    public SaveContractFlow(String issuerId, String contractState) {
+    public SaveContractFlow(String issuerId, String contractJson) {
         this.issuerId = issuerId;
-        this.contractState = contractState;
+        this.contractJson = contractJson;
     }
 
     @Suspendable
@@ -49,7 +48,7 @@ public class SaveContractFlow extends FlowLogic<SignedTransaction> {
         ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
         BeycoContractState toAddState;
         try {
-            toAddState = objectMapper.readValue(contractState, BeycoContractState.class);
+            toAddState = objectMapper.readValue(contractJson, BeycoContractState.class);
         } catch(JsonProcessingException e) {
             throw new FlowException("Something went wrong trying to parse contract json to state object", e);
         }
@@ -60,7 +59,7 @@ public class SaveContractFlow extends FlowLogic<SignedTransaction> {
         }
 
         // Checks
-        if(contractAlreadyExistsInVault()) {
+        if(contractAlreadyExistsInVault(toAddState.getId())) {
             throw new FlowException("The contract that you tried to save already exists.");
         }
 
@@ -84,9 +83,9 @@ public class SaveContractFlow extends FlowLogic<SignedTransaction> {
         return subFlow(new FinalityFlow(selfSignedTx, new HashSet<FlowSession>(0)));
     }
 
-    private boolean contractAlreadyExistsInVault() {
+    private boolean contractAlreadyExistsInVault(String contractId) {
         QueryCriteria.LinearStateQueryCriteria linearStateQueryCriteria = new QueryCriteria.LinearStateQueryCriteria()
-                .withExternalId(Collections.singletonList(issuerId));
+                .withExternalId(Collections.singletonList(contractId));
         QueryCriteria.VaultQueryCriteria criteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
         Vault.Page<BeycoContractState> results = getServiceHub().getVaultService()
                 .queryBy(BeycoContractState.class, criteria.and(linearStateQueryCriteria));

@@ -56,7 +56,8 @@ public class ContractServiceImpl implements ContractService {
     public Contract getContract(String issuerId, String contractId) {
         CordaRPCOps proxy = rpcService.getProxy();
         try {
-            BeycoContractState result = proxy.startTrackedFlowDynamic(GetContractFlow.class, issuerId, contractId).getReturnValue().get();
+            String result = proxy.startTrackedFlowDynamic(GetContractFlow.class, issuerId, contractId).getReturnValue().get();
+            //TODO result to contract
            return null;
         } catch (InterruptedException | ExecutionException e) {
             log.error("Something went wrong while calling the get contract flow", e);
