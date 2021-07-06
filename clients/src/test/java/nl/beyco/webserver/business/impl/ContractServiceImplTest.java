@@ -13,25 +13,25 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
-@RunWith(SpringRunner.class)
-public class ContractServiceImplTest {
-    @TestConfiguration
-    static class ContractServiceImplTestContextConfiguration {
-        @Bean
-        public ContractService contractService() {
-            return new ContractServiceImpl();
-        }
-    }
-
-    @Autowired
-    private ContractService contractService;
-
-    @MockBean
-    private RPCService rpcService;
-
-    @Test
-    public void opslaanContract() throws Exception {
+//
+//@RunWith(SpringRunner.class)
+//public class ContractServiceImplTest {
+//    @TestConfiguration
+//    static class ContractServiceImplTestContextConfiguration {
+//        @Bean
+//        public ContractService contractService() {
+//            return new ContractServiceImpl();
+//        }
+//    }
+//
+//    @Autowired
+//    private ContractService contractService;
+//
+//    @MockBean
+//    private RPCService rpcService;
+//
+//    @Test
+//    public void opslaanContract() throws Exception {
 //        //Arrange
 //        Contract testContract = new Contract("1", "1", "2", "1", "12 mei 2021",
 //                "12 mei 2021", null, null, null);
@@ -47,7 +47,7 @@ public class ContractServiceImplTest {
 //        verify(rpcService).getProxy();
 //        verify(testProxy).startTrackedFlowDynamic(OpslaanContractFlow.class, isA(String.class), isA(Contract.class));
 
-    }
+//    }
 //
 //    @Test
 //    public void ophalenContract() {
@@ -67,4 +67,4 @@ public class ContractServiceImplTest {
 //
 //        //Assert
 //    }
-}
+//}

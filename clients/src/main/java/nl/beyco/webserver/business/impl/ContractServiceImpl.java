@@ -9,7 +9,6 @@ import net.corda.core.node.services.Vault;
 import nl.beyco.flows.GetContractFlow;
 import nl.beyco.flows.SaveContractFlow;
 import nl.beyco.flows.AddAddendumFlow;
-import nl.beyco.states.BeycoContractState;
 import nl.beyco.webserver.business.exceptions.BeycoFlowException;
 import nl.beyco.webserver.business.exceptions.BeycoParseException;
 import nl.beyco.webserver.dto.Addendum;
@@ -45,7 +44,7 @@ public class ContractServiceImpl implements ContractService {
             throw new BeycoParseException("Something went wrong while trying to parse the contract to json format.", e);
         }
         try {
-            SignedTransaction result = proxy.startTrackedFlowDynamic(SaveContractFlow.class, issuerId, contractJson.trim()).getReturnValue().get();
+            SignedTransaction result = proxy.startTrackedFlowDynamic(SaveContractFlow.class, issuerId, contractJson).getReturnValue().get();
         } catch (InterruptedException | ExecutionException e) {
             log.error("Something went wrong while calling the save contract flow", e);
             throw new BeycoFlowException("Something went wrong while calling the save contract flow", e);

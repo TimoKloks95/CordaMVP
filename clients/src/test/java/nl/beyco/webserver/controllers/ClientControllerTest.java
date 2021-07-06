@@ -25,9 +25,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@WebMvcTest(ClientController.class)
-public class ClientControllerTest extends BaseTestCase {
+//@RunWith(SpringRunner.class)
+//@WebMvcTest(ClientController.class)
+//public class ClientControllerTest extends BaseTestCase {
 //    @Autowired
 //    private MockMvc mvc;
 //
@@ -322,4 +322,4 @@ public class ClientControllerTest extends BaseTestCase {
 //                .contentType(MediaType.APPLICATION_JSON).content(addendumJson))
 //                .andExpect(status().isBadRequest());
 //    }
-}
+//}

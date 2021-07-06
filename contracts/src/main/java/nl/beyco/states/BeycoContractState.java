@@ -19,7 +19,6 @@ import java.util.List;
 
 @BelongsToContract(BeycoContract.class)
 public class BeycoContractState implements ContractState, LinearState {
-    private String issuerId;
     private String id;
     private String sellerId;
     private String buyerId;
@@ -40,10 +39,9 @@ public class BeycoContractState implements ContractState, LinearState {
     }
 
     @ConstructorForDeserialization
-    public BeycoContractState(String issuerId, String id, String sellerId, String buyerId, String offerId,
+    public BeycoContractState(String id, String sellerId, String buyerId, String offerId,
                               LocalDateTime sellerSignedAt, LocalDateTime buyerSignedAt, List<Coffee> coffees,
                               List<Condition> conditions, List<Addendum> addenda) {
-        this.issuerId = issuerId;
         this.id = id;
         this.sellerId = sellerId;
         this.buyerId = buyerId;
@@ -96,9 +94,6 @@ public class BeycoContractState implements ContractState, LinearState {
         addenda.add(addendum);
     }
 
-    public String getIssuerId() {
-        return issuerId;
-    }
 
     public void setNode(Party node) {
         this.node = node;

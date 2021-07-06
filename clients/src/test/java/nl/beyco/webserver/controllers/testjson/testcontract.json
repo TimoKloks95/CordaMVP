@@ -11,6 +11,7 @@
       "type": "test",
       "status": "test",
       "title":"test",
+      "value": "test",
       "createdAt": "2021-05-11T10:00:00",
       "negotiationId": "1"
     }
@@ -49,6 +50,7 @@
           "type": "test",
           "status": "test",
           "title": "test",
+          "value": "test",
           "createdAt": "2021-05-11T10:00:00",
           "negotiationId": "1"
         }

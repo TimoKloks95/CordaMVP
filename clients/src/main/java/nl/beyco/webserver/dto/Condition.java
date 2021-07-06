@@ -19,17 +19,21 @@ public class Condition {
     @NotBlank(message = "title is mandatory")
     private String title;
 
+    @NotBlank(message = "value is mandatory")
+    private String value;
+
     @NotNull(message = "createdAt is mandatory")
     private LocalDateTime createdAt;
 
     @NotBlank(message = "negotiationId is mandatory")
     private String negotiationId;
 
-    public Condition(String id, String type, String status, String title, LocalDateTime createdAt, String negotiationId) {
+    public Condition(String id, String type, String status, String title, String value, LocalDateTime createdAt, String negotiationId) {
         this.id = id;
         this.type = type;
         this.status = status;
         this.title = title;
+        this.value = value;
         this.createdAt = createdAt;
         this.negotiationId = negotiationId;
     }
@@ -44,6 +48,14 @@ public class Condition {
 
     public String getType() {
         return type;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
     }
 
     public void setType(String type) {

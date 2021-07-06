@@ -14,9 +14,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
-
-@RunWith(SpringRunner.class)
-public class RPCServiceImplTest {
+//
+//@RunWith(SpringRunner.class)
+//public class RPCServiceImplTest {
 //    @TestConfiguration
 //    static class RPCServiceImplTestContextConfiguration {
 //
@@ -53,4 +53,4 @@ public class RPCServiceImplTest {
 //    public void verbindMetBlockchainSucces() {
 //        verify(rpcService).connectToBlockchainNode();
 //    }
-}
+//}

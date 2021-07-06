@@ -48,7 +48,7 @@ public class BeycoContract implements Contract {
     }
 
     private void validateBeycoContract(BeycoContractState contract) {
-        /*validateBeycoContractStateAttributes(contract);*/
+        validateBeycoContractStateAttributes(contract);
         for(Coffee coffee : contract.getCoffees()) {
             validateCoffeeAttributes(coffee);
         }
@@ -72,7 +72,6 @@ public class BeycoContract implements Contract {
             require.using("Buyer signed can't be after current datetime.", contract.getBuyerSignedAt().isBefore(LocalDateTime.now()));
             require.using("Contract has to specify at least one coffee", contract.getCoffees().size() > 0);
             require.using("Contract has to specify at least one condition", contract.getConditions().size() > 0);
-            require.using("Issuer of the contract has to be equal the buyer or the seller", contract.getIssuerId().equals(contract.getSellerId()) || contract.getIssuerId().equals(contract.getBuyerId()));
             return null;
         });
     }
