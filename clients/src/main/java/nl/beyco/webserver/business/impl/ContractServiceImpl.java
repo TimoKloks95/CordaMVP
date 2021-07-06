@@ -68,8 +68,19 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public void addAddendum(String issuerId, String contractId, Addendum addendum) {
         CordaRPCOps proxy = rpcService.getProxy();
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule()).configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
+        String addendumJson;
         try {
-            proxy.startTrackedFlowDynamic(AddAddendumFlow.class, issuerId, contractId, addendum).getReturnValue().get();
+            addendumJson = writer.writeValueAsString(addendum);
+            log.info(addendumJson);
+        } catch(JsonProcessingException e) {
+            log.error("Something went wrong while trying to parse the addendum to json format.", e);
+            throw new BeycoParseException("Something went wrong while trying to parse the addendum to json format.", e);
+        }
+        try {
+            // Addendum to String
+            SignedTransaction result = proxy.startTrackedFlowDynamic(AddAddendumFlow.class, issuerId, contractId, addendumJson).getReturnValue().get();
         } catch (InterruptedException | ExecutionException e) {
             log.error("Something went wrong while calling the add addendum flow", e);
             throw new BeycoFlowException("Something went wrong while calling the add addendum flow", e);
