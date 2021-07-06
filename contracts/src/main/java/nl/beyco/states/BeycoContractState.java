@@ -1,36 +1,49 @@
 package nl.beyco.states;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.corda.core.contracts.BelongsToContract;
 import net.corda.core.contracts.ContractState;
 import net.corda.core.contracts.LinearState;
 import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.identity.AbstractParty;
 import net.corda.core.identity.Party;
+import net.corda.core.serialization.ConstructorForDeserialization;
 import nl.beyco.contracts.BeycoContract;
+import nl.beyco.helpers.LocalDateTimeDeserializer;
+import nl.beyco.helpers.LocalDateTimeSerializer;
 import org.jetbrains.annotations.NotNull;
-
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
 @BelongsToContract(BeycoContract.class)
 public class BeycoContractState implements ContractState, LinearState {
-    private final String id;
-    private final String sellerId;
-    private final String buyerId;
-    private final String offerId;
-    private final LocalDateTime sellerSignedAt;
-    private final LocalDateTime buyerSignedAt;
-    private final List<Coffee> coffees;
-    private final List<Condition> conditions;
+    private String issuerId;
+    private String id;
+    private String sellerId;
+    private String buyerId;
+    private String offerId;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime sellerSignedAt;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime buyerSignedAt;
+    private List<Coffee> coffees;
+    private List<Condition> conditions;
     private List<Addendum> addenda;
-    private final String issuerId;
-    private Party beyco;
+    private Party node;
 
-    public BeycoContractState(String id, String sellerId, String buyerId, String offerId,
-                              LocalDateTime sellerSignedAt, LocalDateTime buyerSignedAt,
-                              List<Coffee> coffees, List<Condition> conditions,
-                              List<Addendum> addenda, String issuerId, Party beyco) {
+    public BeycoContractState() {
+
+    }
+
+    @ConstructorForDeserialization
+    public BeycoContractState(String issuerId, String id, String sellerId, String buyerId, String offerId,
+                              LocalDateTime sellerSignedAt, LocalDateTime buyerSignedAt, List<Coffee> coffees,
+                              List<Condition> conditions, List<Addendum> addenda) {
+        this.issuerId = issuerId;
         this.id = id;
         this.sellerId = sellerId;
         this.buyerId = buyerId;
@@ -40,9 +53,8 @@ public class BeycoContractState implements ContractState, LinearState {
         this.coffees = coffees;
         this.conditions = conditions;
         this.addenda = addenda;
-        this.issuerId = issuerId;
-        this.beyco = beyco;
     }
+
 
     public String getId() {
         return id;
@@ -80,10 +92,6 @@ public class BeycoContractState implements ContractState, LinearState {
         return addenda;
     }
 
-    public Party getBeyco() {
-        return beyco;
-    }
-
     public void addAddendum(Addendum addendum) {
         addenda.add(addendum);
     }
@@ -92,10 +100,14 @@ public class BeycoContractState implements ContractState, LinearState {
         return issuerId;
     }
 
+    public void setNode(Party node) {
+        this.node = node;
+    }
+
     @NotNull
     @Override
     public List<AbstractParty> getParticipants() {
-        return Arrays.asList(beyco);
+        return Arrays.asList(node);
     }
 
     @NotNull

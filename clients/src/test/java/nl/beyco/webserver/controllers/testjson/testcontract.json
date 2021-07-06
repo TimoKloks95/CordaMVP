@@ -3,19 +3,19 @@
   "sellerId": "1",
   "buyerId": "2",
   "offerId": "1",
-  "sellerSignedAt": "11 mei 2021",
-  "buyerSignedAt": "11 mei 2021",
-  "condities": [
+  "sellerSignedAt": "2021-05-11T10:00:00",
+  "buyerSignedAt": "2021-05-11T10:00:00",
+  "conditions": [
     {
       "id":"1",
       "type": "test",
       "status": "test",
       "title":"test",
-      "createdAt": "11 mei 2021",
+      "createdAt": "2021-05-11T10:00:00",
       "negotiationId": "1"
     }
   ],
-  "koffies": [
+  "coffees": [
     {
       "id": "1",
       "country": "test",
@@ -24,14 +24,14 @@
       "species": "test",
       "process": "test",
       "sector": "test",
-      "harvestAt": "11 mei 2021",
+      "harvestAt": "2021-05-11T10:00:00",
       "qualitySegment": "test",
       "parentId": "2",
       "isBulk": true,
       "quantity": 10,
       "minScreenSize": "1",
       "maxScreenSize": "5",
-      "cuppingScore": 10,
+      "cuppingScore": 9.5,
       "certificates": [
         "test", "test"
       ]
@@ -40,16 +40,16 @@
   "addenda": [
     {
       "id": "1",
-      "createdAt": "5 mei 2021",
-      "buyerSignedAt": "6 mei 2021",
-      "sellerSignedAt": "6 mei 2021",
+      "createdAt": "2021-05-05T10:00:00",
+      "buyerSignedAt": "2021-05-06T10:00:00",
+      "sellerSignedAt": "2021-05-06T10:00:00",
       "conditions": [
         {
           "id":"2",
           "type": "test",
           "status": "test",
           "title": "test",
-          "createdAt": "11 mei 2021",
+          "createdAt": "2021-05-11T10:00:00",
           "negotiationId": "1"
         }
       ]

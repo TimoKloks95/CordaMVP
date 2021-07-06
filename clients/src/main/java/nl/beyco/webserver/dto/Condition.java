@@ -2,6 +2,8 @@ package nl.beyco.webserver.dto;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Entity
 public class Condition {
@@ -17,13 +19,13 @@ public class Condition {
     @NotBlank(message = "title is mandatory")
     private String title;
 
-    @NotBlank(message = "createdAt is mandatory")
-    private String createdAt;
+    @NotNull(message = "createdAt is mandatory")
+    private LocalDateTime createdAt;
 
     @NotBlank(message = "negotiationId is mandatory")
     private String negotiationId;
 
-    public Condition(String id, String type, String status, String title, String createdAt, String negotiationId) {
+    public Condition(String id, String type, String status, String title, LocalDateTime createdAt, String negotiationId) {
         this.id = id;
         this.type = type;
         this.status = status;
@@ -64,11 +66,11 @@ public class Condition {
         this.title = title;
     }
 
-    public String getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 

@@ -1,28 +1,40 @@
 package nl.beyco.states;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.corda.core.serialization.ConstructorForDeserialization;
 import net.corda.core.serialization.CordaSerializable;
+import nl.beyco.helpers.LocalDateTimeDeserializer;
+import nl.beyco.helpers.LocalDateTimeSerializer;
 
 import java.time.LocalDateTime;
 
 @CordaSerializable
 public class Coffee {
-    private final String id;
-    private final String country;
-    private final String region;
-    private final boolean isBulk;
-    private final String unit;
-    private final int quantity;
-    private final String species;
-    private final String process;
-    private final String minScreenSize;
-    private final String maxScreenSize;
-    private final double cuppingScore;
-    private final String sector;
-    private final LocalDateTime harvestAt;
-    private final String qualitySegment;
-    private final String[] certificates;
-    private final String parentId;
+    private String id;
+    private String country;
+    private String region;
+    @JsonProperty("bulk")
+    private boolean isBulk;
+    private String unit;
+    private int quantity;
+    private String species;
+    private String process;
+    private String minScreenSize;
+    private String maxScreenSize;
+    private double cuppingScore;
+    private String sector;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime harvestAt;
+    private String qualitySegment;
+    private String[] certificates;
+    private String parentId;
+
+    public Coffee() {
+
+    }
 
     @ConstructorForDeserialization
     public Coffee(String id, String country, String region, boolean isBulk,

@@ -2,6 +2,8 @@ package nl.beyco.webserver.dto;
 import javax.persistence.Entity;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Entity
 public class Coffee {
@@ -26,8 +28,8 @@ public class Coffee {
     @NotBlank(message = "sector is mandatory")
     private String sector;
 
-    @NotBlank(message = "harvestAt is mandatory")
-    private String harvestAt;
+    @NotNull(message = "harvestAt is mandatory")
+    private LocalDateTime harvestAt;
 
     @NotBlank(message = "qualitySegment is mandatory")
     private String qualitySegment;
@@ -51,7 +53,7 @@ public class Coffee {
     private String[] certificates;
 
     public Coffee(String id, String country, String region, String unit, String species, String process, String sector,
-                  String harvestAt, String qualitySegment, String parentId, boolean isBulk, int quantity, String minScreenSize,
+                  LocalDateTime harvestAt, String qualitySegment, String parentId, boolean isBulk, int quantity, String minScreenSize,
                   String maxScreenSize, double cuppingScore, String[] certificates) {
         this.id = id;
         this.country = country;
@@ -138,11 +140,11 @@ public class Coffee {
         this.sector = sector;
     }
 
-    public String getHarvestAt() {
+    public LocalDateTime getHarvestAt() {
         return harvestAt;
     }
 
-    public void setHarvestAt(String harvestAt) {
+    public void setHarvestAt(LocalDateTime harvestAt) {
         this.harvestAt = harvestAt;
     }
 

@@ -3,6 +3,8 @@ package nl.beyco.webserver.dto;
 import javax.persistence.Entity;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -19,11 +21,11 @@ public class Contract {
     @NotBlank(message = "offerId is mandatory")
     private String offerId;
 
-    @NotBlank(message = "sellerSignedAt is mandatory")
-    private String sellerSignedAt;
+    @NotNull(message = "sellerSignedAt is mandatory")
+    private LocalDateTime sellerSignedAt;
 
-    @NotBlank(message = "buyerSignedAt is mandatory")
-    private String buyerSignedAt;
+    @NotNull(message = "buyerSignedAt is mandatory")
+    private LocalDateTime buyerSignedAt;
 
     @Valid
     private List<Condition> conditions;
@@ -34,8 +36,8 @@ public class Contract {
     @Valid
     private List<Addendum> addenda;
 
-    public Contract(String id, String sellerId, String buyerId, String offerId, String sellerSignedAt,
-                    String buyerSignedAt, List<Condition> conditions, List<Coffee> coffees,
+    public Contract(String id, String sellerId, String buyerId, String offerId, LocalDateTime sellerSignedAt,
+                    LocalDateTime buyerSignedAt, List<Condition> conditions, List<Coffee> coffees,
                     List<Addendum> addenda) {
         this.id = id;
         this.sellerId = sellerId;
@@ -80,19 +82,19 @@ public class Contract {
         this.offerId = offerId;
     }
 
-    public String getSellerSignedAt() {
+    public LocalDateTime getSellerSignedAt() {
         return sellerSignedAt;
     }
 
-    public void setSellerSignedAt(String sellerSignedAt) {
+    public void setSellerSignedAt(LocalDateTime sellerSignedAt) {
         this.sellerSignedAt = sellerSignedAt;
     }
 
-    public String getBuyerSignedAt() {
+    public LocalDateTime getBuyerSignedAt() {
         return buyerSignedAt;
     }
 
-    public void setBuyerSignedAt(String buyerSignedAt) {
+    public void setBuyerSignedAt(LocalDateTime buyerSignedAt) {
         this.buyerSignedAt = buyerSignedAt;
     }
 

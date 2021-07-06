@@ -1,18 +1,33 @@
 package nl.beyco.states;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.corda.core.serialization.ConstructorForDeserialization;
 import net.corda.core.serialization.CordaSerializable;
+import nl.beyco.helpers.LocalDateTimeDeserializer;
+import nl.beyco.helpers.LocalDateTimeSerializer;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @CordaSerializable
 public class Addendum {
-    private final String id;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime buyerSignedAt;
-    private final LocalDateTime sellerSignedAt;
-    private final List<AddendumCondition> conditions;
+    private String id;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime createdAt;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime buyerSignedAt;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime sellerSignedAt;
+    private List<AddendumCondition> conditions;
+
+    public Addendum() {
+
+    }
 
     @ConstructorForDeserialization
     public Addendum(String id, LocalDateTime createdAt, LocalDateTime buyerSignedAt, LocalDateTime sellerSignedAt,

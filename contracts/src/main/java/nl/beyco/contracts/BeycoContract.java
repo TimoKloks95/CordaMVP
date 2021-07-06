@@ -48,7 +48,7 @@ public class BeycoContract implements Contract {
     }
 
     private void validateBeycoContract(BeycoContractState contract) {
-        validateBeycoContractStateAttributes(contract);
+        /*validateBeycoContractStateAttributes(contract);*/
         for(Coffee coffee : contract.getCoffees()) {
             validateCoffeeAttributes(coffee);
         }
@@ -68,8 +68,8 @@ public class BeycoContract implements Contract {
             require.using("Offer id can't be empty or null.", contract.getOfferId() != null && !contract.getOfferId().isEmpty());
             require.using("Seller has not signed the contract. Both parties have to sign the contract.", contract.getSellerSignedAt() != null);
             require.using("Buyer has not signed the contract. Both parties have to sign the contract.", contract.getBuyerSignedAt() != null);
-            require.using("Seller signed can't be after current datetime.", contract.getSellerSignedAt().isAfter(LocalDateTime.now()));
-            require.using("Buyer signed can't be after current datetime.", contract.getBuyerSignedAt().isAfter(LocalDateTime.now()));
+            require.using("Seller signed can't be after current datetime.", contract.getSellerSignedAt().isBefore(LocalDateTime.now()));
+            require.using("Buyer signed can't be after current datetime.", contract.getBuyerSignedAt().isBefore(LocalDateTime.now()));
             require.using("Contract has to specify at least one coffee", contract.getCoffees().size() > 0);
             require.using("Contract has to specify at least one condition", contract.getConditions().size() > 0);
             require.using("Issuer of the contract has to be equal the buyer or the seller", contract.getIssuerId().equals(contract.getSellerId()) || contract.getIssuerId().equals(contract.getBuyerId()));
@@ -98,9 +98,9 @@ public class BeycoContract implements Contract {
     private void validateAddendumAttributes(Addendum addendum) {
         requireThat(require -> {
             require.using("Addendum id can't be empty or null.", addendum.getId() != null && !addendum.getId().isEmpty());
-            require.using("Created at can't be after current datetime.", addendum.getCreatedAt().isAfter(LocalDateTime.now()));
-            require.using("Buyer signed can't be after current datetime.", addendum.getBuyerSignedAt().isAfter(LocalDateTime.now()));
-            require.using("Seller signed can't be after current datetime.", addendum.getSellerSignedAt().isAfter(LocalDateTime.now()));
+            require.using("Created at can't be after current datetime.", addendum.getCreatedAt().isBefore(LocalDateTime.now()));
+            require.using("Buyer signed can't be after current datetime.", addendum.getBuyerSignedAt().isBefore(LocalDateTime.now()));
+            require.using("Seller signed can't be after current datetime.", addendum.getSellerSignedAt().isBefore(LocalDateTime.now()));
             require.using("Addendum has to specify at least one condition.", addendum.getConditions().size() > 0);
             return null;
         });

@@ -1,12 +1,10 @@
 package nl.beyco.flows;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import net.corda.core.flows.FlowException;
 import net.corda.core.flows.FlowLogic;
 import net.corda.core.flows.InitiatingFlow;
 import net.corda.core.flows.StartableByRPC;
-import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.utilities.ProgressTracker;
 
 @InitiatingFlow

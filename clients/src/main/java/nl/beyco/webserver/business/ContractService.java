@@ -1,5 +1,6 @@
 package nl.beyco.webserver.business;
 
+import net.corda.core.transactions.SignedTransaction;
 import nl.beyco.webserver.dto.Addendum;
 import nl.beyco.webserver.dto.Contract;
 

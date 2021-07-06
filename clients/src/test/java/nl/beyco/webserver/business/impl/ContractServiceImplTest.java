@@ -48,23 +48,23 @@ public class ContractServiceImplTest {
 //        verify(testProxy).startTrackedFlowDynamic(OpslaanContractFlow.class, isA(String.class), isA(Contract.class));
 
     }
-
-    @Test
-    public void ophalenContract() {
-        //Arrange
-
-        //Act
-
-        //Assert
-    }
-
-    @Test
-    public void toevoegenAddendum() {
-        //Arrange
-        CordaRPCOps testProxy = mock(CordaRPCOps.class);
-
-        //Act
-
-        //Assert
-    }
+//
+//    @Test
+//    public void ophalenContract() {
+//        //Arrange
+//
+//        //Act
+//
+//        //Assert
+//    }
+//
+//    @Test
+//    public void toevoegenAddendum() {
+//        //Arrange
+//        CordaRPCOps testProxy = mock(CordaRPCOps.class);
+//
+//        //Act
+//
+//        //Assert
+//    }
 }

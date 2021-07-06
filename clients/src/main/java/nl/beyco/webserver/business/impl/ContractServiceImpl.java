@@ -1,10 +1,17 @@
 package nl.beyco.webserver.business.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import net.corda.core.node.services.Vault;
 import nl.beyco.flows.GetContractFlow;
 import nl.beyco.flows.SaveContractFlow;
 import nl.beyco.flows.AddAddendumFlow;
 import nl.beyco.states.BeycoContractState;
 import nl.beyco.webserver.business.exceptions.BeycoFlowException;
+import nl.beyco.webserver.business.exceptions.BeycoParseException;
 import nl.beyco.webserver.dto.Addendum;
 import nl.beyco.webserver.dto.Contract;
 import nl.beyco.webserver.business.ContractService;
@@ -27,13 +34,18 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public void saveContract(String issuerId, Contract contract) {
         CordaRPCOps proxy = rpcService.getProxy();
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule()).configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
+        String contractJson;
         try {
-            String contractJson = "";
-            String[] coffeeJson = new String[2];
-            String[] conditionsJson = new String[2];
-            String[] addendaJson = new String[2];
-
-            proxy.startTrackedFlowDynamic(SaveContractFlow.class, issuerId, contractJson, coffeeJson, conditionsJson, addendaJson).getReturnValue().get();
+            contractJson = writer.writeValueAsString(contract);
+            log.info(contractJson);
+        } catch(JsonProcessingException e) {
+            log.error("Something went wrong while trying to parse the contract to json format.", e);
+            throw new BeycoParseException("Something went wrong while trying to parse the contract to json format.", e);
+        }
+        try {
+            SignedTransaction result = proxy.startTrackedFlowDynamic(SaveContractFlow.class, issuerId, contractJson.trim()).getReturnValue().get();
         } catch (InterruptedException | ExecutionException e) {
             log.error("Something went wrong while calling the save contract flow", e);
             throw new BeycoFlowException("Something went wrong while calling the save contract flow", e);

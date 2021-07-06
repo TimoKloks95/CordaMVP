@@ -3,6 +3,8 @@ package nl.beyco.webserver.dto;
 import javax.persistence.Entity;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -10,19 +12,19 @@ public class Addendum {
     @NotBlank(message = "id is mandatory")
     private String id;
 
-    @NotBlank(message = "createdAt is mandatory")
-    private String createdAt;
+    @NotNull(message = "createdAt is mandatory")
+    private LocalDateTime createdAt;
 
-    @NotBlank(message = "buyerSignedAt is mandatory")
-    private String buyerSignedAt;
+    @NotNull(message = "buyerSignedAt is mandatory")
+    private LocalDateTime buyerSignedAt;
 
-    @NotBlank(message = "sellerSignedAt is mandatory")
-    private String sellerSignedAt;
+    @NotNull(message = "sellerSignedAt is mandatory")
+    private LocalDateTime sellerSignedAt;
 
     @Valid
     private List<Condition> conditions;
 
-    public Addendum(String id, String createdAt, String buyerSignedAt, String sellerSignedAt, List<Condition> conditions) {
+    public Addendum(String id, LocalDateTime createdAt, LocalDateTime buyerSignedAt, LocalDateTime sellerSignedAt, List<Condition> conditions) {
         this.id = id;
         this.createdAt = createdAt;
         this.buyerSignedAt = buyerSignedAt;
@@ -38,27 +40,27 @@ public class Addendum {
         this.id = id;
     }
 
-    public String getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public String getBuyerSignedAt() {
+    public LocalDateTime getBuyerSignedAt() {
         return buyerSignedAt;
     }
 
-    public void setBuyerSignedAt(String buyerSignedAt) {
+    public void setBuyerSignedAt(LocalDateTime buyerSignedAt) {
         this.buyerSignedAt = buyerSignedAt;
     }
 
-    public String getSellerSignedAt() {
+    public LocalDateTime getSellerSignedAt() {
         return sellerSignedAt;
     }
 
-    public void setSellerSignedAt(String sellerSignedAt) {
+    public void setSellerSignedAt(LocalDateTime sellerSignedAt) {
         this.sellerSignedAt = sellerSignedAt;
     }
 

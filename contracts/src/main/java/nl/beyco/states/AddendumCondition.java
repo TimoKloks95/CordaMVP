@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 
 @CordaSerializable
 public class AddendumCondition extends Condition {
+    public AddendumCondition() {
+
+    }
     @ConstructorForDeserialization
     public AddendumCondition(String id, String type, String status, String title, String value,
                              LocalDateTime createdAt, String negotiationId) {
