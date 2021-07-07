@@ -2,6 +2,8 @@ package nl.beyco.flows;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import net.corda.core.flows.*;
 import net.corda.core.identity.Party;
 import net.corda.core.node.services.Vault;
@@ -9,10 +11,8 @@ import net.corda.core.node.services.vault.QueryCriteria;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
 import nl.beyco.contracts.BeycoContract;
-import nl.beyco.flows.helpers.SerializationHelper;
 import nl.beyco.states.BeycoContractState;
 
-import java.security.PublicKey;
 import java.util.Collections;
 import java.util.HashSet;
 
@@ -34,8 +34,9 @@ public class SaveContractFlow extends FlowLogic<SignedTransaction> {
         final Party notary = getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0);
 
         BeycoContractState toAddState;
+        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
         try {
-            toAddState = SerializationHelper.contractJsonToBeycoContractState(contractJson);
+            toAddState = objectMapper.readValue(contractJson, BeycoContractState.class);
         } catch(JsonProcessingException e) {
             throw new FlowException("Something went wrong trying to parse contract json to state object", e);
         }
@@ -50,17 +51,13 @@ public class SaveContractFlow extends FlowLogic<SignedTransaction> {
 
         toAddState.setNode(node);
 
-        final TransactionBuilder builder = createAndPopulateTransactionBuilderForSaveContract(notary, toAddState, node.getOwningKey());
+        final TransactionBuilder builder = new TransactionBuilder(notary);
+        builder.addOutputState(toAddState);
+        builder.addCommand(new BeycoContract.Commands.Save(), Collections.singletonList(node.getOwningKey()));
 
         final SignedTransaction selfSignedTx = getServiceHub().signInitialTransaction(builder);
 
         return subFlow(new FinalityFlow(selfSignedTx, new HashSet<FlowSession>(0)));
-    }
-
-    private TransactionBuilder createAndPopulateTransactionBuilderForSaveContract(Party notary, BeycoContractState toAddState, PublicKey nodeKey) {
-        return new TransactionBuilder(notary)
-                .addOutputState(toAddState)
-                .addCommand(new BeycoContract.Commands.Save(), Collections.singletonList(nodeKey));
     }
 
     private boolean issuerIsNotSellerAndNotBuyer(String sellerId, String buyerId) {
@@ -71,8 +68,7 @@ public class SaveContractFlow extends FlowLogic<SignedTransaction> {
         QueryCriteria.LinearStateQueryCriteria linearStateQueryCriteria = new QueryCriteria.LinearStateQueryCriteria()
                 .withExternalId(Collections.singletonList(contractId));
         QueryCriteria.VaultQueryCriteria criteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
-        Vault.Page<BeycoContractState> results = getServiceHub().getVaultService()
-                .queryBy(BeycoContractState.class, criteria.and(linearStateQueryCriteria));
-        return results.getStates().size() != 0;
+        Vault.Page<BeycoContractState> contracts = getServiceHub().getVaultService().queryBy(BeycoContractState.class, criteria.and(linearStateQueryCriteria));
+        return contracts.getStates().size() != 0;
     }
 }

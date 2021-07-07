@@ -1,5 +1,11 @@
 package nl.beyco.webserver.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import net.corda.core.serialization.ConstructorForDeserialization;
+import nl.beyco.helpers.LocalDateTimeDeserializer;
+import nl.beyco.helpers.LocalDateTimeSerializer;
+
 import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -23,11 +29,18 @@ public class Condition {
     private String value;
 
     @NotNull(message = "createdAt is mandatory")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createdAt;
 
     @NotBlank(message = "negotiationId is mandatory")
     private String negotiationId;
 
+    public Condition() {
+
+    }
+
+    @ConstructorForDeserialization
     public Condition(String id, String type, String status, String title, String value, LocalDateTime createdAt, String negotiationId) {
         this.id = id;
         this.type = type;

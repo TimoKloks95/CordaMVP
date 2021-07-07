@@ -1,5 +1,12 @@
 package nl.beyco.webserver.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import net.corda.core.serialization.ConstructorForDeserialization;
+import nl.beyco.helpers.LocalDateTimeDeserializer;
+import nl.beyco.helpers.LocalDateTimeSerializer;
+
 import javax.persistence.Entity;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -8,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Contract {
     @NotBlank(message = "id is mandatory")
     private String id;
@@ -22,9 +30,13 @@ public class Contract {
     private String offerId;
 
     @NotNull(message = "sellerSignedAt is mandatory")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime sellerSignedAt;
 
     @NotNull(message = "buyerSignedAt is mandatory")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime buyerSignedAt;
 
     @Valid
@@ -36,6 +48,11 @@ public class Contract {
     @Valid
     private List<Addendum> addenda;
 
+    public Contract() {
+
+    }
+
+    @ConstructorForDeserialization
     public Contract(String id, String sellerId, String buyerId, String offerId, LocalDateTime sellerSignedAt,
                     LocalDateTime buyerSignedAt, List<Condition> conditions, List<Coffee> coffees,
                     List<Addendum> addenda) {

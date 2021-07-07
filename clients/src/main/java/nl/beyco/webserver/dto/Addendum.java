@@ -1,5 +1,11 @@
 package nl.beyco.webserver.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import net.corda.core.serialization.ConstructorForDeserialization;
+import nl.beyco.helpers.LocalDateTimeDeserializer;
+import nl.beyco.helpers.LocalDateTimeSerializer;
+
 import javax.persistence.Entity;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -13,18 +19,29 @@ public class Addendum {
     private String id;
 
     @NotNull(message = "createdAt is mandatory")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createdAt;
 
     @NotNull(message = "buyerSignedAt is mandatory")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime buyerSignedAt;
 
     @NotNull(message = "sellerSignedAt is mandatory")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime sellerSignedAt;
 
     @Valid
-    private List<Condition> conditions;
+    private List<AddendumCondition> conditions;
 
-    public Addendum(String id, LocalDateTime createdAt, LocalDateTime buyerSignedAt, LocalDateTime sellerSignedAt, List<Condition> conditions) {
+    public Addendum() {
+
+    }
+
+    @ConstructorForDeserialization
+    public Addendum(String id, LocalDateTime createdAt, LocalDateTime buyerSignedAt, LocalDateTime sellerSignedAt, List<AddendumCondition> conditions) {
         this.id = id;
         this.createdAt = createdAt;
         this.buyerSignedAt = buyerSignedAt;
@@ -64,11 +81,11 @@ public class Addendum {
         this.sellerSignedAt = sellerSignedAt;
     }
 
-    public List<Condition> getConditions() {
+    public List<AddendumCondition> getConditions() {
         return conditions;
     }
 
-    public void setConditions(List<Condition> conditions) {
+    public void setConditions(List<AddendumCondition> conditions) {
         this.conditions = conditions;
     }
 }

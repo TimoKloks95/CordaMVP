@@ -1,4 +1,11 @@
 package nl.beyco.webserver.dto;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import net.corda.core.serialization.ConstructorForDeserialization;
+import nl.beyco.helpers.LocalDateTimeDeserializer;
+import nl.beyco.helpers.LocalDateTimeSerializer;
+
 import javax.persistence.Entity;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -29,6 +36,8 @@ public class Coffee {
     private String sector;
 
     @NotNull(message = "harvestAt is mandatory")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime harvestAt;
 
     @NotBlank(message = "qualitySegment is mandatory")
@@ -42,6 +51,7 @@ public class Coffee {
 
     private String parentId;
 
+    @JsonProperty("bulk")
     private boolean isBulk;
 
     @Min(0)
@@ -52,6 +62,11 @@ public class Coffee {
 
     private String[] certificates;
 
+    public Coffee() {
+
+    }
+
+    @ConstructorForDeserialization
     public Coffee(String id, String country, String region, String unit, String species, String process, String sector,
                   LocalDateTime harvestAt, String qualitySegment, String parentId, boolean isBulk, int quantity, String minScreenSize,
                   String maxScreenSize, double cuppingScore, String[] certificates) {
@@ -72,17 +87,6 @@ public class Coffee {
         this.cuppingScore = cuppingScore;
         this.certificates = certificates;
     }
-
-//    @JsonCreator
-//    public static Koffie createKoffie(String id, String country, String region, String unit, String species, String process,
-//                                      String sector, String harvestAt, String qualitySegment, String parentId,
-//                                      boolean isBulk, int quantity, int minScreenSize, int maxScreenSize, int cuppingScore,
-//                                      String[] certificates) {
-//        return new Koffie().setId(id).setCountry(country).setRegion(region).setUnit(unit).setSpecies(species).setProcess(process).setSector(sector)
-//                .setHarvestAt(harvestAt).setQualitySegment(qualitySegment).setParentId(parentId).setBulk(isBulk)
-//                .setQuantity(quantity).setMinScreenSize(minScreenSize).setMaxScreenSize(maxScreenSize).setCuppingScore(cuppingScore)
-//                .setCertificates(certificates);
-//    }
 
     public String getId() {
         return id;
