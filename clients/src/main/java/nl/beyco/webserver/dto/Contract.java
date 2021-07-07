@@ -17,6 +17,9 @@ import java.util.List;
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Contract {
+    @NotBlank(message = "issuerId is mandatory")
+    private String issuerId;
+
     @NotBlank(message = "id is mandatory")
     private String id;
 
@@ -53,9 +56,10 @@ public class Contract {
     }
 
     @ConstructorForDeserialization
-    public Contract(String id, String sellerId, String buyerId, String offerId, LocalDateTime sellerSignedAt,
+    public Contract(String issuerId, String id, String sellerId, String buyerId, String offerId, LocalDateTime sellerSignedAt,
                     LocalDateTime buyerSignedAt, List<Condition> conditions, List<Coffee> coffees,
                     List<Addendum> addenda) {
+        this.issuerId = issuerId;
         this.id = id;
         this.sellerId = sellerId;
         this.buyerId = buyerId;
@@ -73,6 +77,14 @@ public class Contract {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setIssuerId(String issuerId) {
+        this.issuerId = issuerId;
+    }
+
+    public String getIssuerId() {
+        return issuerId;
     }
 
     public String getSellerId() {

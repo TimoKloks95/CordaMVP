@@ -3,9 +3,10 @@ package nl.beyco.webserver.business;
 import net.corda.core.transactions.SignedTransaction;
 import nl.beyco.webserver.dto.Addendum;
 import nl.beyco.webserver.dto.Contract;
+import nl.beyco.webserver.dto.ToAddAddendum;
 
 public interface ContractService {
-    void saveContract(String issuerId, Contract contract);
+    void saveContract(Contract contract);
     Contract getContract(String issuerId, String contractId);
-    void addAddendum(String issuerId, String contractId, Addendum addendum);
+    void addAddendum(String contractId, ToAddAddendum addendum);
 }

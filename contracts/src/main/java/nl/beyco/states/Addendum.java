@@ -1,5 +1,6 @@
 package nl.beyco.states;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -10,8 +11,10 @@ import nl.beyco.helpers.LocalDateTimeSerializer;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @CordaSerializable
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Addendum {
     private String id;
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -57,5 +60,26 @@ public class Addendum {
 
     public List<AddendumCondition> getConditions() {
         return conditions;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if ((obj == null) || (getClass() != obj.getClass())) {
+            return false;
+        }
+
+        Addendum other = (Addendum) obj;
+
+        if(!Objects.deepEquals(
+            new String[] {id, String.valueOf(createdAt), String.valueOf(buyerSignedAt), String.valueOf(sellerSignedAt)},
+            new String[] {other.id, String.valueOf(other.createdAt), String.valueOf(other.buyerSignedAt), String.valueOf(other.sellerSignedAt)}
+        )) {
+            return false;
+        }
+        return true;
     }
 }

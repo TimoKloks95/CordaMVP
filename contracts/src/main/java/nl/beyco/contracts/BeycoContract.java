@@ -4,12 +4,10 @@ import net.corda.core.contracts.CommandData;
 import net.corda.core.contracts.CommandWithParties;
 import net.corda.core.contracts.Contract;
 import net.corda.core.transactions.LedgerTransaction;
-import nl.beyco.states.Addendum;
-import nl.beyco.states.BeycoContractState;
-import nl.beyco.states.Coffee;
-import nl.beyco.states.Condition;
+import nl.beyco.states.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static net.corda.core.contracts.ContractsDSL.requireThat;
 
@@ -38,13 +36,82 @@ public class BeycoContract implements Contract {
     }
 
     private void verifyAddAddendumToContract(LedgerTransaction tx) {
-        BeycoContractState contract = tx.outputsOfType(BeycoContractState.class).get(0);
+        BeycoContractState outputContract = tx.outputsOfType(BeycoContractState.class).get(0);
+        BeycoContractState inputContract = tx.inputsOfType(BeycoContractState.class).get(0);
+        validateBeycoContract(outputContract);
+        inputContractEqualsOutputContract(inputContract, outputContract);
+    }
+
+    private void inputContractEqualsOutputContract(BeycoContractState inputContract, BeycoContractState outputContract) {
         requireThat(require -> {
-            //TODO toevoegen van i/o checks
-            require.using("Contract has to have at least one addendum", contract.getAddenda().size() > 0);
+            require.using("Input contract should be the same as the output contract.", inputContract.equals(outputContract));
+           return null;
+        });
+        inputCoffeesEqualsOutputCoffees(inputContract.getCoffees(), outputContract.getCoffees());
+        inputConditionsEqualsOutputConditions(inputContract.getConditions(), outputContract.getConditions());
+        inputAddendaEqualsOutputAddendaExceptForNewlyAdded(inputContract.getAddenda(), outputContract.getAddenda());
+    }
+
+    private void inputAddendaEqualsOutputAddendaExceptForNewlyAdded(List<Addendum> inputAddenda, List<Addendum> outputAddenda) {
+        if(inputAddenda != null) {
+            requireThat(require -> {
+                require.using("The output contract should have one more addendum than the input contract.", inputAddenda.size() == outputAddenda.size() + 1);
+               return null;
+            });
+            if(inputAddenda.size() > 0) {
+                for(int i=0; i<inputAddenda.size(); i++) {
+                    Addendum inputAddendum = inputAddenda.get(i);
+                    for(int j=0; j<outputAddenda.size(); i++) {
+                        Addendum outputAddendum = outputAddenda.get(j);
+                        if(inputAddendum.getId().equals(outputAddendum.getId())) {
+                            requireThat(require -> {
+                                require.using("The existing addenda of the input contract should be equal to the existing addenda in the output contract.", inputAddendum.equals(outputAddendum));
+                                return null;
+                            });
+                        }
+                        inputConditionsEqualsOutputConditions(inputAddendum.getConditions(), outputAddendum.getConditions());
+                    }
+                }
+            }
+        }
+    }
+
+    private void inputConditionsEqualsOutputConditions(List<? extends Condition> inputConditions, List<? extends Condition> outputConditions) {
+        requireThat(require -> {
+            require.using("There should be an equal amount of input and output conditions", inputConditions.size() == outputConditions.size());
             return null;
         });
-        validateBeycoContract(contract);
+        for(int i=0; i<inputConditions.size(); i++) {
+            Condition inputCondition = inputConditions.get(i);
+            for(int j=0; j<outputConditions.size(); i++) {
+                Condition outputCondition = outputConditions.get(j);
+                if(inputCondition.getId().equals(outputCondition.getId())) {
+                    requireThat(require -> {
+                        require.using("The conditions of the input contract must be equal to the conditions of the output contract.", inputCondition.equals(outputCondition));
+                        return null;
+                    });
+                }
+            }
+        }
+    }
+
+    private void inputCoffeesEqualsOutputCoffees(List<Coffee> inputCoffees, List<Coffee> outputCoffees) {
+        requireThat(require -> {
+            require.using("There should be an equal amount of input and output coffees", inputCoffees.size() == outputCoffees.size());
+           return null;
+        });
+        for(int i=0; i<inputCoffees.size(); i++) {
+            Coffee inputCoffee = inputCoffees.get(i);
+            for(int j=0; j<outputCoffees.size(); i++) {
+                Coffee outputCoffee = outputCoffees.get(j);
+                if(inputCoffee.getId().equals(outputCoffee.getId())) {
+                    requireThat(require -> {
+                       require.using("The coffees of the input contract must be equal to the coffees of the output contract.", inputCoffee.equals(outputCoffee));
+                       return null;
+                    });
+                }
+            }
+        }
     }
 
     private void validateBeycoContract(BeycoContractState contract) {
@@ -62,6 +129,7 @@ public class BeycoContract implements Contract {
 
     private void validateBeycoContractStateAttributes(BeycoContractState contract) {
         requireThat(require -> {
+            require.using("Issuer has to be the seller or the buyer.", contract.getIssuerId().equals(contract.getSellerId()) || contract.getIssuerId().equals(contract.getBuyerId()));
             require.using("Contract id can't be empty or null.", contract.getId() != null && !contract.getId().isEmpty());
             require.using("Seller id can't be empty or null.", contract.getSellerId() != null && !contract.getSellerId().isEmpty());
             require.using("Buyer id can't be empty or null.", contract.getBuyerId() != null && !contract.getBuyerId().isEmpty());

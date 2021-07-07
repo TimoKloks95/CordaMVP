@@ -1,6 +1,5 @@
 package nl.beyco.states;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.corda.core.serialization.ConstructorForDeserialization;
@@ -9,6 +8,7 @@ import nl.beyco.helpers.LocalDateTimeDeserializer;
 import nl.beyco.helpers.LocalDateTimeSerializer;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @CordaSerializable
 public class Condition {
@@ -64,5 +64,26 @@ public class Condition {
 
     public String getNegotiationId() {
         return negotiationId;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if ((obj == null) || (getClass() != obj.getClass())) {
+            return false;
+        }
+
+        Condition other = (Condition) obj;
+
+        if(!Objects.deepEquals(
+                new String[] {id, type, status, title, value, String.valueOf(createdAt), negotiationId},
+                new String[] {other.id, other.type, other.status, other.title, other.value, String.valueOf(other.createdAt), other.negotiationId}
+        )) {
+            return false;
+        }
+        return true;
     }
 }

@@ -19,11 +19,9 @@ import java.util.HashSet;
 @InitiatingFlow
 @StartableByRPC
 public class SaveContractFlow extends FlowLogic<SignedTransaction> {
-    private final String issuerId;
     private final String contractJson;
 
-    public SaveContractFlow(String issuerId, String contractJson) {
-        this.issuerId = issuerId;
+    public SaveContractFlow(String contractJson) {
         this.contractJson = contractJson;
     }
 
@@ -41,10 +39,6 @@ public class SaveContractFlow extends FlowLogic<SignedTransaction> {
             throw new FlowException("Something went wrong trying to parse contract json to state object", e);
         }
 
-        if(issuerIsNotSellerAndNotBuyer(toAddState.getSellerId(), toAddState.getBuyerId())) {
-            throw new FlowException("The issuer of the contract has to be either the seller or the buyer.");
-        }
-
         if(contractAlreadyExistsInVault(toAddState.getId())) {
             throw new FlowException("The contract that you tried to save already exists.");
         }
@@ -58,10 +52,6 @@ public class SaveContractFlow extends FlowLogic<SignedTransaction> {
         final SignedTransaction selfSignedTx = getServiceHub().signInitialTransaction(builder);
 
         return subFlow(new FinalityFlow(selfSignedTx, new HashSet<FlowSession>(0)));
-    }
-
-    private boolean issuerIsNotSellerAndNotBuyer(String sellerId, String buyerId) {
-        return !issuerId.equals(sellerId) && !issuerId.equals(buyerId);
     }
 
     private boolean contractAlreadyExistsInVault(String contractId) {
