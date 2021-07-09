@@ -1,14 +1,11 @@
 package nl.beyco.webserver.business.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import javafx.util.Pair;
 import nl.beyco.flows.GetContractFlow;
 import nl.beyco.flows.SaveContractFlow;
 import nl.beyco.flows.AddAddendumFlow;
+import nl.beyco.states.ContractJsonWithAddendaJson;
 import nl.beyco.webserver.business.exceptions.BeycoFlowException;
 import nl.beyco.webserver.business.exceptions.BeycoParseException;
 import nl.beyco.webserver.dto.Addendum;
@@ -24,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Observable;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -60,7 +56,7 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public Pair<Contract, List<Addendum>> getContract(String issuerId, String contractId) {
         CordaRPCOps proxy = rpcService.getProxy();
-        Pair<String, String[]> result;
+        ContractJsonWithAddendaJson result;
 
         try {
             result = proxy.startTrackedFlowDynamic(GetContractFlow.class, issuerId, contractId).getReturnValue().get();
@@ -73,15 +69,15 @@ public class ContractServiceImpl implements ContractService {
         List<Addendum> addenda = new LinkedList<>();
 
         try {
-            contract = serializationHelper.contractJsonToContract(result.getKey());
+            contract = serializationHelper.contractJsonToContract(result.getContractJson());
         } catch(JsonProcessingException e) {
             log.error("Something went wrong while trying to parse json string to contract.", e);
             throw new BeycoParseException("Something went wrong while trying to parse json string to contract.", e);
         }
 
         try {
-            for(int i=0; i<result.getValue().length; i++) {
-                addenda.add(serializationHelper.addendumJsonToAddendum(result.getValue()[i]));
+            for(int i=0; i<result.getAddendaJson().length; i++) {
+                addenda.add(serializationHelper.addendumJsonToAddendum(result.getAddendaJson()[i]));
             }
         } catch(JsonProcessingException e) {
             log.error("Something went wrong while trying to parse json string to addendum", e);

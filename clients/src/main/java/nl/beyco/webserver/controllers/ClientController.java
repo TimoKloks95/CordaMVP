@@ -21,20 +21,20 @@ public class ClientController {
         this.contractService = contractService;
     }
 
-    @PostMapping("")
+    @PostMapping("/contracts")
     public ResponseEntity<HttpStatus> saveContract(@RequestHeader("issuerId") String issuerId, @Valid @RequestBody Contract contract) {
         contractService.saveContract(issuerId, contract);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("{contractId}")
+    @GetMapping("/contracts/{contractId}")
     public ResponseEntity<Pair<Contract, List<Addendum>>> getContract(@RequestHeader("issuerId") String issuerId, @PathVariable("contractId") String contractId) {
         log.info("issuerId: "+issuerId);
         Pair<Contract, List<Addendum>> result = contractService.getContract(issuerId, contractId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PostMapping("/addendum")
+    @PostMapping("/addenda")
     public ResponseEntity<HttpStatus> addAddendum(@RequestHeader("issuerId") String issuerId, @Valid @RequestBody Addendum addendum) {
         contractService.addAddendum(issuerId, addendum);
         return new ResponseEntity<>(HttpStatus.OK);

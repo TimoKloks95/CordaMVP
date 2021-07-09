@@ -37,24 +37,5 @@
         "test", "test"
       ]
     }
-  ],
-  "addenda": [
-    {
-      "id": "1",
-      "createdAt": "2021-05-05T10:00:00",
-      "buyerSignedAt": "2021-05-06T10:00:00",
-      "sellerSignedAt": "2021-05-06T10:00:00",
-      "conditions": [
-        {
-          "id":"2",
-          "type": "test",
-          "status": "test",
-          "title": "test",
-          "value": "test",
-          "createdAt": "2021-05-11T10:00:00",
-          "negotiationId": "1"
-        }
-      ]
-    }
   ]
 }

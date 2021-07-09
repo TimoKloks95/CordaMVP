@@ -16,6 +16,7 @@ import net.corda.core.node.services.Vault;
 import net.corda.core.node.services.vault.QueryCriteria;
 import nl.beyco.states.Addendum;
 import nl.beyco.states.BeycoContractState;
+import nl.beyco.states.ContractJsonWithAddendaJson;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -24,7 +25,7 @@ import java.util.List;
 
 @InitiatingFlow
 @StartableByRPC
-public class GetContractFlow extends FlowLogic<Pair<String, String[]>> {
+public class GetContractFlow extends FlowLogic<ContractJsonWithAddendaJson> {
     private String issuerId;
     private String contractId;
 
@@ -36,7 +37,7 @@ public class GetContractFlow extends FlowLogic<Pair<String, String[]>> {
 
     @Suspendable
     @Override
-    public Pair<String, String[]> call() throws FlowException {
+    public ContractJsonWithAddendaJson call() throws FlowException {
         QueryCriteria.LinearStateQueryCriteria linearStateQueryCriteria = new QueryCriteria.LinearStateQueryCriteria()
                 .withExternalId(Collections.singletonList(contractId));
         QueryCriteria.VaultQueryCriteria criteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
@@ -78,7 +79,7 @@ public class GetContractFlow extends FlowLogic<Pair<String, String[]>> {
             throw new FlowException("Something went wrong while trying to parse an addendum to json format.", e);
         }
 
-        return new Pair<>(contractJson, addendaJson);
+        return new ContractJsonWithAddendaJson(contractJson, addendaJson);
     }
 
     private boolean issuerIsNotSellerAndNotBuyer(String sellerId, String buyerId) {
