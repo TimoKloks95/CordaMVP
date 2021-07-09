@@ -24,20 +24,11 @@ import java.util.List;
 @InitiatingFlow
 @StartableByRPC
 public class AddAddendumFlow extends FlowLogic<SignedTransaction> {
-    private static final ProgressTracker.Step BEFORE_SET_ADDENDUM = new ProgressTracker.Step("Before addendum is set.");
-    private static final ProgressTracker.Step AFTER_SET_ADDENDUM = new ProgressTracker.Step("After addendum is set.");
-    private final ProgressTracker progressTracker = new ProgressTracker(BEFORE_SET_ADDENDUM, AFTER_SET_ADDENDUM);
-    @Override
-    public ProgressTracker getProgressTracker() {
-        return progressTracker;
-    }
     private String issuerId;
-    private String contractId;
     private String addendumJson;
 
-    public AddAddendumFlow(String issuerId, String contractId, String addendumJson) {
+    public AddAddendumFlow(String issuerId, String addendumJson) {
         this.issuerId = issuerId;
-        this.contractId = contractId;
         this.addendumJson = addendumJson;
     }
 
@@ -47,27 +38,6 @@ public class AddAddendumFlow extends FlowLogic<SignedTransaction> {
         Party node = getOurIdentity();
         final Party notary = getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0);
 
-        //Ophalen van contract
-        QueryCriteria.LinearStateQueryCriteria linearStateQueryCriteria = new QueryCriteria.LinearStateQueryCriteria()
-                .withExternalId(Collections.singletonList(contractId));
-        QueryCriteria.VaultQueryCriteria criteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
-        Vault.Page<BeycoContractState> results = getServiceHub().getVaultService().queryBy(BeycoContractState.class, criteria.and(linearStateQueryCriteria));
-
-        //Bestaat dit contract?
-        if(results.getStates().size() == 0) {
-            throw new FlowException("The contract that you tried to retrieve doesn't exist.");
-        }
-        //Ophalen input
-        StateAndRef<BeycoContractState> inputContractStateAndRef = results.getStates().get(0);
-        //Ophalen input state
-        BeycoContractState inputContractState = results.getStates().get(0).getState().component1();
-
-        //Is de issuer de seller of buyer van dit contract?
-        if(issuerIsNotSellerAndNotBuyer(inputContractState.getSellerId(), inputContractState.getBuyerId())) {
-            throw new FlowException("The issuer of the contract has to be either the seller or the buyer.");
-        }
-
-        //Deserializeren van addendumJson
         Addendum toAddAddendum;
         ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
         try {
@@ -75,21 +45,31 @@ public class AddAddendumFlow extends FlowLogic<SignedTransaction> {
         } catch(JsonProcessingException e) {
             throw new FlowException("Something went wrong trying to parse addendum json to object", e);
         }
+        toAddAddendum.setNode(node);
 
-        //Aanmaken van output state
-        BeycoContractState outputContract = inputContractState.copyWithNewAddendum(toAddAddendum);
-        outputContract.setNode(node);
+        QueryCriteria.LinearStateQueryCriteria linearStateQueryCriteria = new QueryCriteria.LinearStateQueryCriteria()
+                .withExternalId(Collections.singletonList(toAddAddendum.getContractId()));
+        QueryCriteria.VaultQueryCriteria criteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
+        Vault.Page<BeycoContractState> results = getServiceHub().getVaultService().queryBy(BeycoContractState.class, criteria.and(linearStateQueryCriteria));
 
-        //Opstellen van transactionbuilder
+        if(results.getStates().size() == 0) {
+            throw new FlowException("The contract that you tried to add the addendum to doesn't exist.");
+        }
+
+        StateAndRef<BeycoContractState> inputContractStateAndRef = results.getStates().get(0);
+        BeycoContractState inputContractState = results.getStates().get(0).getState().component1();
+
+        if(issuerIsNotSellerAndNotBuyer(inputContractState.getSellerId(), inputContractState.getBuyerId())) {
+            throw new FlowException("The issuer of the contract has to be either the seller or the buyer.");
+        }
+
         final TransactionBuilder builder = new TransactionBuilder(notary);
-            builder.addInputState(inputContractStateAndRef);
-            builder.addOutputState(outputContract);
-            builder.addCommand(new BeycoContract.Commands.Add(), Arrays.asList(node.getOwningKey()));
+            builder.addReferenceState(inputContractStateAndRef.referenced());
+            builder.addOutputState(toAddAddendum);
+            builder.addCommand(new BeycoContract.Commands.Add(), Collections.singletonList(node.getOwningKey()));
 
-        //Tekenen van transactie
         final SignedTransaction selfSignedTx = getServiceHub().signInitialTransaction(builder);
 
-        //Notarisen
         return subFlow(new FinalityFlow(selfSignedTx, new HashSet<FlowSession>(0)));
     }
 

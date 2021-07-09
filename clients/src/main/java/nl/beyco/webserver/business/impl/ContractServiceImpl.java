@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import javafx.util.Pair;
 import nl.beyco.flows.GetContractFlow;
 import nl.beyco.flows.SaveContractFlow;
 import nl.beyco.flows.AddAddendumFlow;
@@ -21,6 +22,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Observable;
 import java.util.concurrent.ExecutionException;
 
@@ -38,13 +41,14 @@ public class ContractServiceImpl implements ContractService {
     public void saveContract(String issuerId, Contract contract) {
         CordaRPCOps proxy = rpcService.getProxy();
         String contractJson;
+
         try {
             contractJson = serializationHelper.contractToContractJson(contract);
-            log.info(contractJson);
         } catch(JsonProcessingException e) {
             log.error("Something went wrong while trying to parse the contract to json format.", e);
             throw new BeycoParseException("Something went wrong while trying to parse the contract to json format.", e);
         }
+
         try {
             proxy.startTrackedFlowDynamic(SaveContractFlow.class, issuerId, contractJson).getReturnValue().get();
         } catch (InterruptedException | ExecutionException e) {
@@ -54,40 +58,53 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public Contract getContract(String issuerId, String contractId) {
+    public Pair<Contract, List<Addendum>> getContract(String issuerId, String contractId) {
         CordaRPCOps proxy = rpcService.getProxy();
-        String result;
+        Pair<String, String[]> result;
+
         try {
             result = proxy.startTrackedFlowDynamic(GetContractFlow.class, issuerId, contractId).getReturnValue().get();
         } catch (InterruptedException | ExecutionException e) {
             log.error("Something went wrong while calling the get contract flow", e);
             throw new BeycoFlowException("Something went wrong while calling the get contract flow", e);
         }
+
         Contract contract;
+        List<Addendum> addenda = new LinkedList<>();
+
         try {
-            contract = serializationHelper.contractJsonToContract(result);
+            contract = serializationHelper.contractJsonToContract(result.getKey());
         } catch(JsonProcessingException e) {
             log.error("Something went wrong while trying to parse json string to contract.", e);
             throw new BeycoParseException("Something went wrong while trying to parse json string to contract.", e);
         }
-        return contract;
+
+        try {
+            for(int i=0; i<result.getValue().length; i++) {
+                addenda.add(serializationHelper.addendumJsonToAddendum(result.getValue()[i]));
+            }
+        } catch(JsonProcessingException e) {
+            log.error("Something went wrong while trying to parse json string to addendum", e);
+            throw new BeycoParseException("Something went wrong while trying to parse json string to addendum", e);
+        }
+
+        return new Pair<>(contract, addenda);
     }
 
     @Override
-    public void addAddendum(String issuerId, String contractId, Addendum addendum) {
+    public void addAddendum(String issuerId, Addendum addendum) {
         CordaRPCOps proxy = rpcService.getProxy();
-        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule()).configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
         String addendumJson;
+
         try {
-            addendumJson = writer.writeValueAsString(addendum);
-            log.info(addendumJson);
+            addendumJson = serializationHelper.addendumToAddendumJson(addendum);
         } catch(JsonProcessingException e) {
             log.error("Something went wrong while trying to parse the addendum to json format.", e);
             throw new BeycoParseException("Something went wrong while trying to parse the addendum to json format.", e);
         }
+
         try {
-            proxy.startTrackedFlowDynamic(AddAddendumFlow.class, issuerId, contractId, addendumJson).getReturnValue().get();
+            proxy.startTrackedFlowDynamic(AddAddendumFlow.class, issuerId, addendumJson).getReturnValue().get();
         } catch (InterruptedException | ExecutionException e) {
             log.error("Something went wrong while calling the add addendum flow", e);
             throw new BeycoFlowException("Something went wrong while calling the add addendum flow", e);

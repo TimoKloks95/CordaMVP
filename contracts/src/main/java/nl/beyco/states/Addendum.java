@@ -1,21 +1,29 @@
 package nl.beyco.states;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import net.corda.core.contracts.BelongsToContract;
+import net.corda.core.contracts.ContractState;
+import net.corda.core.contracts.LinearState;
+import net.corda.core.contracts.UniqueIdentifier;
+import net.corda.core.identity.AbstractParty;
+import net.corda.core.identity.Party;
 import net.corda.core.serialization.ConstructorForDeserialization;
-import net.corda.core.serialization.CordaSerializable;
+import nl.beyco.contracts.BeycoContract;
 import nl.beyco.helpers.LocalDateTimeDeserializer;
 import nl.beyco.helpers.LocalDateTimeSerializer;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-@CordaSerializable
-public class Addendum {
+@BelongsToContract(BeycoContract.class)
+public class Addendum implements ContractState, LinearState {
     private String id;
+    private String contractId;
+    private String sellerId;
+    private String buyerId;
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createdAt;
@@ -25,19 +33,25 @@ public class Addendum {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime sellerSignedAt;
-    private List<AddendumCondition> conditions;
+    private List<Coffee> coffees;
+    private List<Condition> conditions;
+    private Party node;
 
     public Addendum() {
 
     }
 
     @ConstructorForDeserialization
-    public Addendum(String id, LocalDateTime createdAt, LocalDateTime buyerSignedAt, LocalDateTime sellerSignedAt,
-                    List<AddendumCondition> conditions) {
+    public Addendum(String id, String contractId, String sellerId, String buyerId, LocalDateTime createdAt, LocalDateTime buyerSignedAt, LocalDateTime sellerSignedAt,
+                    List<Coffee> coffees, List<Condition> conditions) {
         this.id = id;
+        this.contractId = contractId;
+        this.sellerId = sellerId;
+        this.buyerId = buyerId;
         this.createdAt = createdAt;
         this.buyerSignedAt = buyerSignedAt;
         this.sellerSignedAt = sellerSignedAt;
+        this.coffees = coffees;
         this.conditions = conditions;
     }
 
@@ -49,6 +63,10 @@ public class Addendum {
         return createdAt;
     }
 
+    public String getContractId() {
+        return contractId;
+    }
+
     public LocalDateTime getBuyerSignedAt() {
         return buyerSignedAt;
     }
@@ -57,16 +75,24 @@ public class Addendum {
         return sellerSignedAt;
     }
 
-    public List<AddendumCondition> getConditions() {
+    public List<Condition> getConditions() {
         return conditions;
     }
 
-    public Addendum copy() {
-        List<AddendumCondition> conditionsCopy = new ArrayList<>();
-        for(AddendumCondition condition : conditions) {
-            conditionsCopy.add(condition.copy());
-        }
-        return new Addendum(this.id, this.createdAt, this.buyerSignedAt, this.sellerSignedAt, conditionsCopy);
+    public List<Coffee> getCoffees() {
+        return coffees;
+    }
+
+    public String getSellerId() {
+        return sellerId;
+    }
+
+    public String getBuyerId() {
+        return buyerId;
+    }
+
+    public void setNode(Party node) {
+        this.node = node;
     }
 
     @Override
@@ -82,11 +108,23 @@ public class Addendum {
         Addendum other = (Addendum) obj;
 
         if(!Objects.deepEquals(
-            new String[] {id, String.valueOf(createdAt), String.valueOf(buyerSignedAt), String.valueOf(sellerSignedAt)},
-            new String[] {other.id, String.valueOf(other.createdAt), String.valueOf(other.buyerSignedAt), String.valueOf(other.sellerSignedAt)}
+            new String[] {id, contractId, String.valueOf(createdAt), String.valueOf(buyerSignedAt), String.valueOf(sellerSignedAt)},
+            new String[] {other.id, other.contractId, String.valueOf(other.createdAt), String.valueOf(other.buyerSignedAt), String.valueOf(other.sellerSignedAt)}
         )) {
             return false;
         }
         return true;
+    }
+
+    @NotNull
+    @Override
+    public UniqueIdentifier getLinearId() {
+        return new UniqueIdentifier(contractId);
+    }
+
+    @NotNull
+    @Override
+    public List<AbstractParty> getParticipants() {
+        return Collections.singletonList(node);
     }
 }

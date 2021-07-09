@@ -1,5 +1,6 @@
 package nl.beyco.webserver.controllers;
 
+import javafx.util.Pair;
 import nl.beyco.webserver.dto.Addendum;
 import nl.beyco.webserver.dto.Contract;
 import nl.beyco.webserver.business.ContractService;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/")
@@ -26,13 +28,13 @@ public class ClientController {
     }
 
     @GetMapping("{contractId}")
-    public ResponseEntity<Contract> getContract(@RequestHeader("issuerId") String issuerId, @PathVariable("contractId") String contractId) {
+    public ResponseEntity<Pair<Contract, List<Addendum>>> getContract(@RequestHeader("issuerId") String issuerId, @PathVariable("contractId") String contractId) {
         log.info("issuerId: "+issuerId);
-        Contract result = contractService.getContract(issuerId, contractId);
+        Pair<Contract, List<Addendum>> result = contractService.getContract(issuerId, contractId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PatchMapping("{contractId}")
+    @PostMapping("/addendum")
     public ResponseEntity<HttpStatus> addAddendum(@RequestHeader("issuerId") String issuerId, @Valid @RequestBody Addendum addendum) {
         contractService.addAddendum(issuerId, addendum);
         return new ResponseEntity<>(HttpStatus.OK);

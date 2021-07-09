@@ -36,82 +36,21 @@ public class BeycoContract implements Contract {
     }
 
     private void verifyAddAddendumToContract(LedgerTransaction tx) {
-        BeycoContractState outputContract = tx.outputsOfType(BeycoContractState.class).get(0);
-        BeycoContractState inputContract = tx.inputsOfType(BeycoContractState.class).get(0);
-        validateBeycoContract(outputContract);
-        inputContractEqualsOutputContract(inputContract, outputContract);
+        Addendum outputAddendum = tx.outputsOfType(Addendum.class).get(0);
+        BeycoContractState referenceContract = tx.referenceInputsOfType(BeycoContractState.class).get(0);
+        validateAddendumAttributes(outputAddendum);
+        outputAddendumIsValidWithReferencedContract(outputAddendum, referenceContract);
     }
 
-    private void inputContractEqualsOutputContract(BeycoContractState inputContract, BeycoContractState outputContract) {
+    private void outputAddendumIsValidWithReferencedContract(Addendum outputAddendum, BeycoContractState referenceContract) {
         requireThat(require -> {
-            require.using("Input contract should be the same as the output contract.", inputContract.equals(outputContract));
+            require.using("Addendum must reference the correct contract.", outputAddendum.getContractId().equals(referenceContract.getId()));
+            require.using("Addendum must have the same seller as the contract.", outputAddendum.getSellerId().equals(referenceContract.getSellerId()));
+            require.using("Addendum must have the same buyer as the contract.", outputAddendum.getBuyerId().equals(referenceContract.getBuyerId()));
+            require.using("Addendum seller signed can't be before seller and buyer signed of the contract", outputAddendum.getSellerSignedAt().isAfter(referenceContract.getSellerSignedAt()) && outputAddendum.getSellerSignedAt().isAfter(referenceContract.getBuyerSignedAt()));
+            require.using("Addendum buyer signed can't be before seller and buyer signed of the contract", outputAddendum.getBuyerSignedAt().isAfter(referenceContract.getSellerSignedAt()) && outputAddendum.getBuyerSignedAt().isAfter(referenceContract.getBuyerSignedAt()));
            return null;
         });
-        inputCoffeesEqualsOutputCoffees(inputContract.getCoffees(), outputContract.getCoffees());
-        inputConditionsEqualsOutputConditions(inputContract.getConditions(), outputContract.getConditions());
-        inputAddendaEqualsOutputAddendaExceptForNewlyAdded(inputContract.getAddenda(), outputContract.getAddenda());
-    }
-
-    private void inputAddendaEqualsOutputAddendaExceptForNewlyAdded(List<Addendum> inputAddenda, List<Addendum> outputAddenda) {
-        if(inputAddenda != null) {
-            requireThat(require -> {
-                require.using("The output contract should have one more addendum than the input contract.", inputAddenda.size() == outputAddenda.size() + 1);
-               return null;
-            });
-            if(inputAddenda.size() > 0) {
-                for(int i=0; i<inputAddenda.size(); i++) {
-                    Addendum inputAddendum = inputAddenda.get(i);
-                    for(int j=0; j<outputAddenda.size(); i++) {
-                        Addendum outputAddendum = outputAddenda.get(j);
-                        if(inputAddendum.getId().equals(outputAddendum.getId())) {
-                            requireThat(require -> {
-                                require.using("The existing addenda of the input contract should be equal to the existing addenda in the output contract.", inputAddendum.equals(outputAddendum));
-                                return null;
-                            });
-                        }
-                        inputConditionsEqualsOutputConditions(inputAddendum.getConditions(), outputAddendum.getConditions());
-                    }
-                }
-            }
-        }
-    }
-
-    private void inputConditionsEqualsOutputConditions(List<? extends Condition> inputConditions, List<? extends Condition> outputConditions) {
-        requireThat(require -> {
-            require.using("There should be an equal amount of input and output conditions", inputConditions.size() == outputConditions.size());
-            return null;
-        });
-        for(int i=0; i<inputConditions.size(); i++) {
-            Condition inputCondition = inputConditions.get(i);
-            for(int j=0; j<outputConditions.size(); i++) {
-                Condition outputCondition = outputConditions.get(j);
-                if(inputCondition.getId().equals(outputCondition.getId())) {
-                    requireThat(require -> {
-                        require.using("The conditions of the input contract must be equal to the conditions of the output contract.", inputCondition.equals(outputCondition));
-                        return null;
-                    });
-                }
-            }
-        }
-    }
-
-    private void inputCoffeesEqualsOutputCoffees(List<Coffee> inputCoffees, List<Coffee> outputCoffees) {
-        requireThat(require -> {
-            require.using("There should be an equal amount of input and output coffees", inputCoffees.size() == outputCoffees.size());
-           return null;
-        });
-        for(int i=0; i<inputCoffees.size(); i++) {
-            Coffee inputCoffee = inputCoffees.get(i);
-            for(int j=0; j<outputCoffees.size(); i++) {
-                Coffee outputCoffee = outputCoffees.get(j);
-                if(inputCoffee.getId().equals(outputCoffee.getId())) {
-                    requireThat(require -> {
-                       require.using("The coffees of the input contract must be equal to the coffees of the output contract.", inputCoffee.equals(outputCoffee));
-                       return null;
-                    });
-                }
-            }
-        }
     }
 
     private void validateBeycoContract(BeycoContractState contract) {
@@ -121,9 +60,6 @@ public class BeycoContract implements Contract {
         }
         for(Condition condition : contract.getConditions()) {
             validateConditionAttributes(condition);
-        }
-        for(Addendum addendum : contract.getAddenda()) {
-            validateAddendumAttributes(addendum);
         }
     }
 
@@ -164,6 +100,7 @@ public class BeycoContract implements Contract {
     private void validateAddendumAttributes(Addendum addendum) {
         requireThat(require -> {
             require.using("Addendum id can't be empty or null.", addendum.getId() != null && !addendum.getId().isEmpty());
+            require.using("Contract id can't be empty or null.", addendum.getContractId() != null && !addendum.getContractId().isEmpty());
             require.using("Created at can't be after current datetime.", addendum.getCreatedAt().isBefore(LocalDateTime.now()));
             require.using("Buyer signed can't be after current datetime.", addendum.getBuyerSignedAt().isBefore(LocalDateTime.now()));
             require.using("Seller signed can't be after current datetime.", addendum.getSellerSignedAt().isBefore(LocalDateTime.now()));

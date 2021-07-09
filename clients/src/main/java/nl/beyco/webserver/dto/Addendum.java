@@ -19,7 +19,13 @@ public class Addendum {
     private String id;
 
     @NotBlank(message = "parentId is mandatory")
-    private String parentId;
+    private String contractId;
+
+    @NotBlank(message = "sellerId is mandatory")
+    private String sellerId;
+
+    @NotBlank(message = "buyerId is mandatory")
+    private String buyerId;
 
     @NotNull(message = "createdAt is mandatory")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -47,9 +53,11 @@ public class Addendum {
     }
 
     @ConstructorForDeserialization
-    public Addendum(String id, String parentId, LocalDateTime createdAt, LocalDateTime buyerSignedAt, LocalDateTime sellerSignedAt, List<Coffee> coffees, List<Condition> conditions) {
+    public Addendum(String id, String contractId, String sellerId, String buyerId, LocalDateTime createdAt, LocalDateTime buyerSignedAt, LocalDateTime sellerSignedAt, List<Coffee> coffees, List<Condition> conditions) {
         this.id = id;
-        this.parentId = parentId;
+        this.contractId = contractId;
+        this.sellerId = sellerId;
+        this.buyerId = buyerId;
         this.createdAt = createdAt;
         this.buyerSignedAt = buyerSignedAt;
         this.sellerSignedAt = sellerSignedAt;
@@ -61,16 +69,32 @@ public class Addendum {
         return id;
     }
 
+    public String getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(String sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    public String getBuyerId() {
+        return buyerId;
+    }
+
+    public void setBuyerId(String buyerId) {
+        this.buyerId = buyerId;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
 
-    public String getParentId() {
-        return parentId;
+    public String getContractId() {
+        return contractId;
     }
 
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
+    public void setContractId(String contractId) {
+        this.contractId = contractId;
     }
 
     public List<Coffee> getCoffees() {

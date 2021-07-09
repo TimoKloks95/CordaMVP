@@ -6,20 +6,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import javafx.util.Pair;
+import net.corda.core.contracts.StateAndRef;
 import net.corda.core.flows.FlowException;
 import net.corda.core.flows.FlowLogic;
 import net.corda.core.flows.InitiatingFlow;
 import net.corda.core.flows.StartableByRPC;
 import net.corda.core.node.services.Vault;
 import net.corda.core.node.services.vault.QueryCriteria;
+import nl.beyco.states.Addendum;
 import nl.beyco.states.BeycoContractState;
 
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 
 @InitiatingFlow
 @StartableByRPC
-public class GetContractFlow extends FlowLogic<String> {
+public class GetContractFlow extends FlowLogic<Pair<String, String[]>> {
     private String issuerId;
     private String contractId;
 
@@ -31,17 +36,24 @@ public class GetContractFlow extends FlowLogic<String> {
 
     @Suspendable
     @Override
-    public String call() throws FlowException {
+    public Pair<String, String[]> call() throws FlowException {
         QueryCriteria.LinearStateQueryCriteria linearStateQueryCriteria = new QueryCriteria.LinearStateQueryCriteria()
                 .withExternalId(Collections.singletonList(contractId));
         QueryCriteria.VaultQueryCriteria criteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
-        Vault.Page<BeycoContractState> results = getServiceHub().getVaultService().queryBy(BeycoContractState.class, criteria.and(linearStateQueryCriteria));
 
-        if(results.getStates().size() == 0) {
+        Vault.Page<BeycoContractState> vaultContracts = getServiceHub().getVaultService().queryBy(BeycoContractState.class, criteria.and(linearStateQueryCriteria));
+
+        if(vaultContracts.getStates().size() == 0) {
             throw new FlowException("The contract that you tried to retrieve doesn't exist.");
         }
 
-        BeycoContractState contract = results.getStates().get(0).getState().component1();
+        BeycoContractState contract = vaultContracts.getStates().get(0).getState().component1();
+
+        Vault.Page<Addendum> vaultAddenda = getServiceHub().getVaultService().queryBy(Addendum.class, criteria.and(linearStateQueryCriteria));
+        List<Addendum> addenda = new LinkedList<>();
+        for (StateAndRef<Addendum> addendumRef : vaultAddenda.getStates()) {
+            addenda.add(addendumRef.getState().component1());
+        }
 
         if(issuerIsNotSellerAndNotBuyer(contract.getSellerId(), contract.getBuyerId())) {
             throw new FlowException("The issuer of the contract has to be either the seller or the buyer.");
@@ -57,7 +69,16 @@ public class GetContractFlow extends FlowLogic<String> {
             throw new FlowException("Something went wrong while trying to parse the contract to json format.", e);
         }
 
-        return contractJson;
+        String[] addendaJson = new String[vaultAddenda.getStates().size()];
+        try {
+            for(int i=0; i<addenda.size(); i++) {
+                addendaJson[i] = writer.writeValueAsString(addenda.get(i));
+            }
+        } catch(JsonProcessingException e) {
+            throw new FlowException("Something went wrong while trying to parse an addendum to json format.", e);
+        }
+
+        return new Pair<>(contractJson, addendaJson);
     }
 
     private boolean issuerIsNotSellerAndNotBuyer(String sellerId, String buyerId) {

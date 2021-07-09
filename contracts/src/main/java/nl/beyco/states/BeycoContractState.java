@@ -30,7 +30,6 @@ public class BeycoContractState implements ContractState, LinearState {
     private LocalDateTime buyerSignedAt;
     private List<Coffee> coffees;
     private List<Condition> conditions;
-    private List<Addendum> addenda;
     private Party node;
 
     public BeycoContractState() {
@@ -40,7 +39,7 @@ public class BeycoContractState implements ContractState, LinearState {
     @ConstructorForDeserialization
     public BeycoContractState(String id, String sellerId, String buyerId, String offerId,
                               LocalDateTime sellerSignedAt, LocalDateTime buyerSignedAt, List<Coffee> coffees,
-                              List<Condition> conditions, List<Addendum> addenda) {
+                              List<Condition> conditions) {
         this.id = id;
         this.sellerId = sellerId;
         this.buyerId = buyerId;
@@ -49,29 +48,7 @@ public class BeycoContractState implements ContractState, LinearState {
         this.buyerSignedAt = buyerSignedAt;
         this.coffees = coffees;
         this.conditions = conditions;
-        this.addenda = addenda;
     }
-
-    public BeycoContractState copyWithNewAddendum(Addendum toAddAddendum) {
-        List<Coffee> coffeesCopy = new ArrayList<>();
-        List<Condition> conditionsCopy = new ArrayList<>();
-        List<Addendum> addendaCopy = new ArrayList<>();
-        for (Coffee coffee : coffees) {
-            coffeesCopy.add(coffee.copy());
-        }
-
-        for(Condition condition : conditions) {
-            conditionsCopy.add(condition.copy());
-        }
-
-        for(Addendum addendum : addenda) {
-            addendaCopy.add(addendum.copy());
-        }
-        addendaCopy.add(toAddAddendum);
-        return new BeycoContractState(this.id, this.sellerId, this.buyerId, this.offerId, this.sellerSignedAt,
-                this.buyerSignedAt, coffeesCopy, conditionsCopy, addendaCopy);
-    }
-
 
     public String getId() {
         return id;
@@ -103,18 +80,6 @@ public class BeycoContractState implements ContractState, LinearState {
 
     public List<Condition> getConditions() {
         return conditions;
-    }
-
-    public List<Addendum> getAddenda() {
-        return addenda;
-    }
-
-    public void setAddenda(List<Addendum> addenda) {
-        this.addenda = addenda;
-    }
-
-    public void addAddendum(Addendum addendum) {
-        addenda.add(addendum);
     }
 
     public void setNode(Party node) {
