@@ -1,5 +1,8 @@
 package nl.beyco.states;
 
+import net.corda.core.serialization.CordaSerializable;
+
+@CordaSerializable
 public class ContractJsonWithAddendaJson {
     private String contractJson;
     private String[] addendaJson;
