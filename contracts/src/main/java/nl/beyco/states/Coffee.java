@@ -16,14 +16,13 @@ public class Coffee {
     private String id;
     private String country;
     private String region;
-    @JsonProperty("bulk")
-    private boolean isBulk;
+    private boolean bulk;
     private String unit;
     private int quantity;
     private String species;
     private String process;
-    private String minScreenSize;
-    private String maxScreenSize;
+    private int minScreenSize;
+    private int maxScreenSize;
     private double cuppingScore;
     private String sector;
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -38,14 +37,14 @@ public class Coffee {
     }
 
     @ConstructorForDeserialization
-    public Coffee(String id, String country, String region, boolean isBulk,
+    public Coffee(String id, String country, String region, boolean bulk,
                   String unit, int quantity, String species, String process,
-                  String minScreenSize, String maxScreenSize, double cuppingScore, String sector,
+                  int minScreenSize, int maxScreenSize, double cuppingScore, String sector,
                   LocalDateTime harvestAt, String qualitySegment, String[] certificates, String parentId) {
             this.id = id;
             this.country = country;
             this.region = region;
-            this.isBulk = isBulk;
+            this.bulk = bulk;
             this.unit = unit;
             this.quantity = quantity;
             this.species = species;
@@ -74,7 +73,7 @@ public class Coffee {
     }
 
     public boolean isBulk() {
-        return isBulk;
+        return bulk;
     }
 
     public String getUnit() {
@@ -93,11 +92,11 @@ public class Coffee {
         return process;
     }
 
-    public String getMinScreenSize() {
+    public int getMinScreenSize() {
         return minScreenSize;
     }
 
-    public String getMaxScreenSize() {
+    public int getMaxScreenSize() {
         return maxScreenSize;
     }
 
@@ -125,6 +124,11 @@ public class Coffee {
         return parentId;
     }
 
+    public Coffee copy() {
+        return new Coffee(this.id, this.country, this.region, this.bulk, this.unit, this.quantity, this.species, this.process, this.minScreenSize, this.maxScreenSize,
+                this.cuppingScore, this.sector, this.harvestAt, this.qualitySegment, this.certificates, this.parentId);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -138,10 +142,10 @@ public class Coffee {
         Coffee other = (Coffee) obj;
 
         if(!Objects.deepEquals(
-                new String[]{id, country, region,String.valueOf(isBulk), unit, String.valueOf(quantity), species, process,
-                        minScreenSize, maxScreenSize, String.valueOf(cuppingScore), sector, String.valueOf(harvestAt), qualitySegment},
-                new String[]{other.id, other.country, other.region, String.valueOf(other.isBulk), other.unit, String.valueOf(other.quantity), other.species, other.process,
-                        other.minScreenSize, other.maxScreenSize, String.valueOf(other.cuppingScore), other.sector, String.valueOf(other.harvestAt), other.qualitySegment}
+                new String[]{id, country, region,String.valueOf(bulk), unit, String.valueOf(quantity), species, process,
+                        String.valueOf(minScreenSize), String.valueOf(maxScreenSize), String.valueOf(cuppingScore), sector, String.valueOf(harvestAt), qualitySegment},
+                new String[]{other.id, other.country, other.region, String.valueOf(other.bulk), other.unit, String.valueOf(other.quantity), other.species, other.process,
+                        String.valueOf(other.minScreenSize), String.valueOf(other.maxScreenSize), String.valueOf(other.cuppingScore), other.sector, String.valueOf(other.harvestAt), other.qualitySegment}
         )) {
             return false;
         }

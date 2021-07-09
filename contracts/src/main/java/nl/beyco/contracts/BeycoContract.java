@@ -129,7 +129,6 @@ public class BeycoContract implements Contract {
 
     private void validateBeycoContractStateAttributes(BeycoContractState contract) {
         requireThat(require -> {
-            require.using("Issuer has to be the seller or the buyer.", contract.getIssuerId().equals(contract.getSellerId()) || contract.getIssuerId().equals(contract.getBuyerId()));
             require.using("Contract id can't be empty or null.", contract.getId() != null && !contract.getId().isEmpty());
             require.using("Seller id can't be empty or null.", contract.getSellerId() != null && !contract.getSellerId().isEmpty());
             require.using("Buyer id can't be empty or null.", contract.getBuyerId() != null && !contract.getBuyerId().isEmpty());
@@ -154,8 +153,8 @@ public class BeycoContract implements Contract {
             require.using("Coffee process can't be empty or null.", coffee.getProcess() != null && !coffee.getProcess().isEmpty());
             require.using("Coffee sector can't be empty or null.", coffee.getSector() != null && !coffee.getSector().isEmpty());
             require.using("Coffee quality segment can't be empty or null.", coffee.getQualitySegment() != null && !coffee.getQualitySegment().isEmpty());
-            require.using("Minimal screen size can't be empty or null.", coffee.getMinScreenSize() != null && !coffee.getMinScreenSize().isEmpty());
-            require.using("Maximal screen size can't be empty or null.", coffee.getMaxScreenSize() != null && !coffee.getMaxScreenSize().isEmpty());
+            require.using("Minimal screen size can't be negative or zero.", coffee.getMinScreenSize() > 0);
+            require.using("Maximal screen size can't be negative or zero.", coffee.getMaxScreenSize() > 0);
             require.using("Coffee quantity can't be negative or zero.", coffee.getQuantity() > 0);
             require.using("Coffee cuppingscore can't be negative or zero.", coffee.getCuppingScore() > 0);
            return null;

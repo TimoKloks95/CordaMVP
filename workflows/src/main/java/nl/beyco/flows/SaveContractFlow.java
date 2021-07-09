@@ -19,9 +19,11 @@ import java.util.HashSet;
 @InitiatingFlow
 @StartableByRPC
 public class SaveContractFlow extends FlowLogic<SignedTransaction> {
+    private final String issuerId;
     private final String contractJson;
 
-    public SaveContractFlow(String contractJson) {
+    public SaveContractFlow(String issuerId, String contractJson) {
+        this.issuerId = issuerId;
         this.contractJson = contractJson;
     }
 
@@ -37,6 +39,10 @@ public class SaveContractFlow extends FlowLogic<SignedTransaction> {
             toAddState = objectMapper.readValue(contractJson, BeycoContractState.class);
         } catch(JsonProcessingException e) {
             throw new FlowException("Something went wrong trying to parse contract json to state object", e);
+        }
+
+        if(issuerIsNotSellerAndNotBuyer(toAddState.getSellerId(), toAddState.getBuyerId())) {
+            throw new FlowException("The issuer of the contract has to be either the seller or the buyer.");
         }
 
         if(contractAlreadyExistsInVault(toAddState.getId())) {
@@ -60,5 +66,9 @@ public class SaveContractFlow extends FlowLogic<SignedTransaction> {
         QueryCriteria.VaultQueryCriteria criteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
         Vault.Page<BeycoContractState> contracts = getServiceHub().getVaultService().queryBy(BeycoContractState.class, criteria.and(linearStateQueryCriteria));
         return contracts.getStates().size() != 0;
+    }
+
+    private boolean issuerIsNotSellerAndNotBuyer(String sellerId, String buyerId) {
+        return !issuerId.equals(sellerId) && !issuerId.equals(buyerId);
     }
 }

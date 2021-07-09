@@ -63,6 +63,7 @@ allprojects {//Properties that you need to compile your project (The application
     }
 }
 
+
 apply plugin: 'net.corda.plugins.cordapp'
 apply plugin: 'net.corda.plugins.cordformation'
 apply plugin: 'net.corda.plugins.quasar-utils'
@@ -85,6 +86,7 @@ dependencies {
     cordapp project(":workflows")
     cordapp project(":contracts")
 
+    quasar  "co.paralleluniverse:quasar-core:0.8.0"
 
     cordaCompile ("org.apache.logging.log4j:log4j-slf4j-impl:${log4j_version}")
     cordaCompile ("org.apache.logging.log4j:log4j-web:${log4j_version}")
@@ -92,6 +94,9 @@ dependencies {
 
 }
 
+tasks.withType(Test) {
+    jvmArgs "-javaagent:${configurations.quasar.iterator().next()}"
+}
 
 //Task to deploy the nodes in order to bootstrap a network
 task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {

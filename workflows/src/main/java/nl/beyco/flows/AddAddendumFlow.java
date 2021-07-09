@@ -11,16 +11,26 @@ import net.corda.core.node.services.Vault;
 import net.corda.core.node.services.vault.QueryCriteria;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
+import net.corda.core.utilities.ProgressTracker;
 import nl.beyco.contracts.BeycoContract;
 import nl.beyco.states.Addendum;
 import nl.beyco.states.BeycoContractState;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 @InitiatingFlow
 @StartableByRPC
 public class AddAddendumFlow extends FlowLogic<SignedTransaction> {
+    private static final ProgressTracker.Step BEFORE_SET_ADDENDUM = new ProgressTracker.Step("Before addendum is set.");
+    private static final ProgressTracker.Step AFTER_SET_ADDENDUM = new ProgressTracker.Step("After addendum is set.");
+    private final ProgressTracker progressTracker = new ProgressTracker(BEFORE_SET_ADDENDUM, AFTER_SET_ADDENDUM);
+    @Override
+    public ProgressTracker getProgressTracker() {
+        return progressTracker;
+    }
     private String issuerId;
     private String contractId;
     private String addendumJson;
@@ -50,17 +60,12 @@ public class AddAddendumFlow extends FlowLogic<SignedTransaction> {
         //Ophalen input
         StateAndRef<BeycoContractState> inputContractStateAndRef = results.getStates().get(0);
         //Ophalen input state
-        BeycoContractState inputContractState = inputContractStateAndRef.getState().component1();
+        BeycoContractState inputContractState = results.getStates().get(0).getState().component1();
 
         //Is de issuer de seller of buyer van dit contract?
         if(issuerIsNotSellerAndNotBuyer(inputContractState.getSellerId(), inputContractState.getBuyerId())) {
             throw new FlowException("The issuer of the contract has to be either the seller or the buyer.");
         }
-
-        //Aanmaken van output state
-        BeycoContractState outputContract = inputContractState.copy();
-        outputContract.setIssuerId(issuerId);
-        outputContract.setNode(node);
 
         //Deserializeren van addendumJson
         Addendum toAddAddendum;
@@ -71,14 +76,15 @@ public class AddAddendumFlow extends FlowLogic<SignedTransaction> {
             throw new FlowException("Something went wrong trying to parse addendum json to object", e);
         }
 
-        //Toevoegen van addendum aan contract
-        outputContract.addAddendum(toAddAddendum);
+        //Aanmaken van output state
+        BeycoContractState outputContract = inputContractState.copyWithNewAddendum(toAddAddendum);
+        outputContract.setNode(node);
 
         //Opstellen van transactionbuilder
         final TransactionBuilder builder = new TransactionBuilder(notary);
-        builder.addInputState(inputContractStateAndRef);
-        builder.addOutputState(outputContract);
-        builder.addCommand(new BeycoContract.Commands.Add(), Collections.singletonList(node.getOwningKey()));
+            builder.addInputState(inputContractStateAndRef);
+            builder.addOutputState(outputContract);
+            builder.addCommand(new BeycoContract.Commands.Add(), Arrays.asList(node.getOwningKey()));
 
         //Tekenen van transactie
         final SignedTransaction selfSignedTx = getServiceHub().signInitialTransaction(builder);

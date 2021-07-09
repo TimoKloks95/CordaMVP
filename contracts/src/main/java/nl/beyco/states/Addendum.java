@@ -1,7 +1,6 @@
 package nl.beyco.states;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.corda.core.serialization.ConstructorForDeserialization;
@@ -10,11 +9,11 @@ import nl.beyco.helpers.LocalDateTimeDeserializer;
 import nl.beyco.helpers.LocalDateTimeSerializer;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @CordaSerializable
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Addendum {
     private String id;
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -60,6 +59,14 @@ public class Addendum {
 
     public List<AddendumCondition> getConditions() {
         return conditions;
+    }
+
+    public Addendum copy() {
+        List<AddendumCondition> conditionsCopy = new ArrayList<>();
+        for(AddendumCondition condition : conditions) {
+            conditionsCopy.add(condition.copy());
+        }
+        return new Addendum(this.id, this.createdAt, this.buyerSignedAt, this.sellerSignedAt, conditionsCopy);
     }
 
     @Override

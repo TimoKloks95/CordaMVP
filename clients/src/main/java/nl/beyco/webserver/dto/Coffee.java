@@ -43,16 +43,15 @@ public class Coffee {
     @NotBlank(message = "qualitySegment is mandatory")
     private String qualitySegment;
 
-    @NotBlank(message = "Minimal screen size is mandatory")
-    private String minScreenSize;
+    @Min(0)
+    private int minScreenSize;
 
-    @NotBlank(message = "Maximal screen size is mandatory")
-    private String maxScreenSize;
+    @Min(0)
+    private int maxScreenSize;
 
     private String parentId;
 
-    @JsonProperty("bulk")
-    private boolean isBulk;
+    private boolean bulk;
 
     @Min(0)
     private int quantity;
@@ -68,8 +67,8 @@ public class Coffee {
 
     @ConstructorForDeserialization
     public Coffee(String id, String country, String region, String unit, String species, String process, String sector,
-                  LocalDateTime harvestAt, String qualitySegment, String parentId, boolean isBulk, int quantity, String minScreenSize,
-                  String maxScreenSize, double cuppingScore, String[] certificates) {
+                  LocalDateTime harvestAt, String qualitySegment, String parentId, boolean bulk, int quantity, int minScreenSize,
+                  int maxScreenSize, double cuppingScore, String[] certificates) {
         this.id = id;
         this.country = country;
         this.region = region;
@@ -80,7 +79,7 @@ public class Coffee {
         this.harvestAt = harvestAt;
         this.qualitySegment = qualitySegment;
         this.parentId = parentId;
-        this.isBulk = isBulk;
+        this.bulk = bulk;
         this.quantity = quantity;
         this.minScreenSize = minScreenSize;
         this.maxScreenSize = maxScreenSize;
@@ -169,11 +168,11 @@ public class Coffee {
     }
 
     public boolean isBulk() {
-        return isBulk;
+        return bulk;
     }
 
     public void setBulk(boolean bulk) {
-        isBulk = bulk;
+        bulk = bulk;
     }
 
     public int getQuantity() {
@@ -184,19 +183,19 @@ public class Coffee {
         this.quantity = quantity;
     }
 
-    public String getMinScreenSize() {
+    public int getMinScreenSize() {
         return minScreenSize;
     }
 
-    public void setMinScreenSize(String minScreenSize) {
+    public void setMinScreenSize(int minScreenSize) {
         this.minScreenSize = minScreenSize;
     }
 
-    public String getMaxScreenSize() {
+    public int getMaxScreenSize() {
         return maxScreenSize;
     }
 
-    public void setMaxScreenSize(String maxScreenSize) {
+    public void setMaxScreenSize(int maxScreenSize) {
         this.maxScreenSize = maxScreenSize;
     }
 

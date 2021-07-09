@@ -14,13 +14,10 @@ import nl.beyco.helpers.LocalDateTimeDeserializer;
 import nl.beyco.helpers.LocalDateTimeSerializer;
 import org.jetbrains.annotations.NotNull;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @BelongsToContract(BeycoContract.class)
 public class BeycoContractState implements ContractState, LinearState {
-    private String issuerId;
     private String id;
     private String sellerId;
     private String buyerId;
@@ -41,10 +38,9 @@ public class BeycoContractState implements ContractState, LinearState {
     }
 
     @ConstructorForDeserialization
-    public BeycoContractState(String issuerId, String id, String sellerId, String buyerId, String offerId,
+    public BeycoContractState(String id, String sellerId, String buyerId, String offerId,
                               LocalDateTime sellerSignedAt, LocalDateTime buyerSignedAt, List<Coffee> coffees,
                               List<Condition> conditions, List<Addendum> addenda) {
-        this.issuerId = issuerId;
         this.id = id;
         this.sellerId = sellerId;
         this.buyerId = buyerId;
@@ -56,9 +52,24 @@ public class BeycoContractState implements ContractState, LinearState {
         this.addenda = addenda;
     }
 
-    public BeycoContractState copy() {
-        return new BeycoContractState(this.issuerId, this.id, this.sellerId, this.buyerId, this.offerId, this.sellerSignedAt,
-                this.buyerSignedAt, this.coffees, this.conditions, this.addenda);
+    public BeycoContractState copyWithNewAddendum(Addendum toAddAddendum) {
+        List<Coffee> coffeesCopy = new ArrayList<>();
+        List<Condition> conditionsCopy = new ArrayList<>();
+        List<Addendum> addendaCopy = new ArrayList<>();
+        for (Coffee coffee : coffees) {
+            coffeesCopy.add(coffee.copy());
+        }
+
+        for(Condition condition : conditions) {
+            conditionsCopy.add(condition.copy());
+        }
+
+        for(Addendum addendum : addenda) {
+            addendaCopy.add(addendum.copy());
+        }
+        addendaCopy.add(toAddAddendum);
+        return new BeycoContractState(this.id, this.sellerId, this.buyerId, this.offerId, this.sellerSignedAt,
+                this.buyerSignedAt, coffeesCopy, conditionsCopy, addendaCopy);
     }
 
 
@@ -98,27 +109,22 @@ public class BeycoContractState implements ContractState, LinearState {
         return addenda;
     }
 
+    public void setAddenda(List<Addendum> addenda) {
+        this.addenda = addenda;
+    }
+
     public void addAddendum(Addendum addendum) {
         addenda.add(addendum);
     }
-
 
     public void setNode(Party node) {
         this.node = node;
     }
 
-    public String getIssuerId() {
-        return issuerId;
-    }
-
-    public void setIssuerId(String issuerId) {
-        this.issuerId = issuerId;
-    }
-
     @NotNull
     @Override
     public List<AbstractParty> getParticipants() {
-        return Arrays.asList(node);
+        return Collections.singletonList(node);
     }
 
     @NotNull

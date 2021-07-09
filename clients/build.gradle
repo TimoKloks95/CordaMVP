@@ -32,7 +32,9 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-websocket:$spring_boot_version") {
         exclude group: "org.springframework.boot", module: "spring-boot-starter-logging"
     }
-    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: "org.junit.vintage", module: "junit-vintage-engine"
+    }
     testImplementation ("org.mockito:mockito-core:$mockito_version")
     testImplementation 'org.mockito:mockito-inline:2.13.0'
     testImplementation("org.hibernate:hibernate-validator:$hibernate_validator_version")
