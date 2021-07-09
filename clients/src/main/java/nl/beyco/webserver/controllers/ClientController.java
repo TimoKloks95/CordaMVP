@@ -33,8 +33,8 @@ public class ClientController {
     }
 
     @PatchMapping("{contractId}")
-    public ResponseEntity<HttpStatus> addAddendum(@RequestHeader("issuerId") String issuerId, @PathVariable("contractId") String contractId, @Valid @RequestBody Addendum addendum) {
-        contractService.addAddendum(issuerId, contractId, addendum);
+    public ResponseEntity<HttpStatus> addAddendum(@RequestHeader("issuerId") String issuerId, @Valid @RequestBody Addendum addendum) {
+        contractService.addAddendum(issuerId, addendum);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

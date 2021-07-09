@@ -18,6 +18,9 @@ public class Addendum {
     @NotBlank(message = "id is mandatory")
     private String id;
 
+    @NotBlank(message = "parentId is mandatory")
+    private String parentId;
+
     @NotNull(message = "createdAt is mandatory")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -34,18 +37,23 @@ public class Addendum {
     private LocalDateTime sellerSignedAt;
 
     @Valid
-    private List<AddendumCondition> conditions;
+    private List<Coffee> coffees;
+
+    @Valid
+    private List<Condition> conditions;
 
     public Addendum() {
 
     }
 
     @ConstructorForDeserialization
-    public Addendum(String id, LocalDateTime createdAt, LocalDateTime buyerSignedAt, LocalDateTime sellerSignedAt, List<AddendumCondition> conditions) {
+    public Addendum(String id, String parentId, LocalDateTime createdAt, LocalDateTime buyerSignedAt, LocalDateTime sellerSignedAt, List<Coffee> coffees, List<Condition> conditions) {
         this.id = id;
+        this.parentId = parentId;
         this.createdAt = createdAt;
         this.buyerSignedAt = buyerSignedAt;
         this.sellerSignedAt = sellerSignedAt;
+        this.coffees = coffees;
         this.conditions = conditions;
     }
 
@@ -55,6 +63,22 @@ public class Addendum {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    public List<Coffee> getCoffees() {
+        return coffees;
+    }
+
+    public void setCoffees(List<Coffee> coffees) {
+        this.coffees = coffees;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -81,11 +105,11 @@ public class Addendum {
         this.sellerSignedAt = sellerSignedAt;
     }
 
-    public List<AddendumCondition> getConditions() {
+    public List<Condition> getConditions() {
         return conditions;
     }
 
-    public void setConditions(List<AddendumCondition> conditions) {
+    public void setConditions(List<Condition> conditions) {
         this.conditions = conditions;
     }
 }

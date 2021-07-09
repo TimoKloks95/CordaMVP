@@ -45,8 +45,6 @@ public class Contract {
     @Valid
     private List<Coffee> coffees;
 
-    @Valid
-    private List<Addendum> addenda;
 
     public Contract() {
 
@@ -54,8 +52,7 @@ public class Contract {
 
     @ConstructorForDeserialization
     public Contract(String id, String sellerId, String buyerId, String offerId, LocalDateTime sellerSignedAt,
-                    LocalDateTime buyerSignedAt, List<Condition> conditions, List<Coffee> coffees,
-                    List<Addendum> addenda) {
+                    LocalDateTime buyerSignedAt, List<Condition> conditions, List<Coffee> coffees) {
         this.id = id;
         this.sellerId = sellerId;
         this.buyerId = buyerId;
@@ -64,7 +61,6 @@ public class Contract {
         this.buyerSignedAt = buyerSignedAt;
         this.conditions = conditions;
         this.coffees = coffees;
-        this.addenda = addenda;
     }
 
     public String getId() {
@@ -131,11 +127,4 @@ public class Contract {
         this.coffees = coffees;
     }
 
-    public List<Addendum> getAddenda() {
-        return addenda;
-    }
-
-    public void setAddenda(List<Addendum> addenda) {
-        this.addenda = addenda;
-    }
 }
