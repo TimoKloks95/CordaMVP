@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -23,19 +24,21 @@ public class ClientController {
 
     @PostMapping("/contracts")
     public ResponseEntity<HttpStatus> saveContract(@RequestHeader("issuerId") String issuerId, @Valid @RequestBody Contract contract) {
+        log.info("Save contract endpoint was called by user with ID: " +issuerId+" at "+ LocalDateTime.now() + "to add contract with ID: "+contract.getId());
         contractService.saveContract(issuerId, contract);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/contracts/{contractId}")
     public ResponseEntity<Pair<Contract, List<Addendum>>> getContract(@RequestHeader("issuerId") String issuerId, @PathVariable("contractId") String contractId) {
-        log.info("issuerId: "+issuerId);
+        log.info("Get contract endpoint was called by user with ID: " +issuerId+" at "+ LocalDateTime.now() + " requesting contract with ID: "+contractId);
         Pair<Contract, List<Addendum>> result = contractService.getContract(issuerId, contractId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping("/addenda")
     public ResponseEntity<HttpStatus> addAddendum(@RequestHeader("issuerId") String issuerId, @Valid @RequestBody Addendum addendum) {
+        log.info("Add addendum endpoint was called by user with ID: " +issuerId+" at "+ LocalDateTime.now() + "to be added to contract with ID: "+addendum.getContractId());
         contractService.addAddendum(issuerId, addendum);
         return new ResponseEntity<>(HttpStatus.OK);
     }
