@@ -37,53 +37,56 @@ public class ContractServiceImpl implements ContractService {
     public void saveContract(String issuerId, Contract contract) {
         CordaRPCOps proxy = rpcService.getProxy();
         String contractJson;
-
+        log.info("Attempting to parse contract with ID: "+contract.getId()+ "to json.");
         try {
             contractJson = serializationHelper.contractToContractJson(contract);
         } catch(JsonProcessingException e) {
-            log.error("Something went wrong while trying to parse the contract to json format.", e);
-            throw new BeycoParseException("Something went wrong while trying to parse the contract to json format.", e);
+            log.error("Something went wrong while trying to parse contract with ID: "+contract.getId()+" to json.", e);
+            throw new BeycoParseException("Something went wrong while trying to parse contract with ID: "+contract.getId()+" to json.", e);
         }
-
+        log.info("Succesfully parsed contract with ID: "+contract.getId()+ "to json.");
+        log.info("Attempting to call the saveContract flow to save contract with ID: "+contract.getId()+" in the blockchain.");
         try {
             proxy.startTrackedFlowDynamic(SaveContractFlow.class, issuerId, contractJson).getReturnValue().get();
         } catch (InterruptedException | ExecutionException e) {
-            log.error("Something went wrong while calling the save contract flow", e);
-            throw new BeycoFlowException("Something went wrong while calling the save contract flow", e);
+            log.error("Something went wrong while calling the saveContract flow to save contract with ID: "+contract.getId()+" in the blockchain.", e);
+            throw new BeycoFlowException("Something went wrong while calling the saveContract flow to save contract with ID: "+contract.getId()+" in the blockchain.", e);
         }
+        log.info("Succesfully saved contract with ID: "+contract.getId()+" in the blockchain.");
     }
 
     @Override
     public Pair<Contract, List<Addendum>> getContract(String issuerId, String contractId) {
         CordaRPCOps proxy = rpcService.getProxy();
         ContractJsonWithAddendaJson result;
-
+        log.info("Attempting to call the getContract flow to get contract with ID: "+contractId+" from the blockchain.");
         try {
             result = proxy.startTrackedFlowDynamic(GetContractFlow.class, issuerId, contractId).getReturnValue().get();
         } catch (InterruptedException | ExecutionException e) {
-            log.error("Something went wrong while calling the get contract flow", e);
-            throw new BeycoFlowException("Something went wrong while calling the get contract flow", e);
+            log.error("Something went wrong while calling the getContract flow to get contract with ID: "+contractId+" from the blockchain.", e);
+            throw new BeycoFlowException("Something went wrong while calling the getContract flow to get contract with ID: "+contractId+" from the blockchain.", e);
         }
-
+        log.info("Succesfully retrieved contract with ID: "+contractId+" from the blockchain.");
         Contract contract;
         List<Addendum> addenda = new LinkedList<>();
-
+        log.info("Attempting to parse retrieved contract json to contract object.");
         try {
             contract = serializationHelper.contractJsonToContract(result.getContractJson());
         } catch(JsonProcessingException e) {
-            log.error("Something went wrong while trying to parse json string to contract.", e);
-            throw new BeycoParseException("Something went wrong while trying to parse json string to contract.", e);
+            log.error("Something went wrong while trying to parse contract json to contract object.", e);
+            throw new BeycoParseException("Something went wrong while trying to parse contract json to contract object.", e);
         }
-
+        log.info("Succesfully parsed contract json to contract object.");
+        log.info("Attempting to parse retrieved addendum json to addendum object.");
         try {
             for(int i=0; i<result.getAddendaJson().length; i++) {
                 addenda.add(serializationHelper.addendumJsonToAddendum(result.getAddendaJson()[i]));
             }
         } catch(JsonProcessingException e) {
-            log.error("Something went wrong while trying to parse json string to addendum", e);
-            throw new BeycoParseException("Something went wrong while trying to parse json string to addendum", e);
+            log.error("Something went wrong while trying to parse addendum json string to addendum object.", e);
+            throw new BeycoParseException("Something went wrong while trying to parse addendum json string to addendum object.", e);
         }
-
+        log.info("Succesfully parsed addendum json to addendum object.");
         return new Pair<>(contract, addenda);
     }
 
@@ -91,19 +94,21 @@ public class ContractServiceImpl implements ContractService {
     public void addAddendum(String issuerId, Addendum addendum) {
         CordaRPCOps proxy = rpcService.getProxy();
         String addendumJson;
-
+        log.info("Attempting to parse addendum with ID: "+addendum.getId()+ "to json.");
         try {
             addendumJson = serializationHelper.addendumToAddendumJson(addendum);
         } catch(JsonProcessingException e) {
-            log.error("Something went wrong while trying to parse the addendum to json format.", e);
-            throw new BeycoParseException("Something went wrong while trying to parse the addendum to json format.", e);
+            log.error("Something went wrong while trying to parse addendum with ID: "+addendum.getId()+"to json.", e);
+            throw new BeycoParseException("Something went wrong while trying to parse addendum with ID: "+addendum.getId()+"to json.", e);
         }
-
+        log.info("Succesfully parsed addendum with ID: "+addendum.getId()+ "to json.");
+        log.info("Attempting to call the addAddendum flow to add addendum with ID: "+addendum.getId()+" to contract with ID: "+addendum.getContractId()+" in the blockchain.");
         try {
             proxy.startTrackedFlowDynamic(AddAddendumFlow.class, issuerId, addendumJson).getReturnValue().get();
         } catch (InterruptedException | ExecutionException e) {
-            log.error("Something went wrong while calling the add addendum flow", e);
-            throw new BeycoFlowException("Something went wrong while calling the add addendum flow", e);
+            log.error("Something went wrong while calling the addAddendum flow to add addendum with ID: "+addendum.getId()+" to contract with ID: "+addendum.getContractId()+" in the blockchain.", e);
+            throw new BeycoFlowException("Something went wrong while calling the addAddendum flow to add addendum with ID: "+addendum.getId()+" to contract with ID: "+addendum.getContractId()+" in the blockchain.", e);
         }
+        log.info("Succesfully added addendum with ID: "+addendum.getId()+" to the contract with ID: "+addendum.getContractId()+" in the blockchain.");
     }
 }
