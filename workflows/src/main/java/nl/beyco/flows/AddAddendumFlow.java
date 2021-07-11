@@ -4,22 +4,17 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import net.corda.core.contracts.StateAndRef;
 import net.corda.core.flows.*;
 import net.corda.core.identity.Party;
 import net.corda.core.node.services.Vault;
 import net.corda.core.node.services.vault.QueryCriteria;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
-import net.corda.core.utilities.ProgressTracker;
 import nl.beyco.contracts.BeycoContract;
 import nl.beyco.states.Addendum;
 import nl.beyco.states.BeycoContractState;
-
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 
 @InitiatingFlow
 @StartableByRPC
@@ -56,21 +51,41 @@ public class AddAddendumFlow extends FlowLogic<SignedTransaction> {
             throw new FlowException("The contract that you tried to add the addendum to doesn't exist.");
         }
 
-        StateAndRef<BeycoContractState> inputContractStateAndRef = results.getStates().get(0);
         BeycoContractState inputContractState = results.getStates().get(0).getState().component1();
 
         if(issuerIsNotSellerAndNotBuyer(inputContractState.getSellerId(), inputContractState.getBuyerId())) {
-            throw new FlowException("The issuer of the contract has to be either the seller or the buyer.");
+            throw new FlowException("The issuer of the addendum has to be either the seller or the buyer of the contract.");
+        }
+
+        if(issuerIsNotSellerAndNotBuyer(toAddAddendum.getSellerId(), toAddAddendum.getBuyerId())) {
+            throw new FlowException("The issuer of the addendum has to be either the seller or the buyer of the addendum.");
+        }
+
+        if(addendumParticipantsAreNotEqualToContractParticipants(inputContractState, toAddAddendum)) {
+            throw new FlowException("The addendum needs to have the same seller and buyer as the contract that it is being added to.");
+        }
+
+        if(addendumSignedIsBeforeContractSigned(inputContractState, toAddAddendum)) {
+            throw new FlowException("The signed time of the addendum can't be before the signed time of the contract that it is being added to.");
         }
 
         final TransactionBuilder builder = new TransactionBuilder(notary);
-            builder.addReferenceState(inputContractStateAndRef.referenced());
             builder.addOutputState(toAddAddendum);
             builder.addCommand(new BeycoContract.Commands.Add(), Collections.singletonList(node.getOwningKey()));
 
         final SignedTransaction selfSignedTx = getServiceHub().signInitialTransaction(builder);
 
         return subFlow(new FinalityFlow(selfSignedTx, new HashSet<FlowSession>(0)));
+    }
+
+    private boolean addendumSignedIsBeforeContractSigned(BeycoContractState inputContractState, Addendum toAddAddendum) {
+        return (toAddAddendum.getSellerSignedAt().isBefore(inputContractState.getSellerSignedAt()) || toAddAddendum.getSellerSignedAt().isBefore(inputContractState.getBuyerSignedAt()))
+                ||
+                (toAddAddendum.getBuyerSignedAt().isBefore(inputContractState.getSellerSignedAt()) || toAddAddendum.getBuyerSignedAt().isBefore(inputContractState.getBuyerSignedAt()));
+    }
+
+    private boolean addendumParticipantsAreNotEqualToContractParticipants(BeycoContractState inputContractState, Addendum toAddAddendum) {
+        return !inputContractState.getSellerId().equals(toAddAddendum.getSellerId()) || !inputContractState.getBuyerId().equals(toAddAddendum.getBuyerId());
     }
 
     private boolean issuerIsNotSellerAndNotBuyer(String sellerId, String buyerId) {

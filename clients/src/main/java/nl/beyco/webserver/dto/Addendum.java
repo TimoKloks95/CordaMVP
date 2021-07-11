@@ -1,5 +1,6 @@
 package nl.beyco.webserver.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.corda.core.serialization.ConstructorForDeserialization;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Addendum {
     @NotBlank(message = "id is mandatory")
     private String id;

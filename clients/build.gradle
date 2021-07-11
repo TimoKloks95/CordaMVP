@@ -1,5 +1,7 @@
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'net.corda.plugins.cordapp'
+apply plugin: 'net.corda.plugins.cordformation'
 
 sourceSets {
     main {
@@ -24,7 +26,7 @@ repositories {
 
 dependencies {
     // Corda dependencies.
-    compile "$corda_release_group:corda-rpc:$corda_release_version"
+    cordaCompile "$corda_release_group:corda-rpc:$corda_release_version"
 
     // CorDapp dependencies.
     compile project(":contracts")

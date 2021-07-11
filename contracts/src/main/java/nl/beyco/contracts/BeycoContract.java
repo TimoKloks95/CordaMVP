@@ -7,7 +7,6 @@ import net.corda.core.transactions.LedgerTransaction;
 import nl.beyco.states.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static net.corda.core.contracts.ContractsDSL.requireThat;
 
@@ -21,7 +20,7 @@ public class BeycoContract implements Contract {
                 verifySaveContract(tx);
             }
             else if(commands.getValue() instanceof Commands.Add) {
-                verifyAddAddendumToContract(tx);
+                verifyAddAddendum(tx);
             }
         }
     }
@@ -35,22 +34,13 @@ public class BeycoContract implements Contract {
         validateBeycoContract(contract);
     }
 
-    private void verifyAddAddendumToContract(LedgerTransaction tx) {
+    private void verifyAddAddendum(LedgerTransaction tx) {
         Addendum outputAddendum = tx.outputsOfType(Addendum.class).get(0);
-        BeycoContractState referenceContract = tx.referenceInputsOfType(BeycoContractState.class).get(0);
-        validateAddendumAttributes(outputAddendum);
-        outputAddendumIsValidWithReferencedContract(outputAddendum, referenceContract);
-    }
-
-    private void outputAddendumIsValidWithReferencedContract(Addendum outputAddendum, BeycoContractState referenceContract) {
         requireThat(require -> {
-            require.using("Addendum must reference the correct contract.", outputAddendum.getContractId().equals(referenceContract.getId()));
-            require.using("Addendum must have the same seller as the contract.", outputAddendum.getSellerId().equals(referenceContract.getSellerId()));
-            require.using("Addendum must have the same buyer as the contract.", outputAddendum.getBuyerId().equals(referenceContract.getBuyerId()));
-            require.using("Addendum seller signed can't be before seller and buyer signed of the contract", outputAddendum.getSellerSignedAt().isAfter(referenceContract.getSellerSignedAt()) && outputAddendum.getSellerSignedAt().isAfter(referenceContract.getBuyerSignedAt()));
-            require.using("Addendum buyer signed can't be before seller and buyer signed of the contract", outputAddendum.getBuyerSignedAt().isAfter(referenceContract.getSellerSignedAt()) && outputAddendum.getBuyerSignedAt().isAfter(referenceContract.getBuyerSignedAt()));
-           return null;
+           require.using("No inputs should be consumed when adding an addendum.", tx.getInputStates().size() == 0);
+            return null;
         });
+        validateAddendumAttributes(outputAddendum);
     }
 
     private void validateBeycoContract(BeycoContractState contract) {
