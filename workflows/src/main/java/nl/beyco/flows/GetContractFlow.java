@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import javafx.util.Pair;
 import net.corda.core.contracts.StateAndRef;
 import net.corda.core.flows.FlowException;
 import net.corda.core.flows.FlowLogic;
@@ -41,8 +40,7 @@ public class GetContractFlow extends FlowLogic<ContractJsonWithAddendaJson> {
         QueryCriteria.LinearStateQueryCriteria linearStateQueryCriteria = new QueryCriteria.LinearStateQueryCriteria()
                 .withExternalId(Collections.singletonList(contractId));
         QueryCriteria.VaultQueryCriteria criteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
-
-        Vault.Page<BeycoContractState> vaultContracts = getServiceHub().getVaultService().queryBy(BeycoContractState.class, criteria.and(linearStateQueryCriteria));
+        Vault.Page<BeycoContractState> vaultContracts = getContractById(linearStateQueryCriteria, criteria);
 
         if(vaultContracts.getStates().size() == 0) {
             throw new FlowException("The contract that you tried to retrieve doesn't exist.");
@@ -50,7 +48,7 @@ public class GetContractFlow extends FlowLogic<ContractJsonWithAddendaJson> {
 
         BeycoContractState contract = vaultContracts.getStates().get(0).getState().component1();
 
-        Vault.Page<Addendum> vaultAddenda = getServiceHub().getVaultService().queryBy(Addendum.class, criteria.and(linearStateQueryCriteria));
+        Vault.Page<Addendum> vaultAddenda = getAddendaById(linearStateQueryCriteria, criteria);
         List<Addendum> addenda = new LinkedList<>();
         for (StateAndRef<Addendum> addendumRef : vaultAddenda.getStates()) {
             addenda.add(addendumRef.getState().component1());
@@ -84,5 +82,13 @@ public class GetContractFlow extends FlowLogic<ContractJsonWithAddendaJson> {
 
     private boolean issuerIsNotSellerAndNotBuyer(String sellerId, String buyerId) {
         return !issuerId.equals(sellerId) && !issuerId.equals(buyerId);
+    }
+
+    private Vault.Page<BeycoContractState> getContractById(QueryCriteria.LinearStateQueryCriteria linearStateQueryCriteria, QueryCriteria.VaultQueryCriteria criteria) {
+        return getServiceHub().getVaultService().queryBy(BeycoContractState.class, criteria.and(linearStateQueryCriteria));
+    }
+
+    private Vault.Page<Addendum> getAddendaById(QueryCriteria.LinearStateQueryCriteria linearStateQueryCriteria, QueryCriteria.VaultQueryCriteria criteria) {
+        return getServiceHub().getVaultService().queryBy(Addendum.class, criteria.and(linearStateQueryCriteria));
     }
 }
