@@ -9,5 +9,5 @@ import java.util.List;
 public interface ContractService {
     void saveContract(String issuerId, Contract contract);
     Pair<Contract, List<Addendum>> getContract(String issuerId, String contractId);
-    void addAddendum(String issuerId, Addendum addendum);
+    void addAddendum(String issuerId, String contractId, Addendum addendum);
 }

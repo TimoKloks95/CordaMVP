@@ -20,9 +20,6 @@ public class Addendum {
     @NotBlank(message = "id is mandatory")
     private String id;
 
-    @NotBlank(message = "parentId is mandatory")
-    private String contractId;
-
     @NotBlank(message = "sellerId is mandatory")
     private String sellerId;
 
@@ -55,9 +52,8 @@ public class Addendum {
     }
 
     @ConstructorForDeserialization
-    public Addendum(String id, String contractId, String sellerId, String buyerId, LocalDateTime createdAt, LocalDateTime buyerSignedAt, LocalDateTime sellerSignedAt, List<Coffee> coffees, List<Condition> conditions) {
+    public Addendum(String id, String sellerId, String buyerId, LocalDateTime createdAt, LocalDateTime buyerSignedAt, LocalDateTime sellerSignedAt, List<Coffee> coffees, List<Condition> conditions) {
         this.id = id;
-        this.contractId = contractId;
         this.sellerId = sellerId;
         this.buyerId = buyerId;
         this.createdAt = createdAt;
@@ -89,14 +85,6 @@ public class Addendum {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getContractId() {
-        return contractId;
-    }
-
-    public void setContractId(String contractId) {
-        this.contractId = contractId;
     }
 
     public List<Coffee> getCoffees() {

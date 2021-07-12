@@ -46,7 +46,7 @@ public class AddAddendumFlowTest {
         Future<SignedTransaction> futureSave = a.startFlow(saveContractFlow);
         network.runNetwork();
 
-        AddAddendumFlow addAddendumFlow = new AddAddendumFlow("1", TestData.getTestAddendum());
+        AddAddendumFlow addAddendumFlow = new AddAddendumFlow("1", "1", TestData.getTestAddendum());
         Future<SignedTransaction> futureAdd = a.startFlow(addAddendumFlow);
         network.runNetwork();
         SignedTransaction signedTransaction = futureAdd.get();

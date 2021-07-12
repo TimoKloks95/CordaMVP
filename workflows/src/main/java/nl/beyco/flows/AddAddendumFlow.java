@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import net.corda.core.contracts.StateAndRef;
 import net.corda.core.flows.*;
 import net.corda.core.identity.Party;
 import net.corda.core.node.services.Vault;
@@ -21,10 +22,12 @@ import java.util.HashSet;
 @StartableByRPC
 public class AddAddendumFlow extends FlowLogic<SignedTransaction> {
     private String issuerId;
+    private String contractId;
     private String addendumJson;
 
-    public AddAddendumFlow(String issuerId, String addendumJson) {
+    public AddAddendumFlow(String issuerId, String contractId, String addendumJson) {
         this.issuerId = issuerId;
+        this.contractId = contractId;
         this.addendumJson = addendumJson;
     }
 
@@ -41,15 +44,29 @@ public class AddAddendumFlow extends FlowLogic<SignedTransaction> {
         } catch(JsonProcessingException e) {
             throw new FlowException("Something went wrong trying to parse addendum json to object", e);
         }
-        toAddAddendum.setNode(node);
 
-        Vault.Page<BeycoContractState> contracts = getContractById(toAddAddendum.getContractId());
+        toAddAddendum.setNode(node);
+        toAddAddendum.setContractId(contractId);
+
+        QueryCriteria.LinearStateQueryCriteria linearStateQueryCriteria = new QueryCriteria.LinearStateQueryCriteria()
+                .withExternalId(Collections.singletonList(contractId));
+        QueryCriteria.VaultQueryCriteria criteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
+
+        Vault.Page<BeycoContractState> contracts = getContractById(linearStateQueryCriteria, criteria);
 
         if(contracts.getStates().size() == 0) {
             throw new FlowException("The contract that you tried to add the addendum to doesn't exist.");
         }
 
         BeycoContractState contractState = contracts.getStates().get(0).getState().component1();
+
+        Vault.Page<Addendum> addenda = getAddendaById(linearStateQueryCriteria, criteria);
+
+        for(StateAndRef<Addendum> addendumStateAndRef : addenda.getStates()) {
+            if(addendumStateAndRef.getState().component1().getId().equals(toAddAddendum.getId())) {
+                throw new FlowException("The addendum you tried to add already exists.");
+            }
+        }
 
         if(issuerIsNotSellerAndNotBuyer(contractState.getSellerId(), contractState.getBuyerId())) {
             throw new FlowException("The issuer of the addendum has to be either the seller or the buyer of the contract.");
@@ -76,11 +93,12 @@ public class AddAddendumFlow extends FlowLogic<SignedTransaction> {
         return subFlow(new FinalityFlow(selfSignedTx, new HashSet<FlowSession>(0)));
     }
 
-    private Vault.Page<BeycoContractState> getContractById(String contractId) {
-        QueryCriteria.LinearStateQueryCriteria linearStateQueryCriteria = new QueryCriteria.LinearStateQueryCriteria()
-                .withExternalId(Collections.singletonList(contractId));
-        QueryCriteria.VaultQueryCriteria criteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
+    private Vault.Page<BeycoContractState> getContractById(QueryCriteria.LinearStateQueryCriteria linearStateQueryCriteria, QueryCriteria.VaultQueryCriteria criteria) {
         return getServiceHub().getVaultService().queryBy(BeycoContractState.class, criteria.and(linearStateQueryCriteria));
+    }
+
+    private Vault.Page<Addendum> getAddendaById(QueryCriteria.LinearStateQueryCriteria linearStateQueryCriteria, QueryCriteria.VaultQueryCriteria criteria) {
+        return getServiceHub().getVaultService().queryBy(Addendum.class, criteria.and(linearStateQueryCriteria));
     }
 
     private boolean addendumSignedIsBeforeContractSigned(BeycoContractState inputContractState, Addendum toAddAddendum) {

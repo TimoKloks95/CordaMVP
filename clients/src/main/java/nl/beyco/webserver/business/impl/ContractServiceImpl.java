@@ -91,7 +91,7 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public void addAddendum(String issuerId, Addendum addendum) {
+    public void addAddendum(String issuerId, String contractId, Addendum addendum) {
         CordaRPCOps proxy = rpcService.getProxy();
         String addendumJson;
         log.info("Attempting to parse addendum with ID: "+addendum.getId()+ "to json.");
@@ -102,13 +102,13 @@ public class ContractServiceImpl implements ContractService {
             throw new BeycoParseException("Something went wrong while trying to parse addendum with ID: "+addendum.getId()+"to json.", e);
         }
         log.info("Succesfully parsed addendum with ID: "+addendum.getId()+ "to json.");
-        log.info("Attempting to call the addAddendum flow to add addendum with ID: "+addendum.getId()+" to contract with ID: "+addendum.getContractId()+" in the blockchain.");
+        log.info("Attempting to call the addAddendum flow to add addendum with ID: "+addendum.getId()+" to contract with ID: "+contractId+" in the blockchain.");
         try {
-            proxy.startTrackedFlowDynamic(AddAddendumFlow.class, issuerId, addendumJson).getReturnValue().get();
+            proxy.startTrackedFlowDynamic(AddAddendumFlow.class, issuerId, contractId, addendumJson).getReturnValue().get();
         } catch (InterruptedException | ExecutionException e) {
-            log.error("Something went wrong while calling the addAddendum flow to add addendum with ID: "+addendum.getId()+" to contract with ID: "+addendum.getContractId()+" in the blockchain.", e);
-            throw new BeycoFlowException("Something went wrong while calling the addAddendum flow to add addendum with ID: "+addendum.getId()+" to contract with ID: "+addendum.getContractId()+" in the blockchain.", e);
+            log.error("Something went wrong while calling the addAddendum flow to add addendum with ID: "+addendum.getId()+" to contract with ID: "+contractId+" in the blockchain.", e);
+            throw new BeycoFlowException("Something went wrong while calling the addAddendum flow to add addendum with ID: "+addendum.getId()+" to contract with ID: "+contractId+" in the blockchain.", e);
         }
-        log.info("Succesfully added addendum with ID: "+addendum.getId()+" to the contract with ID: "+addendum.getContractId()+" in the blockchain.");
+        log.info("Succesfully added addendum with ID: "+addendum.getId()+" to the contract with ID: "+contractId+" in the blockchain.");
     }
 }

@@ -79,8 +79,9 @@ public class BeycoContract implements Contract {
             require.using("Coffee process can't be empty or null.", coffee.getProcess() != null && !coffee.getProcess().isEmpty());
             require.using("Coffee sector can't be empty or null.", coffee.getSector() != null && !coffee.getSector().isEmpty());
             require.using("Coffee quality segment can't be empty or null.", coffee.getQualitySegment() != null && !coffee.getQualitySegment().isEmpty());
-            require.using("Minimal screen size can't be negative or zero.", coffee.getMinScreenSize() > 0);
-            require.using("Maximal screen size can't be negative or zero.", coffee.getMaxScreenSize() > 0);
+            require.using("Minimal screen size should be between 8 and 20.", coffee.getMinScreenSize() >= 8 && coffee.getMinScreenSize() <= 20);
+            require.using("Maximal screen size should be between 8 and 20.", coffee.getMaxScreenSize() >= 8 && coffee.getMaxScreenSize() <= 20);
+            require.using("Minimal screen size can't be higher than maximal screen size.", coffee.getMinScreenSize() <= coffee.getMaxScreenSize());
             require.using("Coffee quantity can't be negative or zero.", coffee.getQuantity() > 0);
             require.using("Coffee cuppingscore can't be negative or zero.", coffee.getCuppingScore() > 0);
            return null;
@@ -90,7 +91,6 @@ public class BeycoContract implements Contract {
     private void validateAddendumAttributes(Addendum addendum) {
         requireThat(require -> {
             require.using("Addendum id can't be empty or null.", addendum.getId() != null && !addendum.getId().isEmpty());
-            require.using("Contract id can't be empty or null.", addendum.getContractId() != null && !addendum.getContractId().isEmpty());
             require.using("Created at can't be after current datetime.", addendum.getCreatedAt().isBefore(LocalDateTime.now()));
             require.using("Buyer signed can't be after current datetime.", addendum.getBuyerSignedAt().isBefore(LocalDateTime.now()));
             require.using("Seller signed can't be after current datetime.", addendum.getSellerSignedAt().isBefore(LocalDateTime.now()));

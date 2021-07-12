@@ -7,6 +7,7 @@ import nl.beyco.helpers.LocalDateTimeDeserializer;
 import nl.beyco.helpers.LocalDateTimeSerializer;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -43,10 +44,12 @@ public class Coffee {
     @NotBlank(message = "qualitySegment is mandatory")
     private String qualitySegment;
 
-    @Min(0)
+    @Min(8)
+    @Max(20)
     private int minScreenSize;
 
-    @Min(0)
+    @Min(8)
+    @Max(20)
     private int maxScreenSize;
 
     private String parentId;

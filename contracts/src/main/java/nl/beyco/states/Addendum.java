@@ -42,10 +42,9 @@ public class Addendum implements ContractState, LinearState {
     }
 
     @ConstructorForDeserialization
-    public Addendum(String id, String contractId, String sellerId, String buyerId, LocalDateTime createdAt, LocalDateTime buyerSignedAt, LocalDateTime sellerSignedAt,
+    public Addendum(String id, String sellerId, String buyerId, LocalDateTime createdAt, LocalDateTime buyerSignedAt, LocalDateTime sellerSignedAt,
                     List<Coffee> coffees, List<Condition> conditions) {
         this.id = id;
-        this.contractId = contractId;
         this.sellerId = sellerId;
         this.buyerId = buyerId;
         this.createdAt = createdAt;
@@ -53,6 +52,10 @@ public class Addendum implements ContractState, LinearState {
         this.sellerSignedAt = sellerSignedAt;
         this.coffees = coffees;
         this.conditions = conditions;
+    }
+
+    public void setContractId(String contractId) {
+        this.contractId = contractId;
     }
 
     public String getId() {
