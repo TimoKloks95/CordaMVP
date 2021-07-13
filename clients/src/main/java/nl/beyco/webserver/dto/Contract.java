@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.corda.core.serialization.ConstructorForDeserialization;
 import nl.beyco.helpers.LocalDateTimeDeserializer;
 import nl.beyco.helpers.LocalDateTimeSerializer;
+import nl.beyco.webserver.helpers.BeycoSerializer;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Entity;
 import javax.validation.Valid;
@@ -17,6 +19,9 @@ import java.util.List;
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Contract {
+    @Autowired
+    private BeycoSerializer serializer;
+
     @NotBlank(message = "id is mandatory")
     private String id;
 
@@ -125,6 +130,10 @@ public class Contract {
 
     public void setCoffees(List<Coffee> coffees) {
         this.coffees = coffees;
+    }
+
+    public String toJson() {
+        return serializer.toJson(this);
     }
 
 }

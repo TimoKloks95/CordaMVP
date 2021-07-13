@@ -59,11 +59,8 @@ public class GetContractFlow extends FlowLogic<ContractJsonWithAddendaJson> {
         }
 
         String contractJson;
-        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        ObjectWriter writer = objectMapper.writer().withDefaultPrettyPrinter();
         try {
-            contractJson = writer.writeValueAsString(contract);
+            contractJson = contract.toJson();
         } catch(JsonProcessingException e) {
             throw new FlowException("Something went wrong while trying to parse the contract to json format.", e);
         }
@@ -71,7 +68,7 @@ public class GetContractFlow extends FlowLogic<ContractJsonWithAddendaJson> {
         String[] addendaJson = new String[vaultAddenda.getStates().size()];
         try {
             for(int i=0; i<addenda.size(); i++) {
-                addendaJson[i] = writer.writeValueAsString(addenda.get(i));
+                addendaJson[i] = addenda.get(i).toJson();
             }
         } catch(JsonProcessingException e) {
             throw new FlowException("Something went wrong while trying to parse an addendum to json format.", e);

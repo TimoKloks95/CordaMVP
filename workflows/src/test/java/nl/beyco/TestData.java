@@ -34,8 +34,8 @@ public class TestData {
                 "      \"parentId\": \"2\",\n" +
                 "      \"bulk\": true,\n" +
                 "      \"quantity\": 10,\n" +
-                "      \"minScreenSize\": 1,\n" +
-                "      \"maxScreenSize\": 5,\n" +
+                "      \"minScreenSize\": 9,\n" +
+                "      \"maxScreenSize\": 16,\n" +
                 "      \"cuppingScore\": 9.5,\n" +
                 "      \"certificates\": [\n" +
                 "        \"test\", \"test\"\n" +
@@ -48,9 +48,8 @@ public class TestData {
     public static String getTestAddendum() {
         return "{\n" +
                 "    \"id\": \"1\",\n" +
-                "    \"contractId\": \"1\",\n" +
                 "    \"sellerId\": \"1\",\n" +
-                "    \"buyerId\": 2,\n" +
+                "    \"buyerId\": \"2\",\n" +
                 "    \"createdAt\": \"2021-06-15T10:00:00\",\n" +
                 "    \"buyerSignedAt\": \"2021-06-14T10:00:00\",\n" +
                 "    \"sellerSignedAt\": \"2021-06-13T10:00:00\",\n" +
@@ -68,8 +67,8 @@ public class TestData {
                 "      \"parentId\": \"2\",\n" +
                 "      \"bulk\": true,\n" +
                 "      \"quantity\": 10,\n" +
-                "      \"minScreenSize\": 1,\n" +
-                "      \"maxScreenSize\": 5,\n" +
+                "      \"minScreenSize\": 9,\n" +
+                "      \"maxScreenSize\": 16,\n" +
                 "      \"cuppingScore\": 9.5,\n" +
                 "      \"certificates\": [\n" +
                 "        \"test\", \"test\"\n" +
