@@ -66,10 +66,6 @@ public class Condition {
         return negotiationId;
     }
 
-    public Condition copy() {
-        return new Condition(this.id, this.type, this.status, this.title, this.value, this.createdAt, this.negotiationId);
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

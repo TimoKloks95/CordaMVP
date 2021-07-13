@@ -1,6 +1,5 @@
 package nl.beyco.states;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.corda.core.serialization.ConstructorForDeserialization;
@@ -52,7 +51,6 @@ public class Coffee {
             this.minScreenSize = minScreenSize;
             this.maxScreenSize = maxScreenSize;
             this.cuppingScore = cuppingScore;
-
             this.sector = sector;
             this.harvestAt = harvestAt;
             this.qualitySegment = qualitySegment;
@@ -122,11 +120,6 @@ public class Coffee {
 
     public String getParentId() {
         return parentId;
-    }
-
-    public Coffee copy() {
-        return new Coffee(this.id, this.country, this.region, this.bulk, this.unit, this.quantity, this.species, this.process, this.minScreenSize, this.maxScreenSize,
-                this.cuppingScore, this.sector, this.harvestAt, this.qualitySegment, this.certificates, this.parentId);
     }
 
     @Override

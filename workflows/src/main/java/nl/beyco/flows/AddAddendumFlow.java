@@ -60,12 +60,8 @@ public class AddAddendumFlow extends FlowLogic<SignedTransaction> {
 
         BeycoContractState contractState = contracts.getStates().get(0).getState().component1();
 
-        Vault.Page<Addendum> addenda = getAddendaById(linearStateQueryCriteria, criteria);
-
-        for(StateAndRef<Addendum> addendumStateAndRef : addenda.getStates()) {
-            if(addendumStateAndRef.getState().component1().getId().equals(toAddAddendum.getId())) {
-                throw new FlowException("The addendum you tried to add already exists.");
-            }
+        if(addendumAlreadyExistsInVault(linearStateQueryCriteria, criteria, toAddAddendum.getId())) {
+            throw new FlowException("The addendum you tried to add already exists.");
         }
 
         if(issuerIsNotSellerAndNotBuyer(contractState.getSellerId(), contractState.getBuyerId())) {
@@ -97,8 +93,14 @@ public class AddAddendumFlow extends FlowLogic<SignedTransaction> {
         return getServiceHub().getVaultService().queryBy(BeycoContractState.class, criteria.and(linearStateQueryCriteria));
     }
 
-    private Vault.Page<Addendum> getAddendaById(QueryCriteria.LinearStateQueryCriteria linearStateQueryCriteria, QueryCriteria.VaultQueryCriteria criteria) {
-        return getServiceHub().getVaultService().queryBy(Addendum.class, criteria.and(linearStateQueryCriteria));
+    private boolean addendumAlreadyExistsInVault(QueryCriteria.LinearStateQueryCriteria linearStateQueryCriteria, QueryCriteria.VaultQueryCriteria criteria, String addendumId) {
+        Vault.Page<Addendum> addenda = getServiceHub().getVaultService().queryBy(Addendum.class, criteria.and(linearStateQueryCriteria));
+        for(StateAndRef<Addendum> addendumStateAndRef : addenda.getStates()) {
+            if(addendumStateAndRef.getState().component1().getId().equals(addendumId)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean addendumSignedIsBeforeContractSigned(BeycoContractState inputContractState, Addendum toAddAddendum) {
