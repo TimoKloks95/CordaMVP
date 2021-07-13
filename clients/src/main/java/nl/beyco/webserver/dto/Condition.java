@@ -11,7 +11,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Entity
 public class Condition {
     @NotBlank(message = "id is mandatory")
     private String id;

@@ -13,7 +13,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Entity
 public class Coffee {
     @NotBlank(message = "id is mandatory")
     private String id;
@@ -175,7 +174,7 @@ public class Coffee {
     }
 
     public void setBulk(boolean bulk) {
-        bulk = bulk;
+        this.bulk = bulk;
     }
 
     public int getQuantity() {

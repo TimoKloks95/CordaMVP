@@ -121,38 +121,4 @@ public class Coffee {
     public String getParentId() {
         return parentId;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-
-        if ((obj == null) || (getClass() != obj.getClass())) {
-            return false;
-        }
-
-        Coffee other = (Coffee) obj;
-
-        if(!Objects.deepEquals(
-                new String[]{id, country, region,String.valueOf(bulk), unit, String.valueOf(quantity), species, process,
-                        String.valueOf(minScreenSize), String.valueOf(maxScreenSize), String.valueOf(cuppingScore), sector, String.valueOf(harvestAt), qualitySegment},
-                new String[]{other.id, other.country, other.region, String.valueOf(other.bulk), other.unit, String.valueOf(other.quantity), other.species, other.process,
-                        String.valueOf(other.minScreenSize), String.valueOf(other.maxScreenSize), String.valueOf(other.cuppingScore), other.sector, String.valueOf(other.harvestAt), other.qualitySegment}
-        )) {
-            return false;
-        }
-
-        if(parentId != null && other.parentId != null) {
-            if(!parentId.equals(other.parentId)) {
-                return false;
-            }
-        }
-
-        if(!Objects.deepEquals(certificates, other.certificates)) {
-            return false;
-        }
-
-        return true;
-    }
 }

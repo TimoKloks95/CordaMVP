@@ -65,25 +65,4 @@ public class Condition {
     public String getNegotiationId() {
         return negotiationId;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-
-        if ((obj == null) || (getClass() != obj.getClass())) {
-            return false;
-        }
-
-        Condition other = (Condition) obj;
-
-        if(!Objects.deepEquals(
-                new String[] {id, type, status, title, value, String.valueOf(createdAt), negotiationId},
-                new String[] {other.id, other.type, other.status, other.title, other.value, String.valueOf(other.createdAt), other.negotiationId}
-        )) {
-            return false;
-        }
-        return true;
-    }
 }

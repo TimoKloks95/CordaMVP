@@ -103,27 +103,6 @@ public class Addendum implements ContractState, LinearState {
         this.node = node;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-
-        if ((obj == null) || (getClass() != obj.getClass())) {
-            return false;
-        }
-
-        Addendum other = (Addendum) obj;
-
-        if(!Objects.deepEquals(
-            new String[] {id, contractId, String.valueOf(createdAt), String.valueOf(buyerSignedAt), String.valueOf(sellerSignedAt)},
-            new String[] {other.id, other.contractId, String.valueOf(other.createdAt), String.valueOf(other.buyerSignedAt), String.valueOf(other.sellerSignedAt)}
-        )) {
-            return false;
-        }
-        return true;
-    }
-
     public String toJson() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);

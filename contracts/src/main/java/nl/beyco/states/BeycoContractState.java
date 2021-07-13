@@ -109,25 +109,4 @@ public class BeycoContractState implements ContractState, LinearState {
         ObjectWriter writer = objectMapper.writer().withDefaultPrettyPrinter();
         return writer.writeValueAsString(this);
     }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-
-        if ((obj == null) || (getClass() != obj.getClass())) {
-            return false;
-        }
-
-        BeycoContractState other = (BeycoContractState) obj;
-
-        if(!Objects.deepEquals(
-                new String[]{id, sellerId, buyerId, offerId, String.valueOf(sellerSignedAt), String.valueOf(buyerSignedAt)},
-                new String[]{other.id, other.sellerId, other.buyerId, other.offerId, String.valueOf(other.sellerSignedAt), String.valueOf(other.buyerSignedAt)}
-        )) {
-            return false;
-        }
-        return true;
-    }
 }

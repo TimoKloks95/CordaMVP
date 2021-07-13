@@ -30,6 +30,10 @@ public class RPCInteractionServiceImpl implements RPCInteractionService {
         try {
             return proxy.startFlowDynamic(SaveContractFlow.class, issuerId, contractJson).getReturnValue().get();
         } catch (InterruptedException | ExecutionException e) {
+            if(e instanceof InterruptedException) {
+                log.error("Save contract flow was interrupted.");
+                Thread.currentThread().interrupt();
+            }
             log.error("Something went wrong while calling the saveContract flow.", e);
             throw new BeycoFlowException("Something went wrong while calling the saveContract flow.", e);
         }
@@ -42,6 +46,10 @@ public class RPCInteractionServiceImpl implements RPCInteractionService {
         try {
             return proxy.startFlowDynamic(GetContractFlow.class, issuerId, contractId).getReturnValue().get();
         } catch (InterruptedException | ExecutionException e) {
+            if(e instanceof InterruptedException) {
+                log.error("Get contract flow was interrupted.");
+                Thread.currentThread().interrupt();
+            }
             log.error("Something went wrong while calling the getContract flow to get contract with ID: "+contractId+" from the blockchain.", e);
             throw new BeycoFlowException("Something went wrong while calling the getContract flow to get contract with ID: "+contractId+" from the blockchain.", e);
         }
@@ -54,6 +62,10 @@ public class RPCInteractionServiceImpl implements RPCInteractionService {
         try {
             return proxy.startFlowDynamic(AddAddendumFlow.class, issuerId, contractId, addendumJson).getReturnValue().get();
         } catch (InterruptedException | ExecutionException e) {
+            if(e instanceof InterruptedException) {
+                log.error("Add addendum flow was interrupted.");
+                Thread.currentThread().interrupt();
+            }
             log.error("Something went wrong while calling the addAddendum flow.", e);
             throw new BeycoFlowException("Something went wrong while calling the addAddendum flow.", e);
         }
