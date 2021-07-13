@@ -2,10 +2,6 @@ package nl.beyco.flows;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import net.corda.core.contracts.StateAndRef;
 import net.corda.core.flows.FlowException;
 import net.corda.core.flows.FlowLogic;
@@ -42,7 +38,7 @@ public class GetContractFlow extends FlowLogic<ContractJsonWithAddendaJson> {
         QueryCriteria.VaultQueryCriteria criteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
         Vault.Page<BeycoContractState> vaultContracts = getContractById(linearStateQueryCriteria, criteria);
 
-        if(vaultContracts.getStates().size() == 0) {
+        if(vaultContracts.getStates().isEmpty()) {
             throw new FlowException("The contract that you tried to retrieve doesn't exist.");
         }
 

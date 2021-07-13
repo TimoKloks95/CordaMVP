@@ -28,7 +28,7 @@ public class BeycoContract implements Contract {
     private void verifySaveContract(LedgerTransaction tx) {
         BeycoContractState contract = tx.outputsOfType(BeycoContractState.class).get(0);
         requireThat(require -> {
-            require.using("No inputs should be consumed when saving a contract.", tx.getInputStates().size() == 0);
+            require.using("No inputs should be consumed when saving a contract.", tx.getInputStates().isEmpty());
             return null;
         });
         validateBeycoContract(contract);
@@ -37,7 +37,7 @@ public class BeycoContract implements Contract {
     private void verifyAddAddendum(LedgerTransaction tx) {
         Addendum outputAddendum = tx.outputsOfType(Addendum.class).get(0);
         requireThat(require -> {
-           require.using("No inputs should be consumed when adding an addendum.", tx.getInputStates().size() == 0);
+           require.using("No inputs should be consumed when adding an addendum.", tx.getInputStates().isEmpty());
             return null;
         });
         validateAddendumAttributes(outputAddendum);
@@ -63,8 +63,8 @@ public class BeycoContract implements Contract {
             require.using("Buyer has not signed the contract. Both parties have to sign the contract.", contract.getBuyerSignedAt() != null);
             require.using("Seller signed can't be after current datetime.", contract.getSellerSignedAt().isBefore(LocalDateTime.now()));
             require.using("Buyer signed can't be after current datetime.", contract.getBuyerSignedAt().isBefore(LocalDateTime.now()));
-            require.using("Contract has to specify at least one coffee", contract.getCoffees().size() > 0);
-            require.using("Contract has to specify at least one condition", contract.getConditions().size() > 0);
+            require.using("Contract has to specify at least one coffee", !contract.getCoffees().isEmpty());
+            require.using("Contract has to specify at least one condition", !contract.getConditions().isEmpty());
             return null;
         });
     }
@@ -94,7 +94,7 @@ public class BeycoContract implements Contract {
             require.using("Created at can't be after current datetime.", addendum.getCreatedAt().isBefore(LocalDateTime.now()));
             require.using("Buyer signed can't be after current datetime.", addendum.getBuyerSignedAt().isBefore(LocalDateTime.now()));
             require.using("Seller signed can't be after current datetime.", addendum.getSellerSignedAt().isBefore(LocalDateTime.now()));
-            require.using("Addendum has to specify at least one condition.", addendum.getConditions().size() > 0);
+            require.using("Addendum has to specify at least one condition.", !addendum.getConditions().isEmpty());
             return null;
         });
         for(Condition condition : addendum.getConditions()) {

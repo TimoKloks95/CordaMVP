@@ -19,7 +19,7 @@ public class BeycoObjectManipulatorImpl implements BeycoObjectManipulator {
     }
 
     public <T> T toObject(String jsonString, Class<T> valueType) throws JsonProcessingException {
-        return (T) objectMapper.readValue(jsonString, valueType);
+        return objectMapper.readValue(jsonString, valueType);
     }
 
     public <T> String toJson(T obj) throws JsonProcessingException {

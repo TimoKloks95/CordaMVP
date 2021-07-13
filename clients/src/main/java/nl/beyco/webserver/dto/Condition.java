@@ -6,7 +6,6 @@ import net.corda.core.serialization.ConstructorForDeserialization;
 import nl.beyco.helpers.LocalDateTimeDeserializer;
 import nl.beyco.helpers.LocalDateTimeSerializer;
 
-import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;

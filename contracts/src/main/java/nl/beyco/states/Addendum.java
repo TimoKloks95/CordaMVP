@@ -21,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 @BelongsToContract(BeycoContract.class)
 public class Addendum implements ContractState, LinearState {

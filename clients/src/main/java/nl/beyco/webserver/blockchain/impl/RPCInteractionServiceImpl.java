@@ -42,7 +42,7 @@ public class RPCInteractionServiceImpl implements RPCInteractionService {
     @Override
     public ContractJsonWithAddendaJson startGetContractFlow(String issuerId, String contractId) {
         CordaRPCOps proxy = rpcConnectionService.getProxy();
-        log.info("Attempting to call the getContract flow to get contract with ID: "+contractId+" from the blockchain.");
+        log.info("Attempting to call the getContract flow.");
         try {
             return proxy.startFlowDynamic(GetContractFlow.class, issuerId, contractId).getReturnValue().get();
         } catch (InterruptedException | ExecutionException e) {
@@ -50,8 +50,8 @@ public class RPCInteractionServiceImpl implements RPCInteractionService {
                 log.error("Get contract flow was interrupted.");
                 Thread.currentThread().interrupt();
             }
-            log.error("Something went wrong while calling the getContract flow to get contract with ID: "+contractId+" from the blockchain.", e);
-            throw new BeycoFlowException("Something went wrong while calling the getContract flow to get contract with ID: "+contractId+" from the blockchain.", e);
+            log.error("Something went wrong while calling the getContract flow.", e);
+            throw new BeycoFlowException("Something went wrong while calling the getContract flow.", e);
         }
     }
 

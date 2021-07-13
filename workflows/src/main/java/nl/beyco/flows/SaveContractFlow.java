@@ -65,7 +65,7 @@ public class SaveContractFlow extends FlowLogic<SignedTransaction> {
                 .withExternalId(Collections.singletonList(contractId));
         QueryCriteria.VaultQueryCriteria criteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
         Vault.Page<BeycoContractState> contracts = getServiceHub().getVaultService().queryBy(BeycoContractState.class, criteria.and(linearStateQueryCriteria));
-        return contracts.getStates().size() != 0;
+        return !contracts.getStates().isEmpty();
     }
 
     private boolean issuerIsNotSellerAndNotBuyer(String sellerId, String buyerId) {

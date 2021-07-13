@@ -8,7 +8,6 @@ import nl.beyco.helpers.LocalDateTimeDeserializer;
 import nl.beyco.helpers.LocalDateTimeSerializer;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @CordaSerializable
 public class Coffee {

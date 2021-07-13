@@ -1,12 +1,10 @@
 package nl.beyco.webserver.dto;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.corda.core.serialization.ConstructorForDeserialization;
 import nl.beyco.helpers.LocalDateTimeDeserializer;
 import nl.beyco.helpers.LocalDateTimeSerializer;
 
-import javax.persistence.Entity;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;

@@ -54,7 +54,7 @@ public class AddAddendumFlow extends FlowLogic<SignedTransaction> {
 
         Vault.Page<BeycoContractState> contracts = getContractById(linearStateQueryCriteria, criteria);
 
-        if(contracts.getStates().size() == 0) {
+        if(contracts.getStates().isEmpty()) {
             throw new FlowException("The contract that you tried to add the addendum to doesn't exist.");
         }
 

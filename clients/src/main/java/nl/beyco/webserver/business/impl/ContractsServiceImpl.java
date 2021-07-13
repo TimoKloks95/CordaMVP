@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public class ContractsServiceImpl implements ContractsService {
     @Autowired
-    private RPCInteractionService RPCInteractionService;
+    private RPCInteractionService rpcInteractionService;
 
     @Autowired
     private BeycoSerializer beycoSerializer;
@@ -24,12 +24,12 @@ public class ContractsServiceImpl implements ContractsService {
     @Override
     public void saveContract(String issuerId, Contract contract) {
         String contractJson = beycoSerializer.toJson(contract);
-        RPCInteractionService.startSaveContractFlow(issuerId, contractJson);
+        rpcInteractionService.startSaveContractFlow(issuerId, contractJson);
     }
 
     @Override
     public Pair<Contract, List<Addendum>> getContract(String issuerId, String contractId) {
-        ContractJsonWithAddendaJson result = RPCInteractionService.startGetContractFlow(issuerId, contractId);
+        ContractJsonWithAddendaJson result = rpcInteractionService.startGetContractFlow(issuerId, contractId);
         Contract contract = (Contract) beycoSerializer.toObject(result.getContractJson(), Contract.class);
 
         List<Addendum> addenda = new LinkedList<>();
@@ -42,6 +42,6 @@ public class ContractsServiceImpl implements ContractsService {
     @Override
     public void addAddendum(String issuerId, String contractId, Addendum addendum) {
         String addendumJson = beycoSerializer.toJson(addendum);
-        RPCInteractionService.startAddAddendumFlow(issuerId, contractId, addendumJson);
+        rpcInteractionService.startAddAddendumFlow(issuerId, contractId, addendumJson);
     }
 }
