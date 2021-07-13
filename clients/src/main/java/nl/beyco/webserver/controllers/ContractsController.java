@@ -25,14 +25,14 @@ public class ContractsController {
 
     @PostMapping("")
     public ResponseEntity<HttpStatus> saveContract(@RequestHeader("issuerId") String issuerId, @Valid @RequestBody Contract contract) {
-        log.info("Save contract endpoint was called by user with ID: {0} at: {1} to add contract with ID: {2}", issuerId, LocalDateTime.now(), contract.getId());
+        log.info("Save contract endpoint was called by user with ID: %s, to add contract with ID: %s", issuerId, contract.getId());
         contractsService.saveContract(issuerId, contract);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/{contractId}")
     public ResponseEntity<Pair<Contract, List<Addendum>>> getContract(@RequestHeader("issuerId") String issuerId, @PathVariable("contractId") String contractId) {
-        log.info("Get contract endpoint was called by user with ID: {0} at: {1} requesting contract with ID: {2}", issuerId, LocalDateTime.now(), contractId);
+        log.info("Get contract endpoint was called by user with ID: %s, requesting contract with ID: %s", issuerId, contractId);
         Pair<Contract, List<Addendum>> result = contractsService.getContract(issuerId, contractId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -40,7 +40,7 @@ public class ContractsController {
     @PostMapping("/{contractId}/addenda")
     public ResponseEntity<HttpStatus> addAddendum(@RequestHeader("issuerId") String issuerId, @PathVariable("contractId") String contractId,
                                                   @Valid @RequestBody Addendum addendum) {
-        log.info("Add addendum endpoint was called by user with ID: {0} at: {1} to be added to contract with ID: {2}", issuerId, LocalDateTime.now(), contractId);
+        log.info("Add addendum endpoint was called by user with ID: %s, to be added to contract with ID: %s", issuerId, contractId);
         contractsService.addAddendum(issuerId, contractId, addendum);
         return new ResponseEntity<>(HttpStatus.OK);
     }
