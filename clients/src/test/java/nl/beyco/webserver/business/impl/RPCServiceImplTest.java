@@ -1,19 +1,5 @@
 package nl.beyco.webserver.business.impl;
 
-import nl.beyco.webserver.business.RPCService;
-import nl.beyco.webserver.config.ClientConfiguration;
-import net.corda.client.rpc.CordaRPCClient;
-import net.corda.client.rpc.CordaRPCConnection;
-import net.corda.core.messaging.CordaRPCOps;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
 //
 //@RunWith(SpringRunner.class)
 //public class RPCServiceImplTest {

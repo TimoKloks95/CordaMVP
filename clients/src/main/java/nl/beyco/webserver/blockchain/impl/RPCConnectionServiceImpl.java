@@ -1,8 +1,8 @@
-package nl.beyco.webserver.business.impl;
+package nl.beyco.webserver.blockchain.impl;
 
+import nl.beyco.webserver.blockchain.RPCConnectionService;
 import nl.beyco.webserver.business.exceptions.BeycoConnectionException;
 import nl.beyco.webserver.config.ClientConfiguration;
-import nl.beyco.webserver.business.RPCService;
 import net.corda.client.rpc.CordaRPCClient;
 import net.corda.client.rpc.CordaRPCConnection;
 import net.corda.client.rpc.RPCException;
@@ -10,21 +10,22 @@ import net.corda.core.messaging.CordaRPCOps;
 import net.corda.core.utilities.NetworkHostAndPort;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-@Service
-public class RPCServiceImpl implements AutoCloseable, RPCService {
-    private static final Logger log = LogManager.getLogger(ContractServiceImpl.class);
+@Component
+public class RPCConnectionServiceImpl implements AutoCloseable, RPCConnectionService {
+    @Autowired
     private ClientConfiguration clientConfiguration;
+    private static final Logger log = LogManager.getLogger(RPCConnectionServiceImpl.class);
+
     private CordaRPCConnection rpcConnection;
     private CordaRPCClient rpcClient;
     private CordaRPCOps proxy;
 
-    public RPCServiceImpl(ClientConfiguration clientConfiguration) {
-        this.clientConfiguration = clientConfiguration;
-    }
 
     @PostConstruct
     @Override

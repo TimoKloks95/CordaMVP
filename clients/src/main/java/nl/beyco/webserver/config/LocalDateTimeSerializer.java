@@ -1,4 +1,4 @@
-package nl.beyco.webserver.helpers;
+package nl.beyco.webserver.config;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
