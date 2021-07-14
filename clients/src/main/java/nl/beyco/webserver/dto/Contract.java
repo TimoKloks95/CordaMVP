@@ -8,6 +8,7 @@ import nl.beyco.helpers.LocalDateTimeDeserializer;
 import nl.beyco.helpers.LocalDateTimeSerializer;
 import nl.beyco.webserver.helpers.BeycoSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.Entity;
 import javax.validation.Valid;
@@ -16,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Component
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Contract {
     @Autowired
