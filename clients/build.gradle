@@ -24,6 +24,10 @@ repositories {
     jcenter()
 }
 
+configurations.all {
+    exclude module: 'log4j-slf4j-impl'
+}
+
 dependencies {
     // Corda dependencies.
     cordaCompile "$corda_release_group:corda-rpc:$corda_release_version"
@@ -40,9 +44,18 @@ dependencies {
     testImplementation ("org.mockito:mockito-core:$mockito_version")
     testImplementation 'org.mockito:mockito-inline:2.13.0'
     testImplementation("org.hibernate:hibernate-validator:$hibernate_validator_version")
-    compile "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_version}"
-    compile "org.apache.logging.log4j:log4j-web:${log4j_version}"
-    compile "org.slf4j:jul-to-slf4j:$slf4j_version"
+    compile ("org.apache.logging.log4j:log4j-slf4j-impl:${log4j_version}") {
+        exclude group: "org.sl4j", module: "slf4j-log4j12"
+        exclude group: "log4j", module: "log4j"
+    }
+    compile ("org.apache.logging.log4j:log4j-web:${log4j_version}") {
+        exclude group: "org.sl4j", module: "slf4j-log4j12"
+        exclude group: "log4j", module: "log4j"
+    }
+    compile ("org.slf4j:jul-to-slf4j:$slf4j_version") {
+        exclude group: "org.sl4j", module: "slf4j-log4j12"
+        exclude group: "log4j", module: "log4j"
+    }
     compile "com.fasterxml.jackson.core:jackson-core:2.12.3"
     compile "com.fasterxml.jackson.core:jackson-databind:2.12.3"
     compile "com.fasterxml.jackson.core:jackson-annotations:2.12.3"
