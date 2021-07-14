@@ -1,5 +1,6 @@
 package nl.beyco.webserver;
 
+import nl.beyco.webserver.dto.Addendum;
 import nl.beyco.webserver.dto.Coffee;
 import nl.beyco.webserver.dto.Condition;
 import nl.beyco.webserver.dto.Contract;
@@ -81,6 +82,314 @@ public class TestData {
                 "}";
     }
 
+    public static String getContractJsonStringMissingRequiredString() {
+        return "{\n" +
+                "  \"id\": \"\",\n" +
+                "  \"sellerId\": \"1\",\n" +
+                "  \"buyerId\": \"2\",\n" +
+                "  \"offerId\": \"1\",\n" +
+                "  \"sellerSignedAt\": \"2021-05-11T10:00\",\n" +
+                "  \"buyerSignedAt\": \"2021-05-11T10:00\",\n" +
+                "  \"conditions\": [\n" +
+                "    {\n" +
+                "      \"id\":\"1\",\n" +
+                "      \"type\": \"test\",\n" +
+                "      \"status\": \"test\",\n" +
+                "      \"title\":\"test\",\n" +
+                "      \"value\": \"test\",\n" +
+                "      \"createdAt\": \"2021-05-11T10:00\",\n" +
+                "      \"negotiationId\": \"1\"\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"coffees\": [\n" +
+                "    {\n" +
+                "      \"id\": \"1\",\n" +
+                "      \"country\": \"test\",\n" +
+                "      \"region\": \"test\",\n" +
+                "      \"unit\": \"test\",\n" +
+                "      \"species\": \"test\",\n" +
+                "      \"process\": \"test\",\n" +
+                "      \"sector\": \"test\",\n" +
+                "      \"harvestAt\": \"2021-05-11T10:00\",\n" +
+                "      \"qualitySegment\": \"test\",\n" +
+                "      \"minScreenSize\": 9,\n" +
+                "      \"maxScreenSize\": 16,\n" +
+                "      \"parentId\": \"2\",\n" +
+                "      \"bulk\": true,\n" +
+                "      \"quantity\": 10,\n" +
+                "      \"cuppingScore\": 9.5,\n" +
+                "      \"certificates\": [\n" +
+                "        \"test\", \"test\"\n" +
+                "      ]\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+    }
+
+    public static String getContractJsonStringInvalidScreensize() {
+        return "{\n" +
+                "  \"id\": \"1\",\n" +
+                "  \"sellerId\": \"1\",\n" +
+                "  \"buyerId\": \"2\",\n" +
+                "  \"offerId\": \"1\",\n" +
+                "  \"sellerSignedAt\": \"2021-05-11T10:00\",\n" +
+                "  \"buyerSignedAt\": \"2021-05-11T10:00\",\n" +
+                "  \"conditions\": [\n" +
+                "    {\n" +
+                "      \"id\":\"1\",\n" +
+                "      \"type\": \"test\",\n" +
+                "      \"status\": \"test\",\n" +
+                "      \"title\":\"test\",\n" +
+                "      \"value\": \"test\",\n" +
+                "      \"createdAt\": \"2021-05-11T10:00\",\n" +
+                "      \"negotiationId\": \"1\"\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"coffees\": [\n" +
+                "    {\n" +
+                "      \"id\": \"1\",\n" +
+                "      \"country\": \"test\",\n" +
+                "      \"region\": \"test\",\n" +
+                "      \"unit\": \"test\",\n" +
+                "      \"species\": \"test\",\n" +
+                "      \"process\": \"test\",\n" +
+                "      \"sector\": \"test\",\n" +
+                "      \"harvestAt\": \"2021-05-11T10:00\",\n" +
+                "      \"qualitySegment\": \"test\",\n" +
+                "      \"minScreenSize\": 1,\n" +
+                "      \"maxScreenSize\": 16,\n" +
+                "      \"parentId\": \"2\",\n" +
+                "      \"bulk\": true,\n" +
+                "      \"quantity\": 10,\n" +
+                "      \"cuppingScore\": 9.5,\n" +
+                "      \"certificates\": [\n" +
+                "        \"test\", \"test\"\n" +
+                "      ]\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+    }
+
+    public static String getContractJsonStringInvalidDateTime() {
+        return "{\n" +
+                "  \"id\": \"1\",\n" +
+                "  \"sellerId\": \"1\",\n" +
+                "  \"buyerId\": \"2\",\n" +
+                "  \"offerId\": \"1\",\n" +
+                "  \"sellerSignedAt\": \"\",\n" +
+                "  \"buyerSignedAt\": \"2021-05-11T10:00\",\n" +
+                "  \"conditions\": [\n" +
+                "    {\n" +
+                "      \"id\":\"1\",\n" +
+                "      \"type\": \"test\",\n" +
+                "      \"status\": \"test\",\n" +
+                "      \"title\":\"test\",\n" +
+                "      \"value\": \"test\",\n" +
+                "      \"createdAt\": \"2021-05-11T10:00\",\n" +
+                "      \"negotiationId\": \"1\"\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"coffees\": [\n" +
+                "    {\n" +
+                "      \"id\": \"1\",\n" +
+                "      \"country\": \"test\",\n" +
+                "      \"region\": \"test\",\n" +
+                "      \"unit\": \"test\",\n" +
+                "      \"species\": \"test\",\n" +
+                "      \"process\": \"test\",\n" +
+                "      \"sector\": \"test\",\n" +
+                "      \"harvestAt\": \"2021-05-11T10:00\",\n" +
+                "      \"qualitySegment\": \"test\",\n" +
+                "      \"minScreenSize\": 10,\n" +
+                "      \"maxScreenSize\": 16,\n" +
+                "      \"parentId\": \"2\",\n" +
+                "      \"bulk\": true,\n" +
+                "      \"quantity\": 10,\n" +
+                "      \"cuppingScore\": 9.5,\n" +
+                "      \"certificates\": [\n" +
+                "        \"test\", \"test\"\n" +
+                "      ]\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+    }
+
+    public static String getAddendumJsonString() {
+        return "{\n" +
+                "    \"id\": \"1\",\n" +
+                "    \"sellerId\": \"1\",\n" +
+                "    \"buyerId\": \"2\",\n" +
+                "    \"createdAt\": \"2021-06-15T10:00\",\n" +
+                "    \"buyerSignedAt\": \"2021-06-14T10:00\",\n" +
+                "    \"sellerSignedAt\": \"2021-06-13T10:00\",\n" +
+                "    \"coffees\": [\n" +
+                "    {\n" +
+                "      \"id\": \"1\",\n" +
+                "      \"country\": \"test\",\n" +
+                "      \"region\": \"test\",\n" +
+                "      \"unit\": \"test\",\n" +
+                "      \"species\": \"test\",\n" +
+                "      \"process\": \"test\",\n" +
+                "      \"sector\": \"test\",\n" +
+                "      \"harvestAt\": \"2021-05-11T10:00\",\n" +
+                "      \"qualitySegment\": \"test\",\n" +
+                "      \"parentId\": \"2\",\n" +
+                "      \"bulk\": true,\n" +
+                "      \"quantity\": 10,\n" +
+                "      \"minScreenSize\": 9,\n" +
+                "      \"maxScreenSize\": 16,\n" +
+                "      \"cuppingScore\": 9.5,\n" +
+                "      \"certificates\": [\n" +
+                "        \"test\", \"test\"\n" +
+                "      ]\n" +
+                "    }\n" +
+                "    ],\n" +
+                "    \"conditions\": [\n" +
+                "        {\n" +
+                "            \"id\": \"3\",\n" +
+                "            \"type\": \"test\",\n" +
+                "            \"status\": \"test\",\n" +
+                "            \"title\": \"test\",\n" +
+                "            \"value\": \"test\",\n" +
+                "            \"createdAt\": \"2021-06-13T10:00\",\n" +
+                "            \"negotiationId\": \"3\"\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}";
+    }
+
+    public static String getAddendumJsonStringMissingRequiredString() {
+        return "{\n" +
+                "    \"id\": \"\",\n" +
+                "    \"sellerId\": \"1\",\n" +
+                "    \"buyerId\": \"2\",\n" +
+                "    \"createdAt\": \"2021-06-15T10:00\",\n" +
+                "    \"buyerSignedAt\": \"2021-06-14T10:00\",\n" +
+                "    \"sellerSignedAt\": \"2021-06-13T10:00\",\n" +
+                "    \"coffees\": [\n" +
+                "    {\n" +
+                "      \"id\": \"1\",\n" +
+                "      \"country\": \"test\",\n" +
+                "      \"region\": \"test\",\n" +
+                "      \"unit\": \"test\",\n" +
+                "      \"species\": \"test\",\n" +
+                "      \"process\": \"test\",\n" +
+                "      \"sector\": \"test\",\n" +
+                "      \"harvestAt\": \"2021-05-11T10:00\",\n" +
+                "      \"qualitySegment\": \"test\",\n" +
+                "      \"parentId\": \"2\",\n" +
+                "      \"bulk\": true,\n" +
+                "      \"quantity\": 10,\n" +
+                "      \"minScreenSize\": 9,\n" +
+                "      \"maxScreenSize\": 16,\n" +
+                "      \"cuppingScore\": 9.5,\n" +
+                "      \"certificates\": [\n" +
+                "        \"test\", \"test\"\n" +
+                "      ]\n" +
+                "    }\n" +
+                "    ],\n" +
+                "    \"conditions\": [\n" +
+                "        {\n" +
+                "            \"id\": \"3\",\n" +
+                "            \"type\": \"test\",\n" +
+                "            \"status\": \"test\",\n" +
+                "            \"title\": \"test\",\n" +
+                "            \"value\": \"test\",\n" +
+                "            \"createdAt\": \"2021-06-13T10:00\",\n" +
+                "            \"negotiationId\": \"3\"\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}";
+    }
+
+    public static String getAddendumJsonStringInvalidScreenSize() {
+        return "{\n" +
+                "    \"id\": \"1\",\n" +
+                "    \"sellerId\": \"1\",\n" +
+                "    \"buyerId\": \"2\",\n" +
+                "    \"createdAt\": \"2021-06-15T10:00\",\n" +
+                "    \"buyerSignedAt\": \"2021-06-14T10:00\",\n" +
+                "    \"sellerSignedAt\": \"2021-06-13T10:00\",\n" +
+                "    \"coffees\": [\n" +
+                "    {\n" +
+                "      \"id\": \"1\",\n" +
+                "      \"country\": \"test\",\n" +
+                "      \"region\": \"test\",\n" +
+                "      \"unit\": \"test\",\n" +
+                "      \"species\": \"test\",\n" +
+                "      \"process\": \"test\",\n" +
+                "      \"sector\": \"test\",\n" +
+                "      \"harvestAt\": \"2021-05-11T10:00\",\n" +
+                "      \"qualitySegment\": \"test\",\n" +
+                "      \"parentId\": \"2\",\n" +
+                "      \"bulk\": true,\n" +
+                "      \"quantity\": 10,\n" +
+                "      \"minScreenSize\": 1,\n" +
+                "      \"maxScreenSize\": 16,\n" +
+                "      \"cuppingScore\": 9.5,\n" +
+                "      \"certificates\": [\n" +
+                "        \"test\", \"test\"\n" +
+                "      ]\n" +
+                "    }\n" +
+                "    ],\n" +
+                "    \"conditions\": [\n" +
+                "        {\n" +
+                "            \"id\": \"3\",\n" +
+                "            \"type\": \"test\",\n" +
+                "            \"status\": \"test\",\n" +
+                "            \"title\": \"test\",\n" +
+                "            \"value\": \"test\",\n" +
+                "            \"createdAt\": \"2021-06-13T10:00\",\n" +
+                "            \"negotiationId\": \"3\"\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}";
+    }
+
+    public static String getAddendumJsonStringInvalidDateTime() {
+        return "{\n" +
+                "    \"id\": \"1\",\n" +
+                "    \"sellerId\": \"1\",\n" +
+                "    \"buyerId\": \"2\",\n" +
+                "    \"createdAt\": \"2021-06-15T10:00\",\n" +
+                "    \"buyerSignedAt\": \"2021-06-14T10:00\",\n" +
+                "    \"sellerSignedAt\": \"\",\n" +
+                "    \"coffees\": [\n" +
+                "    {\n" +
+                "      \"id\": \"1\",\n" +
+                "      \"country\": \"test\",\n" +
+                "      \"region\": \"test\",\n" +
+                "      \"unit\": \"test\",\n" +
+                "      \"species\": \"test\",\n" +
+                "      \"process\": \"test\",\n" +
+                "      \"sector\": \"test\",\n" +
+                "      \"harvestAt\": \"2021-05-11T10:00\",\n" +
+                "      \"qualitySegment\": \"test\",\n" +
+                "      \"parentId\": \"2\",\n" +
+                "      \"bulk\": true,\n" +
+                "      \"quantity\": 10,\n" +
+                "      \"minScreenSize\": 9,\n" +
+                "      \"maxScreenSize\": 16,\n" +
+                "      \"cuppingScore\": 9.5,\n" +
+                "      \"certificates\": [\n" +
+                "        \"test\", \"test\"\n" +
+                "      ]\n" +
+                "    }\n" +
+                "    ],\n" +
+                "    \"conditions\": [\n" +
+                "        {\n" +
+                "            \"id\": \"3\",\n" +
+                "            \"type\": \"test\",\n" +
+                "            \"status\": \"test\",\n" +
+                "            \"title\": \"test\",\n" +
+                "            \"value\": \"test\",\n" +
+                "            \"createdAt\": \"2021-06-13T10:00\",\n" +
+                "            \"negotiationId\": \"3\"\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}";
+    }
+
     public static Contract getContractForTestJson() {
         ArrayList<Condition> conditions = new ArrayList<>(
                 Collections.singletonList(
@@ -92,5 +401,20 @@ public class TestData {
                                 "test", "2", true, 10, 9, 16, 9.5, new String[] {"test", "test"})
                 ));
         return new Contract("1", "1", "2", "1", LocalDateTime.of(2021, 05, 11, 10, 00), LocalDateTime.of(2021, 05, 11, 10, 00), conditions, coffees);
+    }
+
+    public static Addendum getAddendumForTestJson() {
+        ArrayList<Condition> conditions = new ArrayList<>(
+                Collections.singletonList(
+                        new Condition("3", "test", "test", "test", "test", LocalDateTime.of(2021, 06, 13, 10, 00), "3")
+                ));
+        ArrayList<Coffee> coffees = new ArrayList<>(
+                Collections.singletonList(
+                        new Coffee("1", "test", "test", "test", "test", "test", "test", LocalDateTime.of(2021, 05, 11, 10, 00),
+                                "test", "2", true, 10, 9, 16, 9.5, new String[] {"test", "test"})
+                ));
+        return new Addendum("1", "1", "2", LocalDateTime.of(2021, 06, 15, 10, 00),
+                LocalDateTime.of(2021, 06, 14, 10, 00), LocalDateTime.of(2021, 06, 13, 10, 00),
+                coffees, conditions);
     }
 }
