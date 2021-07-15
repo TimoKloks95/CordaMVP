@@ -1,11 +1,10 @@
 package nl.beyco.webserver.blockchain.impl;
 
-import net.corda.core.messaging.CordaRPCOps;
-import net.corda.core.transactions.SignedTransaction;
 import nl.beyco.flows.AddAddendumFlow;
 import nl.beyco.flows.GetContractFlow;
 import nl.beyco.flows.SaveContractFlow;
 import nl.beyco.states.ContractJsonWithAddendaJson;
+import nl.beyco.webserver.blockchain.BeycoProxy;
 import nl.beyco.webserver.blockchain.RPCInteractionService;
 import nl.beyco.webserver.blockchain.RPCConnectionService;
 import nl.beyco.webserver.business.exceptions.BeycoFlowException;
@@ -21,14 +20,13 @@ public class RPCInteractionServiceImpl implements RPCInteractionService {
     private static final Logger log = LogManager.getLogger(RPCInteractionServiceImpl.class);
 
     @Autowired
-    RPCConnectionService rpcConnectionService;
+    private BeycoProxy proxy;
 
     @Override
-    public SignedTransaction startSaveContractFlow(String issuerId, String contractJson) {
-        CordaRPCOps proxy = rpcConnectionService.getProxy();
+    public void startSaveContractFlow(String issuerId, String contractJson) {
         log.info("Attempting to call the saveContract flow.");
         try {
-            return proxy.startFlowDynamic(SaveContractFlow.class, issuerId, contractJson).getReturnValue().get();
+            proxy.startSaveContractFlow(issuerId, contractJson);
         } catch (InterruptedException | ExecutionException e) {
             if(e instanceof InterruptedException) {
                 log.error("Save contract flow was interrupted.");
@@ -41,10 +39,9 @@ public class RPCInteractionServiceImpl implements RPCInteractionService {
 
     @Override
     public ContractJsonWithAddendaJson startGetContractFlow(String issuerId, String contractId) {
-        CordaRPCOps proxy = rpcConnectionService.getProxy();
         log.info("Attempting to call the getContract flow.");
         try {
-            return proxy.startFlowDynamic(GetContractFlow.class, issuerId, contractId).getReturnValue().get();
+            return proxy.startGetContractFlow(issuerId, contractId);
         } catch (InterruptedException | ExecutionException e) {
             if(e instanceof InterruptedException) {
                 log.error("Get contract flow was interrupted.");
@@ -56,11 +53,10 @@ public class RPCInteractionServiceImpl implements RPCInteractionService {
     }
 
     @Override
-    public SignedTransaction startAddAddendumFlow(String issuerId, String contractId, String addendumJson) {
-        CordaRPCOps proxy = rpcConnectionService.getProxy();
+    public void startAddAddendumFlow(String issuerId, String contractId, String addendumJson) {
         log.info("Attempting to call the addAddendum flow.");
         try {
-            return proxy.startFlowDynamic(AddAddendumFlow.class, issuerId, contractId, addendumJson).getReturnValue().get();
+            proxy.startAddAddendumFlow(issuerId, contractId, addendumJson);
         } catch (InterruptedException | ExecutionException e) {
             if(e instanceof InterruptedException) {
                 log.error("Add addendum flow was interrupted.");
