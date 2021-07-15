@@ -3,38 +3,38 @@
   "sellerId": "1",
   "buyerId": "2",
   "offerId": "1",
-  "sellerSignedAt": "2021-05-11T10:00:00",
-  "buyerSignedAt": "2021-05-11T10:00:00",
+  "sellerSignedAt": "2021-05-15T10:00",
+  "buyerSignedAt": "2021-05-16T10:00",
   "conditions": [
     {
       "id":"1",
-      "type": "test",
-      "status": "test",
-      "title":"test",
-      "value": "test",
-      "createdAt": "2021-05-11T10:00:00",
-      "negotiationId": "1"
+      "type": "TestType",
+      "status": "TestStatus",
+      "title":"TestTitle",
+      "value": "TestValue",
+      "createdAt": "2021-06-15T10:00",
+      "negotiationId": "2"
     }
   ],
   "coffees": [
     {
       "id": "1",
-      "country": "test",
-      "region": "test",
-      "unit": "test",
-      "species": "test",
-      "process": "test",
-      "sector": "test",
-      "harvestAt": "2021-05-11T10:00:00",
-      "qualitySegment": "test",
-      "parentId": "2",
+      "country": "TestCountry",
+      "region": "TestRegion",
       "bulk": true,
+      "unit": "TestUnit",
       "quantity": 10,
-      "minScreenSize": 9,
+      "species": "TestSpecies",
+      "process": "TestProcess",
+      "parentId": "2",
+      "minScreenSize": 10,
       "maxScreenSize": 16,
       "cuppingScore": 9.5,
+      "sector": "TestSector",
+      "harvestAt": "2021-05-11T10:00",
+      "qualitySegment": "TestQualitySegment",
       "certificates": [
-        "test", "test"
+        "FirstCertificate", "SecondCertificate"
       ]
     }
   ]

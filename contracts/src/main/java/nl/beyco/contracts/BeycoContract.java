@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import static net.corda.core.contracts.ContractsDSL.requireThat;
 
 public class BeycoContract implements Contract {
-    public static final String ID = "BeycoContract";
+    public static final String ID = "nl.beyco.contracts.BeycoContract";
 
     @Override
     public void verify(LedgerTransaction tx) {
@@ -63,8 +63,8 @@ public class BeycoContract implements Contract {
             require.using("Buyer has not signed the contract. Both parties have to sign the contract.", contract.getBuyerSignedAt() != null);
             require.using("Seller signed can't be after current datetime.", contract.getSellerSignedAt().isBefore(LocalDateTime.now()));
             require.using("Buyer signed can't be after current datetime.", contract.getBuyerSignedAt().isBefore(LocalDateTime.now()));
-            require.using("Contract has to specify at least one coffee", !contract.getCoffees().isEmpty());
-            require.using("Contract has to specify at least one condition", !contract.getConditions().isEmpty());
+            require.using("Contract has to specify at least one coffee.", !contract.getCoffees().isEmpty());
+            require.using("Contract has to specify at least one condition.", !contract.getConditions().isEmpty());
             return null;
         });
     }
@@ -100,6 +100,9 @@ public class BeycoContract implements Contract {
         for(Condition condition : addendum.getConditions()) {
             validateConditionAttributes(condition);
         }
+        for(Coffee coffee : addendum.getCoffees()) {
+            validateCoffeeAttributes(coffee);
+        }
     }
 
     private void validateConditionAttributes(Condition condition) {
@@ -109,6 +112,7 @@ public class BeycoContract implements Contract {
             require.using("Condition status can't be empty or null.", condition.getStatus() != null && !condition.getStatus().isEmpty());
             require.using("Condition title can't be empty or null.", condition.getTitle() != null && !condition.getTitle().isEmpty());
             require.using("Condition value can't be empty or null.", condition.getValue() != null && !condition.getValue().isEmpty());
+            require.using("Condition date can't be after current time.", condition.getCreatedAt().isBefore(LocalDateTime.now()));
             require.using("Condition negotiation id can't be empty or null.", condition.getNegotiationId() != null && !condition.getNegotiationId().isEmpty());
            return null;
         });
