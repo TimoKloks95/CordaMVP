@@ -3,23 +3,29 @@ package nl.beyco.flows;
 import net.corda.core.flows.FlowException;
 import net.corda.core.identity.CordaX500Name;
 import net.corda.testing.node.*;
+import nl.beyco.TestData;
+import nl.beyco.states.ContractJsonWithAddendaJson;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
+import static org.junit.Assert.assertEquals;
 
 public class GetContractFlowTest {
     private MockNetwork network;
-    private StartedMockNode a;
+    private StartedMockNode mockNode;
 
     @Before
     public void setup() {
         network = new MockNetwork(new MockNetworkParameters().withCordappsForAllNodes(Arrays.asList(
                 TestCordapp.findCordapp("nl.beyco.contracts"), TestCordapp.findCordapp("nl.beyco.flows")))
                 .withNotarySpecs(Collections.singletonList(new MockNetworkNotarySpec(new CordaX500Name("Notary", "Amsterdam", "NL")))));
-        a = network.createNode(new MockNodeParameters());
+        mockNode = network.createNode(new MockNodeParameters());
         network.runNetwork();
     }
 
@@ -29,17 +35,35 @@ public class GetContractFlowTest {
     }
 
     @Test
-    public void getContractFlowSucceeds() {
+    public void getContractFlowSucceeds() throws InterruptedException, ExecutionException {
+        SaveContractFlow saveContractFlow = new SaveContractFlow("1", TestData.getContractJson());
+        mockNode.startFlow(saveContractFlow);
+        network.runNetwork();
 
+        GetContractFlow flow = new GetContractFlow("1", "1");
+        Future<ContractJsonWithAddendaJson> promise = mockNode.startFlow(flow);
+        ContractJsonWithAddendaJson result = promise.get();
+        network.runNetwork();
+
+        assertEquals(0, result.getAddendaJson().length);
+        assertEquals(false, result.getContractJson().isEmpty());
     }
 
     @Test(expected = FlowException.class)
     public void getContractFlowFailsBecauseContractDoesntExist() {
-
+        GetContractFlow flow = new GetContractFlow("1", "1");
+        mockNode.startFlow(flow);
+        network.runNetwork();
     }
 
     @Test(expected = FlowException.class)
     public void getContractFlowFailsBecauseIssuerIsNotSellerOrBuyer() {
+        SaveContractFlow saveContractFlow = new SaveContractFlow("1", TestData.getContractJson());
+        mockNode.startFlow(saveContractFlow);
+        network.runNetwork();
 
+        String notMatchingIssuerId = "5554";
+        GetContractFlow flow = new GetContractFlow(notMatchingIssuerId, "1");
+        mockNode.startFlow(flow);
     }
 }
