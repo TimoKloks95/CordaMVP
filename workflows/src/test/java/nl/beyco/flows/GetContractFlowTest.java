@@ -1,5 +1,6 @@
 package nl.beyco.flows;
 
+import net.corda.core.flows.FlowException;
 import net.corda.core.identity.CordaX500Name;
 import net.corda.testing.node.*;
 import org.junit.After;
@@ -32,12 +33,12 @@ public class GetContractFlowTest {
 
     }
 
-    @Test
+    @Test(expected = FlowException.class)
     public void getContractFlowFailsBecauseContractDoesntExist() {
 
     }
 
-    @Test
+    @Test(expected = FlowException.class)
     public void getContractFlowFailsBecauseIssuerIsNotSellerOrBuyer() {
 
     }
