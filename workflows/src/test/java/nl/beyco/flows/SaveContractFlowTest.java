@@ -1,4 +1,4 @@
-package nl.beyco;
+package nl.beyco.flows;
 
 import net.corda.core.identity.CordaX500Name;
 import net.corda.core.node.services.Vault;
@@ -20,23 +20,23 @@ import java.util.concurrent.Future;
 
 import static org.junit.Assert.assertEquals;
 
-//public class SaveContractFlowTest {
-//    private MockNetwork network;
-//    private StartedMockNode a;
-//    @Before
-//    public void setup() {
-//        network = new MockNetwork(new MockNetworkParameters().withCordappsForAllNodes(Arrays.asList(
-//                TestCordapp.findCordapp("nl.beyco.contracts"), TestCordapp.findCordapp("nl.beyco.flows")))
-//                .withNotarySpecs(Collections.singletonList(new MockNetworkNotarySpec(new CordaX500Name("Notary", "Amsterdam", "NL")))));
-//        a = network.createNode(new MockNodeParameters());
-//        network.runNetwork();
-//    }
-//
-//    @After
-//    public void tearDown() {
-//        network.stopNodes();
-//    }
-//
+public class SaveContractFlowTest {
+    private MockNetwork network;
+    private StartedMockNode a;
+    @Before
+    public void setup() {
+        network = new MockNetwork(new MockNetworkParameters().withCordappsForAllNodes(Arrays.asList(
+                TestCordapp.findCordapp("nl.beyco.contracts"), TestCordapp.findCordapp("nl.beyco.flows")))
+                .withNotarySpecs(Collections.singletonList(new MockNetworkNotarySpec(new CordaX500Name("Notary", "Amsterdam", "NL")))));
+        a = network.createNode(new MockNodeParameters());
+        network.runNetwork();
+    }
+
+    @After
+    public void tearDown() {
+        network.stopNodes();
+    }
+
 //    @Test
 //    public void saveContractTest() throws InterruptedException, ExecutionException {
 //        SaveContractFlow saveContractFlow = new SaveContractFlow("1", TestData.getTestContract());
@@ -57,4 +57,24 @@ import static org.junit.Assert.assertEquals;
 //        assertEquals("2", state.getBuyerId());
 //
 //    }
-//}
+
+    @Test
+    public void saveContractFlowSucceeds() {
+
+    }
+
+    @Test
+    public void saveContractFlowFailsBecauseOfParseError() {
+
+    }
+
+    @Test
+    public void saveContractFlowFailsBecauseIssuerIsNotSellerOrBuyer() {
+
+    }
+
+    @Test
+    public void saveContractFlowFailsBecauseContractAlreadyExistsInVault() {
+
+    }
+}
