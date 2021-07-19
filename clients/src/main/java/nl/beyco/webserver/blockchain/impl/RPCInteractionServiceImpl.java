@@ -1,12 +1,8 @@
 package nl.beyco.webserver.blockchain.impl;
 
-import nl.beyco.flows.AddAddendumFlow;
-import nl.beyco.flows.GetContractFlow;
-import nl.beyco.flows.SaveContractFlow;
 import nl.beyco.states.ContractJsonWithAddendaJson;
 import nl.beyco.webserver.blockchain.BeycoProxy;
 import nl.beyco.webserver.blockchain.RPCInteractionService;
-import nl.beyco.webserver.blockchain.RPCConnectionService;
 import nl.beyco.webserver.business.exceptions.BeycoFlowException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
