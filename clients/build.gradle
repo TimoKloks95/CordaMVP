@@ -24,9 +24,9 @@ repositories {
     jcenter()
 }
 
-//configurations.all {
-//    exclude module: 'log4j-slf4j-impl'
-//}
+configurations.all {
+    exclude module: 'log4j-slf4j-impl'
+}
 
 dependencies {
     // Corda dependencies.
@@ -35,12 +35,8 @@ dependencies {
     // CorDapp dependencies.
     compile project(":contracts")
     compile project(":workflows")
-    compile("org.springframework.boot:spring-boot-starter-websocket:$spring_boot_version") {
-        exclude group: "org.springframework.boot", module: "spring-boot-starter-logging"
-    }
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: "org.junit.vintage", module: "junit-vintage-engine"
-    }
+    compile("org.springframework.boot:spring-boot-starter-websocket:$spring_boot_version")
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
     testImplementation ("org.mockito:mockito-core:$mockito_version")
     testImplementation 'org.mockito:mockito-inline:2.13.0'
     testImplementation("org.hibernate:hibernate-validator:$hibernate_validator_version")

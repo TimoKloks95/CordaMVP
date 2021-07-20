@@ -69,6 +69,7 @@ public class AddAddendumFlowTest {
         AddAddendumFlow flow = new AddAddendumFlow("1", "1", TestData.getInvalidJson());
         mockNode.startFlow(flow);
         network.runNetwork();
+
     }
 
     @Test(expected = FlowException.class)

@@ -94,10 +94,6 @@ dependencies {
 
 }
 
-tasks.withType(Test) {
-    jvmArgs "-javaagent:${configurations.quasar.iterator().next()}"
-}
-
 //Task to deploy the nodes in order to bootstrap a network
 task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
 
