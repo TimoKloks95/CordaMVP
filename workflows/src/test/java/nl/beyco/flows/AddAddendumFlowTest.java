@@ -1,22 +1,21 @@
 package nl.beyco.flows;
 
-import net.corda.core.flows.FlowException;
 import net.corda.core.identity.CordaX500Name;
 import net.corda.core.node.services.Vault;
 import net.corda.core.node.services.vault.QueryCriteria;
+import net.corda.core.transactions.SignedTransaction;
 import net.corda.testing.node.*;
 import nl.beyco.TestData;
 import nl.beyco.states.Addendum;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.concurrent.ExecutionException;
-
+import java.util.concurrent.Future;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 
 public class AddAddendumFlowTest {
@@ -39,7 +38,7 @@ public class AddAddendumFlowTest {
     }
 
     @Test
-    public void addAddendumSucceeds() throws InterruptedException, ExecutionException {
+    public void addAddendumSucceeds() {
         SaveContractFlow saveContractFlow = new SaveContractFlow("1", TestData.getContractJson());
         mockNode.startFlow(saveContractFlow);
         network.runNetwork();
@@ -64,22 +63,31 @@ public class AddAddendumFlowTest {
         assertEquals(1, state.getConditions().size());
     }
 
-    @Test(expected = FlowException.class)
+    @Test
     public void addAddendumFlowFailsBecauseOfParseError() {
         AddAddendumFlow flow = new AddAddendumFlow("1", "1", TestData.getInvalidJson());
-        mockNode.startFlow(flow);
-        network.runNetwork();
-
+        Future<SignedTransaction> future = mockNode.startFlow(flow);
+        try {
+            network.runNetwork();
+            future.get();
+            fail("Expected exception was not thrown.");
+        } catch(Exception e) {
+        }
     }
 
-    @Test(expected = FlowException.class)
+    @Test
     public void addAddendumFlowFailsBecauseContractDoesntExist() {
         AddAddendumFlow flow = new AddAddendumFlow("1", "1", TestData.getAddendumJson());
-        mockNode.startFlow(flow);
-        network.runNetwork();
+        Future<SignedTransaction> future = mockNode.startFlow(flow);
+        try {
+            network.runNetwork();
+            future.get();
+            fail("Expected exception was not thrown.");
+        } catch(Exception e) {
+        }
     }
 
-    @Test(expected = FlowException.class)
+    @Test
     public void addAddendumFlowFailsBecauseAddendumAlreadyExists() {
         SaveContractFlow saveContractFlow = new SaveContractFlow("1", TestData.getContractJson());
         mockNode.startFlow(saveContractFlow);
@@ -88,40 +96,63 @@ public class AddAddendumFlowTest {
         AddAddendumFlow addAddendumFlow = new AddAddendumFlow("1", "1", TestData.getAddendumJson());
         mockNode.startFlow(addAddendumFlow);
         network.runNetwork();
-        mockNode.startFlow(addAddendumFlow);
-        network.runNetwork();
+
+        AddAddendumFlow identicalFlow = new AddAddendumFlow("1", "1", TestData.getAddendumJson());
+
+        Future<SignedTransaction> future = mockNode.startFlow(identicalFlow);
+        try {
+            network.runNetwork();
+            future.get();
+            fail("Expected exception was not thrown.");
+        } catch(Exception e) {
+        }
     }
 
-    @Test(expected = FlowException.class)
+    @Test
     public void addAddendumFlowFailsBecauseIssuerIsNotSellerOrBuyerAddendum() {
         SaveContractFlow saveContractFlow = new SaveContractFlow("1", TestData.getContractJson());
         mockNode.startFlow(saveContractFlow);
         network.runNetwork();
 
         AddAddendumFlow addAddendumFlow = new AddAddendumFlow("500", "1", TestData.getAddendumJson());
-        mockNode.startFlow(addAddendumFlow);
-        network.runNetwork();
+        Future<SignedTransaction> future = mockNode.startFlow(addAddendumFlow);
+        try {
+            network.runNetwork();
+            future.get();
+            fail("Expected exception was not thrown.");
+        } catch(Exception e) {
+        }
     }
 
-    @Test(expected = FlowException.class)
+    @Test
     public void addAddendumFlowFailsBecauseAddendumParticipantsDifferFromContractParticipants() {
         SaveContractFlow saveContractFlow = new SaveContractFlow("1", TestData.getContractJson());
         mockNode.startFlow(saveContractFlow);
         network.runNetwork();
 
         AddAddendumFlow addAddendumFlow = new AddAddendumFlow("1", "1", TestData.getAddendumJsonWithDifferentParticipants());
-        mockNode.startFlow(addAddendumFlow);
-        network.runNetwork();
+        Future<SignedTransaction> future = mockNode.startFlow(addAddendumFlow);
+        try {
+            network.runNetwork();
+            future.get();
+            fail("Expected exception was not thrown.");
+        } catch(Exception e) {
+        }
     }
 
-    @Test(expected = FlowException.class)
+    @Test
     public void addAddendumFlowFailsBecauseAddendumIsSignedBeforeContract() {
         SaveContractFlow saveContractFlow = new SaveContractFlow("1", TestData.getContractJson());
         mockNode.startFlow(saveContractFlow);
         network.runNetwork();
 
         AddAddendumFlow addAddendumFlow = new AddAddendumFlow("1", "1", TestData.getAddendumJsonWithSignedTimeBeforeContract());
-        mockNode.startFlow(addAddendumFlow);
-        network.runNetwork();
+        Future<SignedTransaction> future = mockNode.startFlow(addAddendumFlow);
+        try {
+            network.runNetwork();
+            future.get();
+            fail("Expected exception was not thrown.");
+        } catch(Exception e) {
+        }
     }
 }

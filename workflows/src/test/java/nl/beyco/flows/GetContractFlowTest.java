@@ -1,6 +1,5 @@
 package nl.beyco.flows;
 
-import net.corda.core.flows.FlowException;
 import net.corda.core.identity.CordaX500Name;
 import net.corda.testing.node.*;
 import nl.beyco.TestData;
@@ -8,13 +7,12 @@ import nl.beyco.states.ContractJsonWithAddendaJson;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class GetContractFlowTest {
     private MockNetwork network;
@@ -49,14 +47,19 @@ public class GetContractFlowTest {
         assertEquals(false, result.getContractJson().isEmpty());
     }
 
-    @Test(expected = FlowException.class)
+    @Test
     public void getContractFlowFailsBecauseContractDoesntExist() {
         GetContractFlow flow = new GetContractFlow("1", "1");
-        mockNode.startFlow(flow);
-        network.runNetwork();
+        Future<ContractJsonWithAddendaJson> future = mockNode.startFlow(flow);
+        try {
+            network.runNetwork();
+            future.get();
+            fail("Expected exception was not thrown.");
+        } catch(Exception e) {
+        }
     }
 
-    @Test(expected = FlowException.class)
+    @Test
     public void getContractFlowFailsBecauseIssuerIsNotSellerOrBuyer() {
         SaveContractFlow saveContractFlow = new SaveContractFlow("1", TestData.getContractJson());
         mockNode.startFlow(saveContractFlow);
@@ -64,6 +67,12 @@ public class GetContractFlowTest {
 
         String notMatchingIssuerId = "5554";
         GetContractFlow flow = new GetContractFlow(notMatchingIssuerId, "1");
-        mockNode.startFlow(flow);
+        Future<ContractJsonWithAddendaJson> future = mockNode.startFlow(flow);
+        try {
+            network.runNetwork();
+            future.get();
+            fail("Expected exception was not thrown.");
+        } catch (Exception e) {
+        }
     }
 }

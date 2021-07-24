@@ -1,28 +1,22 @@
 package nl.beyco.flows;
 
-import net.corda.core.flows.FlowException;
 import net.corda.core.identity.CordaX500Name;
 import net.corda.core.node.services.Vault;
 import net.corda.core.node.services.vault.QueryCriteria;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.testing.node.*;
 import nl.beyco.TestData;
-import nl.beyco.contracts.BeycoContract;
-import nl.beyco.flows.AddAddendumFlow;
-import nl.beyco.flows.SaveContractFlow;
 import nl.beyco.states.BeycoContractState;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class SaveContractFlowTest {
     private MockNetwork network;
@@ -65,26 +59,44 @@ public class SaveContractFlowTest {
 
     }
 
-    @Test(expected = FlowException.class)
+    @Test
     public void saveContractFlowFailsBecauseOfParseError() {
         SaveContractFlow flow = new SaveContractFlow("1", TestData.getInvalidJson());
-        mockNode.startFlow(flow);
-        network.runNetwork();
+        Future<SignedTransaction> future = mockNode.startFlow(flow);
+        try {
+            network.runNetwork();
+            future.get();
+            fail("Expected exception was not thrown.");
+        } catch(Exception e) {
+        }
     }
 
-    @Test(expected = FlowException.class)
+    @Test
     public void saveContractFlowFailsBecauseIssuerIsNotSellerOrBuyer() {
         String notMatchingIssuerId = "5983";
         SaveContractFlow flow = new SaveContractFlow(notMatchingIssuerId, TestData.getContractJson());
-        mockNode.startFlow(flow);
-        network.runNetwork();
+        Future<SignedTransaction> future = mockNode.startFlow(flow);
+        try {
+            network.runNetwork();
+            future.get();
+            fail("Expected exception was not thrown.");
+        } catch(Exception e) {
+        }
     }
 
-    @Test(expected = FlowException.class)
+    @Test
     public void saveContractFlowFailsBecauseContractAlreadyExistsInVault() {
         SaveContractFlow flow = new SaveContractFlow("1", TestData.getContractJson());
         mockNode.startFlow(flow);
         network.runNetwork();
-        mockNode.startFlow(flow);
+
+        SaveContractFlow identicalFlow = new SaveContractFlow("1", TestData.getContractJson());
+        Future<SignedTransaction> future = mockNode.startFlow(identicalFlow);
+        try {
+            network.runNetwork();
+            future.get();
+            fail("Expected exception was not thrown.");
+        } catch(Exception e) {
+        }
     }
 }
