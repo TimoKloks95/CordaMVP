@@ -11,7 +11,8 @@ public class AddendumTest {
     @Test
     public void getLinearId() {
         Addendum testAddendum = TestData.getValidAddendum();
-        UniqueIdentifier expected = new UniqueIdentifier(testAddendum.getId());
+        testAddendum.setContractId("1");
+        UniqueIdentifier expected = new UniqueIdentifier("1");
         assertEquals(expected.getExternalId(), testAddendum.getLinearId().getExternalId());
     }
 }

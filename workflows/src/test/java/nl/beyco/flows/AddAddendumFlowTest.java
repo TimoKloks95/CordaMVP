@@ -109,12 +109,53 @@ public class AddAddendumFlowTest {
     }
 
     @Test
+    public void addAddendumFlowFailsBecauseAddendumAlreadyExistsMultipleAddendum() {
+        SaveContractFlow saveContractFlow = new SaveContractFlow("1", TestData.getContractJson());
+        mockNode.startFlow(saveContractFlow);
+        network.runNetwork();
+
+        AddAddendumFlow addAddendumFlow = new AddAddendumFlow("1", "1", TestData.getAddendumJson());
+        mockNode.startFlow(addAddendumFlow);
+        network.runNetwork();
+
+        AddAddendumFlow secondAddAddendumFlow = new AddAddendumFlow("1", "1", TestData.getSecondAddendumJson());
+        mockNode.startFlow(secondAddAddendumFlow);
+        network.runNetwork();
+
+        AddAddendumFlow identicalFlow = new AddAddendumFlow("1", "1", TestData.getAddendumJson());
+
+        Future<SignedTransaction> future = mockNode.startFlow(identicalFlow);
+        try {
+            network.runNetwork();
+            future.get();
+            fail("Expected exception was not thrown.");
+        } catch(Exception e) {
+        }
+    }
+
+    @Test
+    public void addAddendumFlowFailsBecauseIssuerIsNotSellerOrBuyerContract() {
+        SaveContractFlow saveContractFlow = new SaveContractFlow("1", TestData.getContractJson());
+        mockNode.startFlow(saveContractFlow);
+        network.runNetwork();
+
+        AddAddendumFlow addAddendumFlow = new AddAddendumFlow("500", "1", TestData.getAddendumJsonWithDifferentParticipants());
+        Future<SignedTransaction> future = mockNode.startFlow(addAddendumFlow);
+        try {
+            network.runNetwork();
+            future.get();
+            fail("Expected exception was not thrown.");
+        } catch(Exception e) {
+        }
+    }
+
+    @Test
     public void addAddendumFlowFailsBecauseIssuerIsNotSellerOrBuyerAddendum() {
         SaveContractFlow saveContractFlow = new SaveContractFlow("1", TestData.getContractJson());
         mockNode.startFlow(saveContractFlow);
         network.runNetwork();
 
-        AddAddendumFlow addAddendumFlow = new AddAddendumFlow("500", "1", TestData.getAddendumJson());
+        AddAddendumFlow addAddendumFlow = new AddAddendumFlow("1", "1", TestData.getAddendumJsonWithDifferentParticipants());
         Future<SignedTransaction> future = mockNode.startFlow(addAddendumFlow);
         try {
             network.runNetwork();
@@ -130,7 +171,7 @@ public class AddAddendumFlowTest {
         mockNode.startFlow(saveContractFlow);
         network.runNetwork();
 
-        AddAddendumFlow addAddendumFlow = new AddAddendumFlow("1", "1", TestData.getAddendumJsonWithDifferentParticipants());
+        AddAddendumFlow addAddendumFlow = new AddAddendumFlow("2", "1", TestData.getAddendumJsonWithDifferentParticipants());
         Future<SignedTransaction> future = mockNode.startFlow(addAddendumFlow);
         try {
             network.runNetwork();
