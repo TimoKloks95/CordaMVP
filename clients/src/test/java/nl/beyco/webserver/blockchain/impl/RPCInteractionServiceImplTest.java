@@ -45,6 +45,7 @@ public class RPCInteractionServiceImplTest {
     public void startSaveContractFlowSuccess() throws InterruptedException, ExecutionException {
         doNothing().when(beycoProxy).startSaveContractFlow(isA(String.class), isA(String.class));
         rpcInteractionService.startSaveContractFlow("1", "Test");
+        verify(beycoProxy).startSaveContractFlow(isA(String.class), isA(String.class));
     }
 
     @Test(expected = BeycoFlowException.class)
@@ -76,6 +77,7 @@ public class RPCInteractionServiceImplTest {
     public void startAddAddendumFlowSuccess() throws InterruptedException, ExecutionException {
         doNothing().when(beycoProxy).startAddAddendumFlow(isA(String.class), isA(String.class), isA(String.class));
         rpcInteractionService.startAddAddendumFlow("1", "1", "Test");
+        verify(beycoProxy).startAddAddendumFlow(isA(String.class), isA(String.class), isA(String.class));
     }
 
     @Test(expected = BeycoFlowException.class)

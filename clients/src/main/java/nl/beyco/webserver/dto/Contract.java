@@ -9,8 +9,6 @@ import nl.beyco.helpers.LocalDateTimeSerializer;
 import nl.beyco.webserver.helpers.BeycoSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javax.persistence.Entity;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
